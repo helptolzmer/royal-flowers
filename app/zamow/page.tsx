@@ -4,16 +4,16 @@ import { useState } from "react";
 import { ArrowRight, ArrowLeft, Check, Flower2, MapPin, Calendar, User, Phone, MessageSquare } from "lucide-react";
 
 const bukiety = [
-  { id: 1,  nazwa: "Romantyczne Czerwone Róże", opis: "12 szt.",      cena: 120, emoji: "🌹", kategoria: "Klasyka"     },
-  { id: 2,  nazwa: "Pastelowe Peonie",           opis: "7 szt.",       cena: 150, emoji: "🌸", kategoria: "Premium"     },
-  { id: 3,  nazwa: "Słoneczny Tulipan Mix",      opis: "15 szt.",      cena: 100, emoji: "🌷", kategoria: "Wiosna"      },
-  { id: 4,  nazwa: "Biały Elegancki Bukiet",     opis: "10 szt.",      cena: 130, emoji: "🤍", kategoria: "Ślub"        },
-  { id: 5,  nazwa: "Lila Lawenda & Frezja",      opis: "Kompozycja",   cena: 100, emoji: "💜", kategoria: "Aromatyczny" },
-  { id: 6,  nazwa: "Złota Mimoza & Tulipan",     opis: "Mix 20 szt.",  cena: 110, emoji: "🌼", kategoria: "Wiosna"      },
-  { id: 7,  nazwa: "Orchidea Premium",           opis: "3 łodygi",     cena: 200, emoji: "🪷", kategoria: "Premium"     },
-  { id: 8,  nazwa: "Rustykalny Polny Mix",       opis: "Kompozycja",   cena: 100, emoji: "🌾", kategoria: "Boho"        },
-  { id: 9,  nazwa: "Chryzantema Biała",          opis: "12 szt.",      cena: 100, emoji: "🌺", kategoria: "Klasyka"     },
-  { id: 10, nazwa: "Egzotyczna Anthurium",       opis: "5 szt.",       cena: 180, emoji: "🔴", kategoria: "Egzotyczny"  },
+  { id: 1,  nazwa: "Romantyczne Czerwone Róże", emoji: "🌹", kategoria: "Klasyka"     },
+  { id: 2,  nazwa: "Pastelowe Peonie",           emoji: "🌸", kategoria: "Premium"     },
+  { id: 3,  nazwa: "Słoneczny Tulipan Mix",      emoji: "🌷", kategoria: "Wiosna"      },
+  { id: 4,  nazwa: "Biały Elegancki Bukiet",     emoji: "🤍", kategoria: "Ślub"        },
+  { id: 5,  nazwa: "Lila Lawenda & Frezja",      emoji: "💜", kategoria: "Aromatyczny" },
+  { id: 6,  nazwa: "Złota Mimoza & Tulipan",     emoji: "🌼", kategoria: "Wiosna"      },
+  { id: 7,  nazwa: "Orchidea Premium",           emoji: "🪷", kategoria: "Premium"     },
+  { id: 8,  nazwa: "Rustykalny Polny Mix",       emoji: "🌾", kategoria: "Boho"        },
+  { id: 9,  nazwa: "Chryzantema Biała",          emoji: "🌺", kategoria: "Klasyka"     },
+  { id: 10, nazwa: "Egzotyczna Anthurium",       emoji: "🔴", kategoria: "Egzotyczny"  },
 ];
 
 const kwiatomaty = [
@@ -177,11 +177,9 @@ export default function ZamowPage() {
                     <span className="font-jost text-xs text-gold/60 tracking-[0.3em] uppercase block mb-1">
                       {b.kategoria}
                     </span>
-                    <h3 className="font-cormorant text-base font-medium text-cream leading-tight mb-1">
+                    <h3 className="font-cormorant text-base font-medium text-cream leading-tight">
                       {b.nazwa}
                     </h3>
-                    <p className="font-jost text-xs text-cream/40 mb-3">{b.opis}</p>
-                    <p className="font-cormorant text-lg text-gold">{b.cena} zł</p>
                   </div>
 
                   {/* Per-card price input */}
@@ -193,7 +191,6 @@ export default function ZamowPage() {
                     </label>
                     <input
                       type="number"
-                      min={100}
                       placeholder="wpisz kwotę"
                       value={kwoty[b.id] ?? ""}
                       onChange={(e) => {
@@ -242,11 +239,10 @@ export default function ZamowPage() {
                 <span className="text-2xl">{selectedBukiet.emoji}</span>
                 <div className="flex-1">
                   <p className="font-cormorant text-lg text-cream">{selectedBukiet.nazwa}</p>
-                  <p className="font-jost text-xs text-cream/40">{selectedBukiet.opis}</p>
                 </div>
-                <p className="font-cormorant text-xl text-gold">
-                  {form.kwota ? `${form.kwota} zł` : `${selectedBukiet.cena} zł`}
-                </p>
+                {form.kwota && (
+                  <p className="font-cormorant text-xl text-gold">{form.kwota} zł</p>
+                )}
               </div>
             )}
 
@@ -410,7 +406,7 @@ export default function ZamowPage() {
               <h3 className="font-cormorant text-lg text-cream mb-4">Podsumowanie zamówienia</h3>
               {[
                 { label: "Bukiet",       val: selectedBukiet?.nazwa },
-                { label: "Cena",         val: form.kwota ? `${form.kwota} zł` : selectedBukiet ? `${selectedBukiet.cena} zł` : undefined },
+                { label: "Kwota",        val: form.kwota ? `${form.kwota} zł` : undefined },
                 { label: "Automat",      val: selectedAutomat?.nazwa },
                 { label: "Data odbioru", val: form.data },
                 { label: "Godzina",      val: form.godzina },
