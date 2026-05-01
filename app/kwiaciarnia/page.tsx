@@ -1,5 +1,9 @@
+import fs from "fs";
+import path from "path";
 import Link from "next/link";
 import { ArrowRight, Heart, Star, Award, Flower2 } from "lucide-react";
+import AktualnosciSlider, { Aktualnosc } from "@/components/AktualnosciSlider";
+import KwiatySlider from "@/components/KwiatySlider";
 
 const galeria = [
   { src: "/images/kwiaciarnia/DSCF1768.jpg", alt: "Kompozycja w wazonie – róże pomarańczowe", kategoria: "Kompozycje" },
@@ -20,10 +24,25 @@ const uslugi = [
   { icon: Award, label: "Dekoracje", desc: "Eventy i biura" },
 ];
 
+function getAktualnosci(): Aktualnosc[] {
+  try {
+    const raw = fs.readFileSync(
+      path.join(process.cwd(), "data", "aktualnosci.json"),
+      "utf-8"
+    );
+    return JSON.parse(raw);
+  } catch {
+    return [];
+  }
+}
+
 export default function KwiaciarniaPage() {
+  const aktualnosci = getAktualnosci();
+
   return (
     <main className="pt-20 min-h-screen bg-dark">
-      {/* Hero ze zdjęciem */}
+
+      {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative min-h-[520px] flex items-center overflow-hidden">
         <img
           src="/images/kwiaciarnia/DSCF1679.jpg"
@@ -50,7 +69,7 @@ export default function KwiaciarniaPage() {
         </div>
       </section>
 
-      {/* Pasek usług */}
+      {/* ── Pasek usług ──────────────────────────────────── */}
       <section className="border-y border-gold/15 bg-dark-800">
         <div className="max-w-7xl mx-auto px-6 py-8 grid grid-cols-2 md:grid-cols-4 divide-x divide-gold/15">
           {uslugi.map((u) => (
@@ -65,7 +84,43 @@ export default function KwiaciarniaPage() {
         </div>
       </section>
 
-      {/* Galeria masonry – 4 kolumny */}
+      {/* ── Aktualności ──────────────────────────────────── */}
+      <section className="py-20 px-6 md:px-16">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex items-end justify-between mb-12">
+            <div>
+              <p className="font-jost text-xs tracking-[0.4em] uppercase text-gold mb-3">
+                Co nowego
+              </p>
+              <h2 className="font-cormorant text-4xl md:text-5xl font-light text-cream">
+                Aktualności
+              </h2>
+            </div>
+            <div className="hidden md:block w-24 h-px bg-gold/30" />
+          </div>
+          <AktualnosciSlider items={aktualnosci} />
+        </div>
+      </section>
+
+      {/* ── Znaczenie Kwiatów ────────────────────────────── */}
+      <section className="py-20 bg-dark-800 border-y border-gold/10">
+        <div className="max-w-5xl mx-auto px-6 md:px-16">
+          <div className="flex items-end justify-between mb-12">
+            <div>
+              <p className="font-jost text-xs tracking-[0.4em] uppercase text-gold mb-3">
+                Symbolika
+              </p>
+              <h2 className="font-cormorant text-4xl md:text-5xl font-light text-cream">
+                Znaczenie Kwiatów
+              </h2>
+            </div>
+            <div className="hidden md:block w-24 h-px bg-gold/30" />
+          </div>
+          <KwiatySlider />
+        </div>
+      </section>
+
+      {/* ── Nasze Realizacje ─────────────────────────────── */}
       <section className="py-20 px-6 md:px-16 max-w-7xl mx-auto">
         <div className="flex items-end justify-between mb-12">
           <div>
@@ -77,11 +132,7 @@ export default function KwiaciarniaPage() {
           <div className="hidden md:block w-24 h-px bg-gold/30" />
         </div>
 
-        {/* CSS columns masonry */}
-        <div
-          className="gap-4"
-          style={{ columnCount: 4, columnGap: "1rem" }}
-        >
+        <div className="gap-4" style={{ columnCount: 4, columnGap: "1rem" }}>
           {galeria.map((g, i) => (
             <div
               key={i}
@@ -112,7 +163,7 @@ export default function KwiaciarniaPage() {
         </div>
       </section>
 
-      {/* CTA */}
+      {/* ── CTA ──────────────────────────────────────────── */}
       <section className="py-24 px-6 bg-dark-800 border-t border-gold/10">
         <div className="max-w-2xl mx-auto text-center">
           <p className="font-jost text-xs tracking-[0.5em] uppercase text-gold mb-6">
