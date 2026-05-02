@@ -8,49 +8,49 @@ const kwiaty = [
     haslo: "Miłość & Namiętność",
     znaczenie:
       "Symbol głębokiej miłości i namiętności. Czerwona róża to najsilniejszy kwiatowy wyraz uczuć – wyznanie miłości bez słów, gest, który mówi więcej niż tysiąc zdań.",
-    zdjecie: "/images/kwiaciarnia/DSCF1666.jpg",
+    zdjecie: "/images/czerwona%20roza%201.png",
   },
   {
     nazwa: "Różowa Róża",
     haslo: "Wdzięczność & Podziw",
     znaczenie:
       "Wyraża wdzięczność, delikatną sympatię i podziw. Różowe róże to idealny dar dla kogoś, kogo cenimy – łączą elegancję z ciepłem i szczerą troską.",
-    zdjecie: "/images/kwiaciarnia/DSCF1834.jpg",
+    zdjecie: "/images/rozowa%20roza.png",
   },
   {
     nazwa: "Biała Róża",
     haslo: "Czystość & Nowy Początek",
     znaczenie:
       "Czystość, niewinność i nowy początek. Biała róża towarzyszy ślubom i chwilom głębokiej refleksji. Symbolizuje szczerość intencji i czystość ducha.",
-    zdjecie: "/images/kwiaciarnia/DSCF1679.jpg",
+    zdjecie: "/images/biala%20roza.png",
   },
   {
     nazwa: "Tulipan",
     haslo: "Doskonała Miłość",
     znaczenie:
       "Doskonała, bezwarunkowa miłość. W języku kwiatów tulipan wyraża deklarację uczuć – czerwony oznacza namiętność, żółty beztroską radość, fioletowy – królewską dumę.",
-    zdjecie: "/images/kwiaciarnia/DSCF1874.jpg",
+    zdjecie: "/images/tulipan.png",
   },
   {
     nazwa: "Słonecznik",
     haslo: "Wierność & Radość",
     znaczenie:
       "Symbol słońca, ciepła i lojalności. Słonecznik podąża za słońcem przez cały dzień – jak oddany przyjaciel, który zawsze jest po Twojej stronie.",
-    zdjecie: "/images/kwiaciarnia/DSCF1285.jpg",
+    zdjecie: "/images/slonecznik.png",
   },
   {
     nazwa: "Lilia",
     haslo: "Majestat & Wzniosłość",
     znaczenie:
       "Symbol królewskiej godności i wzniosłości duchowej. Biała lilia od wieków towarzyszy uroczystościom i refleksji – kwiat wyjątkowych, niepowtarzalnych chwil.",
-    zdjecie: "/images/kwiaciarnia/DSCF1887.jpg",
+    zdjecie: "/images/lilia.png",
   },
   {
     nazwa: "Frezja",
     haslo: "Zaufanie & Przyjaźń",
     znaczenie:
       "Symbolizuje niewinność, szczerość i trwałą przyjaźń. Jej intensywny, słodki zapach pozostaje w pamięci na długo – tak jak wierna, sprawdzona przyjaźń.",
-    zdjecie: "/images/kwiaciarnia/DSCF1231.jpg",
+    zdjecie: "/images/frezja.png",
   },
 ];
 
