@@ -8,21 +8,21 @@ const kwiaty = [
     haslo: "Miłość & Namiętność",
     znaczenie:
       "Symbol głębokiej miłości i namiętności. Czerwona róża to najsilniejszy kwiatowy wyraz uczuć – wyznanie miłości bez słów, gest, który mówi więcej niż tysiąc zdań.",
-    zdjecie: "/images/czerwona%20roza%201.png",
+    zdjecie: "/images/czerwona-roza-1.png",
   },
   {
     nazwa: "Różowa Róża",
     haslo: "Wdzięczność & Podziw",
     znaczenie:
       "Wyraża wdzięczność, delikatną sympatię i podziw. Różowe róże to idealny dar dla kogoś, kogo cenimy – łączą elegancję z ciepłem i szczerą troską.",
-    zdjecie: "/images/rozowa%20roza.png",
+    zdjecie: "/images/rozowa-roza.png",
   },
   {
     nazwa: "Biała Róża",
     haslo: "Czystość & Nowy Początek",
     znaczenie:
       "Czystość, niewinność i nowy początek. Biała róża towarzyszy ślubom i chwilom głębokiej refleksji. Symbolizuje szczerość intencji i czystość ducha.",
-    zdjecie: "/images/biala%20roza.png",
+    zdjecie: "/images/biala-roza.png",
   },
   {
     nazwa: "Tulipan",
