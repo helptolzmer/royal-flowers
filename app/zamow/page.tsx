@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, ArrowLeft, Check, Flower2, MapPin, Calendar, User, Phone, MessageSquare } from "lucide-react";
+import { ArrowRight, ArrowLeft, Check, Flower2, MapPin, Calendar, User, Phone, MessageSquare, Store } from "lucide-react";
 
 const bukiety = [
   { id: 1,  nazwa: "Romantyczne Czerwone Róże", emoji: "🌹", kategoria: "Klasyka"     },
@@ -25,7 +25,10 @@ const kwiatomaty = [
   { id: 6, nazwa: "Przed wejściem Stacja Orlen",             dzielnica: "Stary Sącz" },
 ];
 
+const KWIACIARNIA_ADRES = "Al. Wolności 10/A, Nowy Sącz";
+
 type Step = 1 | 2 | 3;
+type PickupTab = "automat" | "kwiaciarnia";
 
 interface FormData {
   bukiet: number | null;
@@ -87,12 +90,17 @@ function StepIndicator({ current }: { current: Step }) {
 }
 
 function generateCode(): string {
-  const num = Math.floor(1000 + Math.random() * 9000);
-  return `RF-${num}`;
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let code = "RF-";
+  for (let i = 0; i < 6; i++) {
+    code += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return code;
 }
 
 export default function ZamowPage() {
   const [step, setStep] = useState<Step>(1);
+  const [pickupTab, setPickupTab] = useState<PickupTab>("automat");
   const [form, setForm] = useState<FormData>({
     bukiet: null,
     kwota: "",
@@ -111,7 +119,7 @@ export default function ZamowPage() {
 
   const canGoStep2 = form.bukiet !== null;
   const canGoStep3 =
-    form.automat !== null &&
+    (pickupTab === "automat" ? form.automat !== null : true) &&
     form.data !== "" &&
     form.godzina !== "" &&
     form.imie.trim() !== "" &&
@@ -161,7 +169,6 @@ export default function ZamowPage() {
                       : "border-cream/10 hover:border-gold/30"
                   }`}
                 >
-                  {/* Selectable card area */}
                   <div
                     onClick={() => setForm((f) => ({ ...f, bukiet: b.id, kwota: kwoty[b.id] ?? "" }))}
                     className={`relative p-6 cursor-pointer flex-1 transition-colors duration-300 ${
@@ -182,7 +189,6 @@ export default function ZamowPage() {
                     </h3>
                   </div>
 
-                  {/* Per-card price input */}
                   <div className={`px-4 py-3 border-t transition-colors duration-300 ${
                     form.bukiet === b.id ? "border-gold/30 bg-gold/5" : "border-cream/5 bg-dark-800"
                   }`}>
@@ -246,36 +252,91 @@ export default function ZamowPage() {
               </div>
             )}
 
+            {/* Zakładki odbioru */}
+            <div className="flex border border-cream/10 mb-8">
+              <button
+                onClick={() => setPickupTab("automat")}
+                className={`flex-1 flex items-center justify-center gap-2 font-jost text-xs tracking-widest uppercase px-4 py-3.5 transition-all duration-300 ${
+                  pickupTab === "automat"
+                    ? "bg-gold text-dark"
+                    : "text-cream/50 hover:text-cream hover:bg-cream/5"
+                }`}
+              >
+                <MapPin size={13} /> Wybierz automat
+              </button>
+              <button
+                onClick={() => setPickupTab("kwiaciarnia")}
+                className={`flex-1 flex items-center justify-center gap-2 font-jost text-xs tracking-widest uppercase px-4 py-3.5 border-l border-cream/10 transition-all duration-300 ${
+                  pickupTab === "kwiaciarnia"
+                    ? "bg-gold text-dark"
+                    : "text-cream/50 hover:text-cream hover:bg-cream/5"
+                }`}
+              >
+                <Store size={13} /> Odbierz w kwiaciarni
+              </button>
+            </div>
+
             <div className="space-y-6">
               {/* Automat */}
-              <div>
-                <label className="flex items-center gap-2 font-jost text-xs tracking-widest uppercase text-gold mb-3">
-                  <MapPin size={13} /> Wybierz automat
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {kwiatomaty.map((k) => (
-                    <button
-                      key={k.id}
-                      onClick={() => setForm((f) => ({ ...f, automat: k.id }))}
-                      className={`text-left p-4 border transition-all duration-300 ${
-                        form.automat === k.id
-                          ? "border-gold bg-gold/5"
-                          : "border-cream/10 hover:border-gold/30 bg-dark-800"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="font-jost text-xs text-gold/60 tracking-wider uppercase">
-                          {k.dzielnica}
-                        </span>
-                        {form.automat === k.id && (
-                          <Check size={12} className="text-gold" />
-                        )}
-                      </div>
-                      <p className="font-jost text-sm text-cream">{k.nazwa}</p>
-                    </button>
-                  ))}
+              {pickupTab === "automat" && (
+                <div>
+                  <label className="flex items-center gap-2 font-jost text-xs tracking-widest uppercase text-gold mb-3">
+                    <MapPin size={13} /> Wybierz automat
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {kwiatomaty.map((k) => (
+                      <button
+                        key={k.id}
+                        onClick={() => setForm((f) => ({ ...f, automat: k.id }))}
+                        className={`text-left p-4 border transition-all duration-300 ${
+                          form.automat === k.id
+                            ? "border-gold bg-gold/5"
+                            : "border-cream/10 hover:border-gold/30 bg-dark-800"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-jost text-xs text-gold/60 tracking-wider uppercase">
+                            {k.dzielnica}
+                          </span>
+                          {form.automat === k.id && (
+                            <Check size={12} className="text-gold" />
+                          )}
+                        </div>
+                        <p className="font-jost text-sm text-cream">{k.nazwa}</p>
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {/* Kwiaciarnia */}
+              {pickupTab === "kwiaciarnia" && (
+                <div className="border border-gold/20 bg-gold/5 p-6 space-y-4">
+                  <div className="flex items-start gap-3">
+                    <Store size={16} className="text-gold mt-0.5 flex-shrink-0" />
+                    <div className="space-y-4 flex-1">
+                      <div>
+                        <p className="font-jost text-[10px] tracking-[0.3em] uppercase text-gold/60 mb-1">
+                          Adres
+                        </p>
+                        <p className="font-jost text-sm text-cream">{KWIACIARNIA_ADRES}</p>
+                      </div>
+                      <div>
+                        <p className="font-jost text-[10px] tracking-[0.3em] uppercase text-gold/60 mb-1">
+                          Godziny otwarcia
+                        </p>
+                        <p className="font-jost text-sm text-cream">Pon – Pt: 9:00 – 17:00</p>
+                        <p className="font-jost text-sm text-cream">Sobota: 9:00 – 14:00</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="border-t border-gold/15 pt-4">
+                    <p className="font-jost text-xs text-cream/40 leading-relaxed">
+                      Po złożeniu zamówienia otrzymasz unikalny kod odbioru widoczny w podsumowaniu — okaż go w kwiaciarni.
+                    </p>
+                  </div>
+                </div>
+              )}
 
               {/* Data i godzina */}
               <div className="grid grid-cols-2 gap-4">
@@ -324,7 +385,7 @@ export default function ZamowPage() {
 
               <div>
                 <label className="flex items-center gap-2 font-jost text-xs tracking-widest uppercase text-gold mb-3">
-                  <Phone size={13} /> Numer telefonu (SMS z kodem)
+                  <Phone size={13} /> Numer telefonu{pickupTab === "automat" ? " (SMS z kodem)" : ""}
                 </label>
                 <input
                   type="tel"
@@ -374,7 +435,6 @@ export default function ZamowPage() {
         {/* STEP 3 – Potwierdzenie */}
         {step === 3 && (
           <div className="animate-scale-in max-w-xl mx-auto text-center">
-            {/* Success icon */}
             <div className="w-20 h-20 border border-gold mx-auto mb-8 flex items-center justify-center">
               <Check size={32} className="text-gold" />
             </div>
@@ -385,13 +445,20 @@ export default function ZamowPage() {
             <h2 className="font-cormorant text-4xl font-light text-cream mb-4">
               Dziękujemy, {form.imie.split(" ")[0]}!
             </h2>
-            <p className="font-jost text-sm text-cream/50 mb-10 leading-relaxed">
-              Wysłaliśmy SMS z kodem odbioru na numer{" "}
-              <span className="text-cream">{form.telefon}</span>. Okaż kod przy
-              automacie, aby odebrać kwiaty.
-            </p>
 
-            {/* Kod */}
+            {pickupTab === "automat" ? (
+              <p className="font-jost text-sm text-cream/50 mb-10 leading-relaxed">
+                Wysłaliśmy SMS z kodem odbioru na numer{" "}
+                <span className="text-cream">{form.telefon}</span>. Okaż kod przy
+                automacie, aby odebrać kwiaty.
+              </p>
+            ) : (
+              <p className="font-jost text-sm text-cream/50 mb-10 leading-relaxed">
+                Twoje zamówienie zostało przyjęte. Okaż poniższy kod w kwiaciarni przy odbiorze.
+              </p>
+            )}
+
+            {/* Kod odbioru */}
             <div className="border border-gold/30 bg-gold/5 px-12 py-8 mb-10 inline-block">
               <p className="font-jost text-xs tracking-[0.6em] uppercase text-gold/60 mb-3">
                 Twój kod odbioru
@@ -407,21 +474,31 @@ export default function ZamowPage() {
               {[
                 { label: "Bukiet",       val: selectedBukiet?.nazwa },
                 { label: "Kwota",        val: form.kwota ? `${form.kwota} zł` : undefined },
-                { label: "Automat",      val: selectedAutomat?.nazwa },
+                pickupTab === "automat"
+                  ? { label: "Automat",      val: selectedAutomat?.nazwa }
+                  : { label: "Odbiór",       val: KWIACIARNIA_ADRES },
+                pickupTab === "kwiaciarnia"
+                  ? { label: "Kod odbioru",  val: kod }
+                  : null,
                 { label: "Data odbioru", val: form.data },
                 { label: "Godzina",      val: form.godzina },
-              ].map((row) => (
-                <div key={row.label} className="flex justify-between items-center py-2 border-b border-cream/5 last:border-0">
-                  <span className="font-jost text-xs text-cream/40 tracking-wider uppercase">{row.label}</span>
-                  <span className="font-jost text-sm text-cream">{row.val}</span>
-                </div>
-              ))}
+              ]
+                .filter(Boolean)
+                .map((row) => (
+                  <div key={row!.label} className="flex justify-between items-center py-2 border-b border-cream/5 last:border-0">
+                    <span className="font-jost text-xs text-cream/40 tracking-wider uppercase">{row!.label}</span>
+                    <span className={`font-jost text-sm ${row!.label === "Kod odbioru" ? "text-gold font-medium tracking-widest" : "text-cream"}`}>
+                      {row!.val}
+                    </span>
+                  </div>
+                ))}
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 onClick={() => {
                   setStep(1);
+                  setPickupTab("automat");
                   setForm({ bukiet: null, kwota: "", automat: null, data: "", godzina: "", imie: "", telefon: "", uwagi: "" });
                   setKwoty({});
                 }}
