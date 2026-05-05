@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, ArrowLeft, Check, Flower2, MapPin, Calendar, User, Phone, MessageSquare, Store } from "lucide-react";
+import emailjs from "@emailjs/browser";
+import { ArrowRight, ArrowLeft, Check, Flower2, MapPin, Calendar, User, Phone, MessageSquare, Store, Mail } from "lucide-react";
 
 const bukiety = [
   { id: 1,  nazwa: "Romantyczne Czerwone Róże", emoji: "🌹", kategoria: "Klasyka"     },
@@ -38,6 +39,7 @@ interface FormData {
   godzina: string;
   imie: string;
   telefon: string;
+  email: string;
   uwagi: string;
 }
 
@@ -109,10 +111,13 @@ export default function ZamowPage() {
     godzina: "",
     imie: "",
     telefon: "",
+    email: "",
     uwagi: "",
   });
   const [kod] = useState(generateCode());
   const [kwoty, setKwoty] = useState<Record<number, string>>({});
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
 
   const selectedBukiet = bukiety.find((b) => b.id === form.bukiet);
   const selectedAutomat = kwiatomaty.find((k) => k.id === form.automat);
@@ -125,8 +130,51 @@ export default function ZamowPage() {
     form.imie.trim() !== "" &&
     form.telefon.trim() !== "";
 
-  function handleSubmit() {
-    setStep(3);
+  async function handleSubmit() {
+    setSending(true);
+    setSendError(null);
+
+    const pickupInfo =
+      pickupTab === "automat"
+        ? `Automat: ${selectedAutomat?.nazwa}, ${selectedAutomat?.dzielnica}`
+        : `Kwiaciarnia: ${KWIACIARNIA_ADRES}`;
+
+    const baseParams = {
+      order_code: kod,
+      client_name: form.imie,
+      client_phone: form.telefon,
+      client_email: form.email || "nie podano",
+      bukiet: selectedBukiet ? `${selectedBukiet.emoji} ${selectedBukiet.nazwa}` : "",
+      kwota: form.kwota ? `${form.kwota} zł` : "nie podano",
+      pickup_type: pickupInfo,
+      data_odbioru: form.data,
+      godzina_odbioru: form.godzina,
+      uwagi: form.uwagi || "brak",
+    };
+
+    try {
+      await emailjs.send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_OWNER!,
+        { ...baseParams, to_email: "kwiaciarniaroyalflowers@gmail.com" },
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
+      );
+
+      if (form.email) {
+        await emailjs.send(
+          process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+          process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_CLIENT!,
+          { ...baseParams, to_email: form.email },
+          process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
+        );
+      }
+
+      setStep(3);
+    } catch {
+      setSendError("Nie udało się wysłać zamówienia. Sprawdź połączenie i spróbuj ponownie.");
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -398,6 +446,19 @@ export default function ZamowPage() {
 
               <div>
                 <label className="flex items-center gap-2 font-jost text-xs tracking-widest uppercase text-gold mb-3">
+                  <Mail size={13} /> E-mail (opcjonalnie – potwierdzenie zamówienia)
+                </label>
+                <input
+                  type="email"
+                  placeholder="anna@example.com"
+                  value={form.email}
+                  onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                  className="w-full bg-dark-800 border border-cream/10 text-cream font-jost text-sm px-4 py-3 placeholder:text-cream/20 focus:outline-none focus:border-gold/50 transition-colors duration-300"
+                />
+              </div>
+
+              <div>
+                <label className="flex items-center gap-2 font-jost text-xs tracking-widest uppercase text-gold mb-3">
                   <MessageSquare size={13} /> Uwagi (opcjonalnie)
                 </label>
                 <textarea
@@ -410,23 +471,31 @@ export default function ZamowPage() {
               </div>
             </div>
 
+            {sendError && (
+              <p className="font-jost text-xs text-red-400 text-center mt-6 border border-red-400/20 bg-red-400/5 px-4 py-3">
+                {sendError}
+              </p>
+            )}
+
             <div className="flex justify-between mt-10">
               <button
                 onClick={() => setStep(1)}
-                className="inline-flex items-center gap-2 font-jost text-sm tracking-widest uppercase text-cream/40 hover:text-cream transition-colors duration-300"
+                disabled={sending}
+                className="inline-flex items-center gap-2 font-jost text-sm tracking-widest uppercase text-cream/40 hover:text-cream transition-colors duration-300 disabled:opacity-40"
               >
                 <ArrowLeft size={16} /> Wróć
               </button>
               <button
                 onClick={handleSubmit}
-                disabled={!canGoStep3}
+                disabled={!canGoStep3 || sending}
                 className={`inline-flex items-center gap-3 font-jost text-sm tracking-widest uppercase px-10 py-4 transition-all duration-300 ${
-                  canGoStep3
+                  canGoStep3 && !sending
                     ? "bg-gold text-dark hover:bg-gold-light"
                     : "bg-cream/10 text-cream/25 cursor-not-allowed"
                 }`}
               >
-                Potwierdź zamówienie <ArrowRight size={16} />
+                {sending ? "Wysyłanie…" : "Potwierdź zamówienie"}
+                {!sending && <ArrowRight size={16} />}
               </button>
             </div>
           </div>
@@ -499,8 +568,9 @@ export default function ZamowPage() {
                 onClick={() => {
                   setStep(1);
                   setPickupTab("automat");
-                  setForm({ bukiet: null, kwota: "", automat: null, data: "", godzina: "", imie: "", telefon: "", uwagi: "" });
+                  setForm({ bukiet: null, kwota: "", automat: null, data: "", godzina: "", imie: "", telefon: "", email: "", uwagi: "" });
                   setKwoty({});
+                  setSendError(null);
                 }}
                 className="inline-flex items-center justify-center gap-2 font-jost text-xs tracking-widest uppercase border border-gold/30 text-gold px-8 py-3 hover:border-gold hover:bg-gold/5 transition-all duration-300"
               >
