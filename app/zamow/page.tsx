@@ -152,20 +152,25 @@ export default function ZamowPage() {
       uwagi: form.uwagi || "brak",
     };
 
+    const EJS_SERVICE  = "service_pw7x0df";
+    const EJS_KEY      = "-Yp8zoOj7V9bdLb_O";
+    const EJS_T_OWNER  = "template_jn31zqm";
+    const EJS_T_CLIENT = "template_4r8akwm";
+
     try {
       await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_OWNER!,
+        EJS_SERVICE,
+        EJS_T_OWNER,
         { ...baseParams, to_email: "kwiaciarniaroyalflowers@gmail.com" },
-        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
+        EJS_KEY
       );
 
       if (form.email) {
         await emailjs.send(
-          process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-          process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_CLIENT!,
+          EJS_SERVICE,
+          EJS_T_CLIENT,
           { ...baseParams, to_email: form.email },
-          process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
+          EJS_KEY
         );
       }
 
