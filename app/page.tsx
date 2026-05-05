@@ -276,6 +276,55 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Dane kontaktowe ── */}
+      <section className="bg-dark-800 border-t border-gold/10 py-20 px-6 md:px-16">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="font-jost text-xs tracking-[0.5em] uppercase text-gold mb-4">
+              Kontakt
+            </p>
+            <h2 className="font-cormorant text-4xl md:text-5xl font-light text-cream">
+              Dane kontaktowe
+            </h2>
+            <div className="w-12 h-px bg-gold mx-auto mt-6" />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-gold/10">
+            {[
+              { label: "Firma",   value: "Royal Flowers Kwiaciarnia" },
+              { label: "NIP",     value: "7342527300" },
+              { label: "Adres",   value: "Al. Wolności 10/A, 33-300 Nowy Sącz" },
+              { label: "Telefon", value: "532 688 820" },
+              { label: "E-mail",  value: "kwiaciarniaroyalflowers@gmail.com" },
+              { label: "Godziny", value: "Pon–Pt: 9:00–17:00  ·  Sob: 9:00–14:00" },
+            ].map((row) => (
+              <div key={row.label} className="bg-dark-800 px-8 py-6 flex items-center gap-6">
+                <span className="font-jost text-[10px] tracking-[0.3em] uppercase text-gold/50 w-20 shrink-0">
+                  {row.label}
+                </span>
+                <span className="font-jost text-sm text-cream/75">{row.value}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 flex flex-wrap gap-6 justify-center">
+            <Link
+              href="/regulamin"
+              className="font-jost text-xs tracking-widest uppercase text-cream/35 hover:text-gold transition-colors duration-300"
+            >
+              Regulamin sprzedaży
+            </Link>
+            <span className="text-cream/15">·</span>
+            <Link
+              href="/polityka-prywatnosci"
+              className="font-jost text-xs tracking-widest uppercase text-cream/35 hover:text-gold transition-colors duration-300"
+            >
+              Polityka prywatności
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="border-t border-gold/10 bg-dark py-8 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
@@ -283,7 +332,7 @@ export default function Home() {
             ROYAL <span className="text-gold">FLOWERS</span>
           </p>
           <p className="font-jost text-xs text-cream/30">
-            © 2025 Royal Flowers. Wszystkie prawa zastrzeżone.
+            © 2026 Royal Flowers. Wszystkie prawa zastrzeżone.
           </p>
         </div>
       </footer>

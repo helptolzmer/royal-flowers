@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import emailjs from "@emailjs/browser";
 import { ArrowRight, ArrowLeft, Check, Flower2, MapPin, Calendar, User, Phone, MessageSquare, Store, Mail } from "lucide-react";
 
@@ -41,6 +42,7 @@ interface FormData {
   telefon: string;
   email: string;
   uwagi: string;
+  regulamin: boolean;
 }
 
 function StepIndicator({ current }: { current: Step }) {
@@ -113,6 +115,7 @@ export default function ZamowPage() {
     telefon: "",
     email: "",
     uwagi: "",
+    regulamin: false,
   });
   const [kod] = useState(generateCode());
   const [kwoty, setKwoty] = useState<Record<number, string>>({});
@@ -128,7 +131,8 @@ export default function ZamowPage() {
     form.data !== "" &&
     form.godzina !== "" &&
     form.imie.trim() !== "" &&
-    form.telefon.trim() !== "";
+    form.telefon.trim() !== "" &&
+    form.regulamin === true;
 
   async function handleSubmit() {
     setSending(true);
@@ -476,6 +480,36 @@ export default function ZamowPage() {
               </div>
             </div>
 
+            {/* Akceptacja regulaminu */}
+            <div className="mt-6">
+              <label className="flex items-start gap-3 cursor-pointer group">
+                <button
+                  type="button"
+                  role="checkbox"
+                  aria-checked={form.regulamin}
+                  onClick={() => setForm((f) => ({ ...f, regulamin: !f.regulamin }))}
+                  className={`mt-0.5 w-4 h-4 shrink-0 border flex items-center justify-center transition-all duration-200 ${
+                    form.regulamin
+                      ? "bg-gold border-gold"
+                      : "border-cream/30 hover:border-gold/50"
+                  }`}
+                >
+                  {form.regulamin && <Check size={10} className="text-dark" />}
+                </button>
+                <span className="font-jost text-xs text-cream/60 leading-relaxed group-hover:text-cream/80 transition-colors duration-200">
+                  Akceptuję{" "}
+                  <Link
+                    href="/regulamin"
+                    target="_blank"
+                    className="text-gold underline underline-offset-2 decoration-gold/40 hover:decoration-gold transition-all duration-200"
+                  >
+                    regulamin sprzedaży
+                  </Link>{" "}
+                  Royal Flowers <span className="text-red-400">*</span>
+                </span>
+              </label>
+            </div>
+
             {sendError && (
               <p className="font-jost text-xs text-red-400 text-center mt-6 border border-red-400/20 bg-red-400/5 px-4 py-3">
                 {sendError}
@@ -573,7 +607,7 @@ export default function ZamowPage() {
                 onClick={() => {
                   setStep(1);
                   setPickupTab("automat");
-                  setForm({ bukiet: null, kwota: "", automat: null, data: "", godzina: "", imie: "", telefon: "", email: "", uwagi: "" });
+                  setForm({ bukiet: null, kwota: "", automat: null, data: "", godzina: "", imie: "", telefon: "", email: "", uwagi: "", regulamin: false });
                   setKwoty({});
                   setSendError(null);
                 }}
