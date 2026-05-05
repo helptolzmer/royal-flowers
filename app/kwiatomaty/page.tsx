@@ -9,7 +9,7 @@ import { MapPin, Clock, Wifi, WifiOff, ArrowRight, Package } from "lucide-react"
  * Gdy null → wyświetla gradient placeholder.
  * Zdjęcie kwiatomatu jest już dostępne jako /images/kwiatomat.jpg
  */
-const HERO_BG: string | null = "/images/kwiatomat.jpg";
+const HERO_BG: string | null = "/images/kwiatomat-kobiety.jpg";
 
 const kwiatomaty = [
   {
@@ -91,7 +91,7 @@ export default function KwiatomatyPage() {
         {HERO_BG ? (
           <Image
             src={HERO_BG}
-            alt="Kwiatomat Royal Flowers 24h"
+            alt="Zespół Royal Flowers przy kwiatomacie – odbiór bukietów 24h"
             fill
             priority
             className="object-cover object-center"
