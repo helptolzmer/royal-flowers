@@ -25,7 +25,9 @@ const wszystkieZdjecia = [
   { src: "/images/kwiaciarnia/DSCF1861.jpg",  alt: "Kolorowa kompozycja w pomarańczowym wazonie",   kategoria: "Kompozycje" },
   { src: "/images/kwiaciarnia/DSCF1874.jpg",  alt: "Niebieskie tulipany",                           kategoria: "Bukiety" },
   { src: "/images/kwiaciarnia/DSCF1885.jpg",  alt: "Zbliżenie niebieskich kwiatów",                 kategoria: "Detale" },
-  { src: "/images/kwiaciarnia/DSCF1887.jpg",  alt: "Kompozycja z orchideami",                       kategoria: "Kompozycje" },
+  { src: "/images/kwiaciarnia/DSCF1887.jpg",         alt: "Kompozycja z orchideami",                       kategoria: "Kompozycje" },
+  { src: "/images/kwiaciarnia/realizacja-maki-miks.jpg",   alt: "Kolorowe maki i letnie kwiaty w kwiaciarni",    kategoria: "Kompozycje" },
+  { src: "/images/kwiaciarnia/realizacja-frezje-miks.jpg", alt: "Frezje i egzotyczne kwiaty – wiosenny miks",   kategoria: "Bukiety" },
 ];
 
 const kategorie = ["Wszystkie", "Bukiety", "Kompozycje", "Dekoracje", "Opakowania", "Za kulisami", "Zespół", "Detale"];

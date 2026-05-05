@@ -10,10 +10,10 @@ const wartosci = [
 ];
 
 const naszaPraca = [
-  { src: "/images/kwiaciarnia/kulisami-wianek.jpg",     alt: "Florystka w wianku z kwiatów – rzemiosło Royal Flowers" },
-  { src: "/images/kwiaciarnia/kulisami-maki.jpg",        alt: "Kolorowe maki i kwiaty w kwiaciarni Royal Flowers" },
-  { src: "/images/kwiaciarnia/kulisami-roze-protea.jpg", alt: "Różowe róże i King Protea – świeże dostawa" },
-  { src: "/images/kwiaciarnia/kulisami-tulipany.jpg",    alt: "Wyjątkowe niebieskie tulipany – unikalne odmiany" },
+  { src: "/images/kwiaciarnia/kulisami-wianek.jpg",  alt: "Florystka w wianku z kwiatów – rzemiosło Royal Flowers" },
+  { src: "/images/kwiaciarnia/DSCF1375.jpg",         alt: "Florystka Royal Flowers – pasja i uśmiech przy pracy" },
+  { src: "/images/kwiaciarnia/DSCF1366.jpg",         alt: "Florystka skupiona na tworzeniu kompozycji" },
+  { src: "/images/kwiaciarnia/DSCF1163.jpg",         alt: "Zespół Royal Flowers z pudełkiem kwiatowym" },
 ];
 
 export default function ONasPage() {

@@ -9,7 +9,7 @@ import { MapPin, Clock, Wifi, WifiOff, ArrowRight, Package } from "lucide-react"
  * Gdy null → wyświetla gradient placeholder.
  * Zdjęcie kwiatomatu jest już dostępne jako /images/kwiatomat.jpg
  */
-const HERO_BG: string | null = "/images/kwiatomat-kobiety.jpg";
+const HERO_BG: string | null = "/images/kwiatomat-dscf1491.jpg";
 
 const kwiatomaty = [
   {
