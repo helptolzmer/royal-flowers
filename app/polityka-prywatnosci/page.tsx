@@ -7,7 +7,7 @@ export const metadata = {
 };
 
 const FIRMA = "Małgorzata Pasiut Partyserwis Kwiaciarnia Royal Flowers";
-const ADRES = "Al. Wolności 10/A, 33-300 Nowy Sącz";
+const ADRES = "Podgrodzie 416, 33-386 Podgrodzie";
 const NIP   = "7342527300";
 const EMAIL = "kwiaciarniaroyalflowers@gmail.com";
 const TEL   = "532 688 820";

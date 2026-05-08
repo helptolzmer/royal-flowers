@@ -293,7 +293,7 @@ export default function Home() {
             {[
               { label: "Firma",   value: "Małgorzata Pasiut Partyserwis Kwiaciarnia Royal Flowers" },
               { label: "NIP",     value: "7342527300" },
-              { label: "Adres",   value: "Al. Wolności 10/A, 33-300 Nowy Sącz" },
+              { label: "Adres",   value: "Podgrodzie 416, 33-386 Podgrodzie" },
               { label: "Telefon", value: "532 688 820" },
               { label: "E-mail",  value: "kwiaciarniaroyalflowers@gmail.com" },
               { label: "Godziny", value: "Pon–Pt: 9:00–17:00  ·  Sob: 9:00–14:00" },

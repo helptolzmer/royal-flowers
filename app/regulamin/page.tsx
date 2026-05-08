@@ -7,6 +7,7 @@ export const metadata = {
 };
 
 const FIRMA = "Małgorzata Pasiut Partyserwis Kwiaciarnia Royal Flowers";
+const ADRES_SIEDZIBY = "Podgrodzie 416, 33-386 Podgrodzie";
 const ADRES = "Al. Wolności 10/A, 33-300 Nowy Sącz";
 const NIP   = "7342527300";
 const EMAIL = "kwiaciarniaroyalflowers@gmail.com";
@@ -18,7 +19,7 @@ const sekcje = [
     tytul: "§ 1. Postanowienia ogólne",
     tresc: [
       `Niniejszy Regulamin określa zasady składania zamówień i zawierania umów sprzedaży za pośrednictwem serwisu internetowego Royal Flowers (dalej: „Sklep").`,
-      `Sprzedawcą jest: ${FIRMA}, z siedzibą pod adresem ${ADRES}, NIP: ${NIP}, e-mail: ${EMAIL}, tel.: ${TEL} (dalej: „Sprzedawca").`,
+      `Sprzedawcą jest: ${FIRMA}, z siedzibą pod adresem ${ADRES_SIEDZIBY}, NIP: ${NIP}, e-mail: ${EMAIL}, tel.: ${TEL} (dalej: „Sprzedawca").`,
       `Klientem jest każda osoba fizyczna posiadająca pełną zdolność do czynności prawnych, osoba fizyczna prowadząca działalność gospodarczą, osoba prawna lub jednostka organizacyjna nieposiadająca osobowości prawnej, która złożyła zamówienie w Sklepie (dalej: „Klient").`,
       `Korzystanie ze Sklepu i składanie zamówień wymaga akceptacji niniejszego Regulaminu.`,
     ],
@@ -77,7 +78,7 @@ const sekcje = [
   {
     tytul: "§ 8. Ochrona danych osobowych",
     tresc: [
-      `Administratorem danych osobowych Klientów jest ${FIRMA} z siedzibą pod adresem ${ADRES}.`,
+      `Administratorem danych osobowych Klientów jest ${FIRMA} z siedzibą pod adresem ${ADRES_SIEDZIBY}.`,
       `Dane osobowe przetwarzane są w celu realizacji zamówień, obsługi reklamacji oraz – za zgodą Klienta – w celach marketingowych.`,
       `Szczegółowe informacje o przetwarzaniu danych osobowych zawarte są w Polityce Prywatności dostępnej pod adresem /polityka-prywatnosci.`,
     ],
@@ -150,7 +151,7 @@ export default function RegulaminPage() {
           <div className="space-y-1">
             {[
               ["Firma",  FIRMA],
-              ["Adres",  ADRES],
+              ["Adres",  ADRES_SIEDZIBY],
               ["NIP",    NIP],
               ["E-mail", EMAIL],
               ["Tel.",   TEL],
