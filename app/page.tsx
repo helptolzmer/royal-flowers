@@ -291,7 +291,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-gold/10">
             {[
-              { label: "Firma",   value: "Royal Flowers Kwiaciarnia" },
+              { label: "Firma",   value: "Małgorzata Pasiut Partyserwis Kwiaciarnia Royal Flowers" },
               { label: "NIP",     value: "7342527300" },
               { label: "Adres",   value: "Al. Wolności 10/A, 33-300 Nowy Sącz" },
               { label: "Telefon", value: "532 688 820" },

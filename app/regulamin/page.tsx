@@ -6,7 +6,7 @@ export const metadata = {
   description: "Regulamin sprzedaży Kwiaciarni Royal Flowers w Nowym Sączu.",
 };
 
-const FIRMA = "Royal Flowers Kwiaciarnia";
+const FIRMA = "Małgorzata Pasiut Partyserwis Kwiaciarnia Royal Flowers";
 const ADRES = "Al. Wolności 10/A, 33-300 Nowy Sącz";
 const NIP   = "7342527300";
 const EMAIL = "kwiaciarniaroyalflowers@gmail.com";
