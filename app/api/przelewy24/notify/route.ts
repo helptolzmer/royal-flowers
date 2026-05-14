@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 
-const MERCHANT_ID = parseInt(process.env.P24_MERCHANT_ID!, 16);
+const MERCHANT_ID = parseInt(process.env.P24_MERCHANT_ID!, 10);
 const CRC         = process.env.P24_CRC!;
 const API_KEY     = process.env.P24_API_KEY!;
 const P24_BASE    = "https://secure.przelewy24.pl";
