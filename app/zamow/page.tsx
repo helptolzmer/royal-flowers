@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import emailjs from "@emailjs/browser";
 import { ArrowRight, ArrowLeft, Check, Flower2, MapPin, Calendar, User, Phone, MessageSquare, Store, Mail } from "lucide-react";
 
 const bukiety = [
@@ -132,6 +131,8 @@ export default function ZamowPage() {
     form.godzina !== "" &&
     form.imie.trim() !== "" &&
     form.telefon.trim() !== "" &&
+    form.kwota.trim() !== "" &&
+    parseFloat(form.kwota) >= 1 &&
     form.regulamin === true;
 
   async function handleSubmit() {
@@ -143,44 +144,47 @@ export default function ZamowPage() {
         ? `Automat: ${selectedAutomat?.nazwa}, ${selectedAutomat?.dzielnica}`
         : `Kwiaciarnia: ${KWIACIARNIA_ADRES}`;
 
-    const baseParams = {
-      order_code: kod,
-      client_name: form.imie,
-      client_phone: form.telefon,
-      client_email: form.email || "nie podano",
-      bukiet: selectedBukiet ? `${selectedBukiet.emoji} ${selectedBukiet.nazwa}` : "",
-      kwota: form.kwota ? `${form.kwota} zł` : "nie podano",
-      pickup_type: pickupInfo,
-      data_odbioru: form.data,
-      godzina_odbioru: form.godzina,
-      uwagi: form.uwagi || "brak",
-    };
-
-    const EJS_SERVICE  = "service_pw7x0df";
-    const EJS_KEY      = "-Yp8zoOj7V9bdLb_O";
-    const EJS_T_OWNER  = "template_jn31zqm";
-    const EJS_T_CLIENT = "template_4r8akwm";
+    // Zapisz dane zamówienia w sessionStorage – strona /potwierdzenie wyśle maile po powrocie z P24
+    sessionStorage.setItem(
+      "royalflowers_order",
+      JSON.stringify({
+        orderCode:   kod,
+        bukiet:      selectedBukiet ? `${selectedBukiet.emoji} ${selectedBukiet.nazwa}` : "",
+        kwota:       form.kwota,
+        pickupInfo,
+        data:        form.data,
+        godzina:     form.godzina,
+        imie:        form.imie,
+        telefon:     form.telefon,
+        email:       form.email,
+        uwagi:       form.uwagi,
+        pickupTab,
+        automatNazwa: selectedAutomat?.nazwa,
+      })
+    );
 
     try {
-      await emailjs.send(
-        EJS_SERVICE,
-        EJS_T_OWNER,
-        { ...baseParams, to_email: "kwiaciarniaroyalflowers@gmail.com" },
-        EJS_KEY
-      );
+      const res = await fetch("/api/przelewy24/create", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({
+          orderCode:   kod,
+          amountPLN:   form.kwota,
+          email:       form.email,
+          description: `Royal Flowers – ${selectedBukiet?.nazwa}`,
+        }),
+      });
 
-      if (form.email) {
-        await emailjs.send(
-          EJS_SERVICE,
-          EJS_T_CLIENT,
-          { ...baseParams, to_email: form.email },
-          EJS_KEY
-        );
+      const data = await res.json();
+
+      if (!res.ok || !data.redirectUrl) {
+        setSendError(data.error || "Błąd inicjalizacji płatności. Spróbuj ponownie.");
+        return;
       }
 
-      setStep(3);
+      window.location.href = data.redirectUrl;
     } catch {
-      setSendError("Nie udało się wysłać zamówienia. Sprawdź połączenie i spróbuj ponownie.");
+      setSendError("Nie udało się połączyć z bramką płatności. Sprawdź połączenie i spróbuj ponownie.");
     } finally {
       setSending(false);
     }
@@ -533,7 +537,7 @@ export default function ZamowPage() {
                     : "bg-cream/10 text-cream/25 cursor-not-allowed"
                 }`}
               >
-                {sending ? "Wysyłanie…" : "Potwierdź zamówienie"}
+                {sending ? "Przekierowanie do płatności…" : "Zamów i zapłać"}
                 {!sending && <ArrowRight size={16} />}
               </button>
             </div>
