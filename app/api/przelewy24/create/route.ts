@@ -23,9 +23,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const sign = sha384hex(
-      JSON.stringify({ sessionId: orderCode, merchantId: MERCHANT_ID, amount, currency: "PLN", crc: CRC })
-    );
+    const signInput = { sessionId: orderCode, merchantId: MERCHANT_ID, amount, currency: "PLN", crc: CRC };
+    const sign = sha384hex(JSON.stringify(signInput));
 
     const payload = {
       merchantId:  MERCHANT_ID,
@@ -44,6 +43,19 @@ export async function POST(req: Request) {
 
     const credentials = Buffer.from(`${MERCHANT_ID}:${API_KEY}`).toString("base64");
 
+    console.log("[P24] >>> REQUEST", {
+      url:        `${P24_BASE}/api/v1/transaction/register`,
+      merchantId: MERCHANT_ID,
+      posId:      MERCHANT_ID,
+      sessionId:  orderCode,
+      amount,
+      currency:   "PLN",
+      urlReturn:  payload.urlReturn,
+      urlNotify:  payload.urlNotify,
+      signInput,
+      sign,
+    });
+
     const p24Res = await fetch(`${P24_BASE}/api/v1/transaction/register`, {
       method:  "POST",
       headers: {
@@ -53,21 +65,52 @@ export async function POST(req: Request) {
       body: JSON.stringify(payload),
     });
 
-    const p24Data = await p24Res.json();
+    const responseText = await p24Res.text();
 
-    if (!p24Res.ok || !p24Data.data?.token) {
-      console.error("[P24] register error:", p24Data);
+    let p24Data: unknown;
+    try {
+      p24Data = JSON.parse(responseText);
+    } catch {
+      p24Data = responseText;
+    }
+
+    console.log("[P24] <<< RESPONSE", {
+      status:  p24Res.status,
+      headers: Object.fromEntries(p24Res.headers.entries()),
+      body:    p24Data,
+    });
+
+    if (!p24Res.ok || !(p24Data as Record<string, unknown>)?.data) {
       return NextResponse.json(
-        { error: "Błąd rejestracji płatności. Spróbuj ponownie.", details: p24Data },
+        {
+          error:      "Błąd rejestracji płatności.",
+          p24Status:  p24Res.status,
+          p24Body:    p24Data,
+        },
+        { status: 502 }
+      );
+    }
+
+    const token = (p24Data as { data: { token?: string } }).data?.token;
+    if (!token) {
+      console.error("[P24] brak tokenu w odpowiedzi:", p24Data);
+      return NextResponse.json(
+        {
+          error:   "P24 nie zwróciło tokenu płatności.",
+          p24Body: p24Data,
+        },
         { status: 502 }
       );
     }
 
     return NextResponse.json({
-      redirectUrl: `${P24_BASE}/trnRequest/${p24Data.data.token}`,
+      redirectUrl: `${P24_BASE}/trnRequest/${token}`,
     });
   } catch (err) {
-    console.error("[P24] create error:", err);
-    return NextResponse.json({ error: "Błąd serwera" }, { status: 500 });
+    console.error("[P24] create – nieoczekiwany błąd:", err);
+    return NextResponse.json(
+      { error: "Błąd serwera", details: String(err) },
+      { status: 500 }
+    );
   }
 }
