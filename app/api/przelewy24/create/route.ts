@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 
-const P24_BASE = "https://secure.przelewy24.pl";
-
 function sha384hex(json: string): string {
   return crypto.createHash("sha384").update(json, "utf8").digest("hex");
 }
@@ -11,8 +9,14 @@ export async function POST(req: Request) {
   // Czytamy env wewnątrz handlera – gwarantuje runtime values (nie czas modułu)
   const MERCHANT_ID = parseInt((process.env.P24_MERCHANT_ID ?? "").trim(), 10);
   const CRC         = (process.env.P24_CRC    ?? "").trim();
+  // P24_API_KEY = "Klucz do raportów" z panelu P24 (NIE klucz CRC!)
   const API_KEY     = (process.env.P24_API_KEY ?? "").trim();
   const SITE_URL    = (process.env.SITE_URL    ?? "https://royalflowers.pl").trim();
+  // P24_SANDBOX=true → sandbox.przelewy24.pl, brak/false → secure.przelewy24.pl
+  const SANDBOX     = (process.env.P24_SANDBOX ?? "").trim().toLowerCase() === "true";
+  const P24_BASE    = SANDBOX
+    ? "https://sandbox.przelewy24.pl"
+    : "https://secure.przelewy24.pl";
 
   console.log("[P24] ENV CHECK", {
     P24_MERCHANT_ID_raw: process.env.P24_MERCHANT_ID,
@@ -22,6 +26,8 @@ export async function POST(req: Request) {
     API_KEY_length:      API_KEY.length,
     API_KEY_first5:      API_KEY.slice(0, 5),
     SITE_URL,
+    SANDBOX,
+    P24_BASE,
   });
 
   try {
@@ -102,11 +108,25 @@ export async function POST(req: Request) {
     });
 
     if (!p24Res.ok || !(p24Data as Record<string, unknown>)?.data) {
+      const hints: string[] = [];
+      if (p24Res.status === 401) {
+        hints.push(
+          "401 Unauthorized – sprawdź:",
+          "1. P24_API_KEY musi być 'Klucz do raportów' z panelu P24 (NIE klucz CRC)",
+          "2. W panelu P24 → Moje dane → API → dodaj '%' do listy dozwolonych IP",
+          "3. Upewnij się, że REST API jest aktywowane w panelu P24",
+          SANDBOX
+            ? "4. Używasz SANDBOX – upewnij się, że credentials są z konta sandbox (sandbox.przelewy24.pl)"
+            : "4. Używasz PRODUKCJI – jeśli testujesz, ustaw P24_SANDBOX=true",
+        );
+      }
+      console.error("[P24] błąd rejestracji", { hints });
       return NextResponse.json(
         {
           error:      "Błąd rejestracji płatności.",
           p24Status:  p24Res.status,
           p24Body:    p24Data,
+          hints,
         },
         { status: 502 }
       );

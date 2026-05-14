@@ -1,16 +1,19 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 
-const MERCHANT_ID = parseInt(process.env.P24_MERCHANT_ID!, 10);
-const CRC         = process.env.P24_CRC!;
-const API_KEY     = process.env.P24_API_KEY!;
-const P24_BASE    = "https://secure.przelewy24.pl";
-
 function sha384hex(json: string): string {
   return crypto.createHash("sha384").update(json, "utf8").digest("hex");
 }
 
 export async function POST(req: Request) {
+  const MERCHANT_ID = parseInt((process.env.P24_MERCHANT_ID ?? "").trim(), 10);
+  const CRC         = (process.env.P24_CRC     ?? "").trim();
+  const API_KEY     = (process.env.P24_API_KEY  ?? "").trim();
+  const SANDBOX     = (process.env.P24_SANDBOX  ?? "").trim().toLowerCase() === "true";
+  const P24_BASE    = SANDBOX
+    ? "https://sandbox.przelewy24.pl"
+    : "https://secure.przelewy24.pl";
+
   try {
     const body = await req.json();
     const {
