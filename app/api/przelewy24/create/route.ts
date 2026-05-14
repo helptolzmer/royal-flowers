@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 
-const MERCHANT_ID = parseInt(process.env.P24_MERCHANT_ID!, 10);
-const CRC         = process.env.P24_CRC!;
-const API_KEY     = process.env.P24_API_KEY!;
+const MERCHANT_ID = parseInt((process.env.P24_MERCHANT_ID ?? "").trim(), 10);
+const CRC         = (process.env.P24_CRC         ?? "").trim();
+const API_KEY     = (process.env.P24_API_KEY      ?? "").trim();
 const P24_BASE    = "https://secure.przelewy24.pl";
-const SITE_URL    = process.env.SITE_URL || "https://royalflowers.pl";
+const SITE_URL    = (process.env.SITE_URL         ?? "https://royalflowers.pl").trim();
 
 function sha384hex(json: string): string {
   return crypto.createHash("sha384").update(json, "utf8").digest("hex");
@@ -23,8 +23,15 @@ export async function POST(req: Request) {
       );
     }
 
-    const signInput = { sessionId: orderCode, merchantId: MERCHANT_ID, amount, currency: "PLN", crc: CRC };
-    const sign = sha384hex(JSON.stringify(signInput));
+    // Kolejność kluczy musi być dokładnie taka jak w dokumentacji P24
+    const signJsonString = JSON.stringify({
+      sessionId:  orderCode,
+      merchantId: MERCHANT_ID,
+      amount,
+      currency:   "PLN",
+      crc:        CRC,
+    });
+    const sign = sha384hex(signJsonString);
 
     const payload = {
       merchantId:  MERCHANT_ID,
@@ -41,19 +48,25 @@ export async function POST(req: Request) {
       sign,
     };
 
-    const credentials = Buffer.from(`${MERCHANT_ID}:${API_KEY}`).toString("base64");
+    // Basic Auth: base64(merchantId:apiKey)
+    const rawCredentials = `${MERCHANT_ID}:${API_KEY}`;
+    const credentials    = Buffer.from(rawCredentials).toString("base64");
 
     console.log("[P24] >>> REQUEST", {
-      url:        `${P24_BASE}/api/v1/transaction/register`,
-      merchantId: MERCHANT_ID,
-      posId:      MERCHANT_ID,
-      sessionId:  orderCode,
+      url:              `${P24_BASE}/api/v1/transaction/register`,
+      merchantId:       MERCHANT_ID,
+      posId:            MERCHANT_ID,
+      sessionId:        orderCode,
       amount,
-      currency:   "PLN",
-      urlReturn:  payload.urlReturn,
-      urlNotify:  payload.urlNotify,
-      signInput,
+      currency:         "PLN",
+      urlReturn:        payload.urlReturn,
+      urlNotify:        payload.urlNotify,
+      // dokładny string wchodzący do SHA384
+      signJsonString,
       sign,
+      // weryfikacja auth – widoczny merchantId, zamaskowany klucz
+      authRaw:          `${MERCHANT_ID}:${API_KEY.slice(0, 4)}…${API_KEY.slice(-4)}`,
+      authBase64Prefix: credentials.slice(0, 12) + "…",
     });
 
     const p24Res = await fetch(`${P24_BASE}/api/v1/transaction/register`, {
