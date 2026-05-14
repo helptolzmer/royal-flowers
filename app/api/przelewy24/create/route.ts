@@ -23,8 +23,8 @@ export async function POST(req: Request) {
     MERCHANT_ID_parsed:  MERCHANT_ID,
     CRC_length:          CRC.length,
     CRC_first5:          CRC.slice(0, 5),
-    REPORT_KEY_length:   API_KEY.length,
-    REPORT_KEY_first5:   API_KEY.slice(0, 5),
+    P24_REPORT_KEY_length: API_KEY.length,
+    P24_REPORT_KEY_first5: API_KEY.slice(0, 5),
     SITE_URL,
     SANDBOX,
     P24_BASE,
@@ -112,7 +112,7 @@ export async function POST(req: Request) {
       if (p24Res.status === 401) {
         hints.push(
           "401 Unauthorized – sprawdź:",
-          "1. P24_API_KEY musi być 'Klucz do raportów' z panelu P24 (NIE klucz CRC)",
+          "1. P24_REPORT_KEY musi być 'Klucz do raportów' z panelu P24 (NIE klucz CRC)",
           "2. W panelu P24 → Moje dane → API → dodaj '%' do listy dozwolonych IP",
           "3. Upewnij się, że REST API jest aktywowane w panelu P24",
           SANDBOX

@@ -14,6 +14,14 @@ export async function POST(req: Request) {
     ? "https://sandbox.przelewy24.pl"
     : "https://secure.przelewy24.pl";
 
+  console.log("[P24] ENV CHECK (notify)", {
+    MERCHANT_ID,
+    P24_REPORT_KEY_length: API_KEY.length,
+    P24_REPORT_KEY_first5: API_KEY.slice(0, 5),
+    SANDBOX,
+    P24_BASE,
+  });
+
   try {
     const body = await req.json();
     const {
