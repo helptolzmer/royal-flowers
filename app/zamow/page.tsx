@@ -124,7 +124,14 @@ export default function ZamowPage() {
   const selectedBukiet = bukiety.find((b) => b.id === form.bukiet);
   const selectedAutomat = kwiatomaty.find((k) => k.id === form.automat);
 
-  const canGoStep2 = form.bukiet !== null;
+  const isAmountInvalid = (bouquetId: number): boolean => {
+    const val = kwoty[bouquetId];
+    return !!val && val !== "" && parseFloat(val) < 100;
+  };
+
+  const canGoStep2 =
+    form.bukiet !== null &&
+    !isAmountInvalid(form.bukiet);
   const canGoStep3 =
     (pickupTab === "automat" ? form.automat !== null : true) &&
     form.data !== "" &&
@@ -132,7 +139,7 @@ export default function ZamowPage() {
     form.imie.trim() !== "" &&
     form.telefon.trim() !== "" &&
     form.kwota.trim() !== "" &&
-    parseFloat(form.kwota) >= 1 &&
+    parseFloat(form.kwota) >= 100 &&
     form.regulamin === true;
 
   async function handleSubmit() {
@@ -267,8 +274,17 @@ export default function ZamowPage() {
                           setForm((f) => ({ ...f, kwota: val }));
                         }
                       }}
-                      className="w-full bg-transparent border border-cream/10 text-cream font-jost text-xs px-3 py-2 placeholder:text-cream/20 focus:outline-none focus:border-gold/50 transition-colors duration-300 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                      className={`w-full bg-transparent border text-cream font-jost text-xs px-3 py-2 placeholder:text-cream/20 focus:outline-none transition-colors duration-300 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${
+                        isAmountInvalid(b.id)
+                          ? "border-red-400/60 focus:border-red-400"
+                          : "border-cream/10 focus:border-gold/50"
+                      }`}
                     />
+                    {isAmountInvalid(b.id) && (
+                      <p className="font-jost text-[10px] text-red-400 mt-1.5">
+                        Minimalna kwota to 100 zł
+                      </p>
+                    )}
                   </div>
                 </div>
               ))}
