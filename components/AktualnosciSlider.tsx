@@ -10,15 +10,6 @@ export type Aktualnosc = {
   zdjecie: string;
 };
 
-const MONTHS = [
-  "stycznia","lutego","marca","kwietnia","maja","czerwca",
-  "lipca","sierpnia","września","października","listopada","grudnia",
-];
-
-function formatDate(d: string) {
-  const [y, m, day] = d.split("-").map(Number);
-  return `${day} ${MONTHS[m - 1]} ${y}`;
-}
 
 export default function AktualnosciSlider({ items }: { items: Aktualnosc[] }) {
   const [current, setCurrent] = useState(0);
@@ -58,7 +49,7 @@ export default function AktualnosciSlider({ items }: { items: Aktualnosc[] }) {
                 {/* Content */}
                 <div className="bg-dark-800 p-8 md:p-12 flex flex-col justify-center">
                   <p className="font-jost text-xs tracking-[0.4em] uppercase text-gold mb-4">
-                    {formatDate(item.data)}
+                    {item.data}
                   </p>
                   <h3 className="font-cormorant text-3xl md:text-4xl font-light text-cream mb-4 leading-tight">
                     {item.tytul}

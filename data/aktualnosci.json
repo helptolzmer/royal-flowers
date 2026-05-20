@@ -1,23 +1,30 @@
 [
   {
     "id": "1",
-    "tytul": "Szkolenie MIF Poland",
-    "opis": "Z dumą informujemy, że nasza floristka wzięła udział w prestiżowym szkoleniu MIF Poland. Nowe techniki i inspiracje z europejskiego świata florystyki już wkrótce widoczne w naszych kompozycjach.",
-    "data": "2025-04-10",
-    "zdjecie": "/images/kwiaciarnia/DSCF1155.jpg"
+    "tytul": "Przenosimy się!",
+    "opis": "Nasza kwiaciarnia przeprowadza się na Jana Długosza 27 — zaledwie 300 metrów od obecnej lokalizacji. Czeka na Was prywatny parking pod kwiaciarnią, całkowicie odświeżony styl i nowości. Do zobaczenia po wakacjach!",
+    "data": "LIPIEC 2026",
+    "zdjecie": "/images/domek.png"
   },
   {
     "id": "2",
-    "tytul": "Dzień Matki – zamów zawczasu!",
-    "opis": "Dzień Matki już 26 maja! Nie czekaj na ostatnią chwilę – zamów wyjątkowy bukiet dla swojej mamy. Przygotowaliśmy specjalne kompozycje w odcieniach różu i bieli.",
-    "data": "2025-05-01",
-    "zdjecie": "/images/kwiaciarnia/DSCF1163.jpg"
+    "tytul": "Dzień Mamy już wkrótce!",
+    "opis": "Przygotuj wyjątkowy bukiet dla swojej Mamy. Zapraszamy do kwiaciarni lub zamów online.",
+    "data": "26 MAJA 2026",
+    "zdjecie": "/images/matka.jpg"
   },
   {
     "id": "3",
+    "tytul": "Szkolenie MIF Poland",
+    "opis": "Z dumą informujemy, że nasza floristka wzięła udział w prestiżowym szkoleniu MIF Poland. Nowe techniki i inspiracje z europejskiego świata florystyki już wkrótce widoczne w naszych kompozycjach.",
+    "data": "10 KWIETNIA 2026",
+    "zdjecie": "/images/szkolenie.jpg"
+  },
+  {
+    "id": "4",
     "tytul": "Nowe kwiaty w ofercie",
-    "opis": "Wiosna przyniosła nam nowe odmiany! W ofercie pojawiły się kolorowe tulipany, frezje oraz sezonowe piwonie. Zapraszamy do kwiaciarni lub do zamówienia online.",
-    "data": "2025-04-20",
-    "zdjecie": "/images/kwiaciarnia/DSCF1210.jpg"
+    "opis": "Świeże dostawy, nowe kompozycje i sezonowe nowości czekają na Ciebie w Royal Flowers.",
+    "data": "KWIECIEŃ 2026",
+    "zdjecie": "/images/nowe.jpg"
   }
 ]
