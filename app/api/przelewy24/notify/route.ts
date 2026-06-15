@@ -8,7 +8,7 @@ function sha384hex(json: string): string {
 export async function POST(req: Request) {
   const MERCHANT_ID = parseInt((process.env.P24_MERCHANT_ID ?? "").trim(), 10);
   const CRC         = (process.env.P24_CRC     ?? "").trim();
-  const API_KEY     = (process.env.P24_REPORT_KEY ?? "").trim();
+  const API_KEY     = (process.env.P24_API_KEY ?? "").trim();
   const SANDBOX     = (process.env.P24_SANDBOX  ?? "").trim().toLowerCase() === "true";
   const P24_BASE    = SANDBOX
     ? "https://sandbox.przelewy24.pl"
@@ -16,8 +16,8 @@ export async function POST(req: Request) {
 
   console.log("[P24] ENV CHECK (notify)", {
     MERCHANT_ID,
-    P24_REPORT_KEY_length: API_KEY.length,
-    P24_REPORT_KEY_first5: API_KEY.slice(0, 5),
+    P24_API_KEY_length: API_KEY.length,
+    P24_API_KEY_first5: API_KEY.slice(0, 5),
     SANDBOX,
     P24_BASE,
   });

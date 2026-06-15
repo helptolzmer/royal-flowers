@@ -9,8 +9,8 @@ export async function POST(req: Request) {
   // Czytamy env wewnątrz handlera – gwarantuje runtime values (nie czas modułu)
   const MERCHANT_ID = parseInt((process.env.P24_MERCHANT_ID ?? "").trim(), 10);
   const CRC         = (process.env.P24_CRC    ?? "").trim();
-  // P24_REPORT_KEY = "Klucz do raportów" z panelu P24 (NIE klucz CRC!)
-  const API_KEY     = (process.env.P24_REPORT_KEY ?? "").trim();
+  // P24_API_KEY = "Klucz API" (32 znaki) z panelu P24 → Konfiguracja API (NIE klucz CRC!)
+  const API_KEY     = (process.env.P24_API_KEY ?? "").trim();
   const SITE_URL    = (process.env.SITE_URL    ?? "https://royalflowers.pl").trim();
   // P24_SANDBOX=true → sandbox.przelewy24.pl, brak/false → secure.przelewy24.pl
   const SANDBOX     = (process.env.P24_SANDBOX ?? "").trim().toLowerCase() === "true";
@@ -23,8 +23,8 @@ export async function POST(req: Request) {
     MERCHANT_ID_parsed:  MERCHANT_ID,
     CRC_length:          CRC.length,
     CRC_first5:          CRC.slice(0, 5),
-    P24_REPORT_KEY_length: API_KEY.length,
-    P24_REPORT_KEY_first5: API_KEY.slice(0, 5),
+    P24_API_KEY_length: API_KEY.length,
+    P24_API_KEY_first5: API_KEY.slice(0, 5),
     SITE_URL,
     SANDBOX,
     P24_BASE,
@@ -112,7 +112,7 @@ export async function POST(req: Request) {
       if (p24Res.status === 401) {
         hints.push(
           "401 Unauthorized – sprawdź:",
-          "1. P24_REPORT_KEY musi być 'Klucz do raportów' z panelu P24 (NIE klucz CRC)",
+          "1. P24_API_KEY musi być 'Klucz API' (32 znaki) z panelu P24 → Konfiguracja API (NIE klucz CRC)",
           "2. W panelu P24 → Moje dane → API → dodaj '%' do listy dozwolonych IP",
           "3. Upewnij się, że REST API jest aktywowane w panelu P24",
           SANDBOX
