@@ -15,13 +15,20 @@ import {
   Store,
   Mail,
 } from "lucide-react";
+import {
+  getAvailableHours,
+  getPickupDeadline,
+  isHoliday,
+  getFlowerDayMsg,
+  AUTOMAT_ADDRESS,
+  SHOP_ADDRESS,
+} from "@/lib/orderRules";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface FormData {
   kompozycja: string | null;
   kwota: string;
-  automat: number | null;
   data: string;
   godzina: string;
   imie: string;
@@ -52,16 +59,14 @@ const CHIPY = [
   { label: "MEGA",   value: 500 },
 ];
 
-const kwiatomaty = [
-  { id: 1, nazwa: "ul. Wincentego Witosa 110",          dzielnica: "Nowy Sącz"  },
-  { id: 2, nazwa: "Naprzeciwko Galerii Trzy Korony",    dzielnica: "Nowy Sącz"  },
-  { id: 3, nazwa: "al. Wolności 10A",                   dzielnica: "Nowy Sącz"  },
-  { id: 4, nazwa: "Plac Dąbrowskiego 2",                dzielnica: "Nowy Sącz"  },
-  { id: 5, nazwa: "Przy wejściu do Galerii Gołąbkowice",dzielnica: "Nowy Sącz"  },
-  { id: 6, nazwa: "Przed wejściem Stacja Orlen",        dzielnica: "Stary Sącz" },
-];
+const KWIACIARNIA_ADRES = SHOP_ADDRESS;
 
-const KWIACIARNIA_ADRES = "Al. Wolności 10/A, Nowy Sącz";
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function formatDeadlineDate(dateStr: string): string {
+  const [y, m, d] = dateStr.split("-");
+  return `${d}.${m}.${y}`;
+}
 
 // ─── StepIndicator ────────────────────────────────────────────────────────────
 
@@ -225,7 +230,6 @@ export default function ZamowPage() {
   const [form, setForm] = useState<FormData>({
     kompozycja: null,
     kwota: "",
-    automat: null,
     data: "",
     godzina: "",
     imie: "",
@@ -237,6 +241,7 @@ export default function ZamowPage() {
   const [kod] = useState(generateCode());
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
+  const [dataError, setDataError] = useState<string | null>(null);
 
   // Sekcja 2 "Zdaj się na nas" — lokalny stan kwoty
   const [zdajKwota, setZdajKwota] = useState("");
@@ -245,18 +250,59 @@ export default function ZamowPage() {
   const zdajInvalid = zdajTouched && zdajKwota !== "" && zdajKwotaNum < 150;
   const zdajEmpty = zdajTouched && zdajKwota === "";
 
-  const selectedAutomat = kwiatomaty.find((k) => k.id === form.automat);
+  // Dynamiczne sloty godzinowe — przeliczane przy zmianie daty lub trybu odbioru
+  const availableHours = form.data && !dataError
+    ? getAvailableHours(form.data, new Date(), pickupTab)
+    : [];
+  const noHoursAvailable = !!form.data && !dataError && availableHours.length === 0;
+
+  // Deadline odbioru — pokazywany po wyborze daty i godziny
+  const deadlineHour = form.godzina ? parseInt(form.godzina.split(":")[0], 10) : null;
+  const deadline =
+    form.data && form.godzina && !dataError && deadlineHour !== null
+      ? getPickupDeadline(form.data, deadlineHour, pickupTab)
+      : null;
 
   const kwotaInvalid = form.kwota !== "" && parseFloat(form.kwota) < 150;
   const canGoStep3 =
-    (pickupTab === "automat" ? form.automat !== null : true) &&
     form.data !== "" &&
+    !dataError &&
+    !noHoursAvailable &&
     form.godzina !== "" &&
     form.imie.trim() !== "" &&
     form.telefon.trim() !== "" &&
     form.kwota.trim() !== "" &&
     !kwotaInvalid &&
     form.regulamin === true;
+
+  function handleDateChange(dateStr: string) {
+    // Reset godzina przy zmianie daty
+    setForm((f) => ({ ...f, data: dateStr, godzina: "" }));
+    setDataError(null);
+    if (!dateStr) return;
+
+    const [y, m, d] = dateStr.split("-").map(Number);
+    const date = new Date(y, m - 1, d);
+
+    if (date.getDay() === 0) {
+      setDataError("W niedziele kwiaciarnia jest zamknięta — wybierz inny dzień.");
+      return;
+    }
+    if (isHoliday(date)) {
+      setDataError("W tym dniu kwiaciarnia jest zamknięta (święto) — wybierz inny dzień.");
+      return;
+    }
+    const flowerMsg = getFlowerDayMsg(date);
+    if (flowerMsg) {
+      setDataError(flowerMsg);
+    }
+  }
+
+  function handlePickupTabChange(tab: PickupTab) {
+    setPickupTab(tab);
+    // Reset godzina bo dostępne sloty mogą się zmienić
+    setForm((f) => ({ ...f, godzina: "" }));
+  }
 
   function goToStep2(kompozycja: string, kwota: string) {
     setForm((f) => ({ ...f, kompozycja, kwota }));
@@ -275,7 +321,7 @@ export default function ZamowPage() {
 
     const pickupInfo =
       pickupTab === "automat"
-        ? `Automat: ${selectedAutomat?.nazwa}, ${selectedAutomat?.dzielnica}`
+        ? `Automat: ${AUTOMAT_ADDRESS}`
         : `Kwiaciarnia: ${KWIACIARNIA_ADRES}`;
 
     sessionStorage.setItem(
@@ -292,7 +338,7 @@ export default function ZamowPage() {
         email: form.email,
         uwagi: form.uwagi,
         pickupTab,
-        automatNazwa: selectedAutomat?.nazwa,
+        automatNazwa: pickupTab === "automat" ? AUTOMAT_ADDRESS : undefined,
       })
     );
 
@@ -305,6 +351,9 @@ export default function ZamowPage() {
           amountPLN: form.kwota,
           email: form.email,
           description: `Royal Flowers – ${form.kompozycja ?? "Kompozycja"}`,
+          data: form.data,
+          godzina: form.godzina,
+          pickupType: pickupTab,
         }),
       });
 
@@ -530,7 +579,7 @@ export default function ZamowPage() {
             {/* Zakładki odbioru */}
             <div className="flex border border-cream/10 mb-8">
               <button
-                onClick={() => setPickupTab("automat")}
+                onClick={() => handlePickupTabChange("automat")}
                 className={`flex-1 flex items-center justify-center gap-2 font-jost text-xs tracking-widest uppercase px-4 py-3.5 transition-all duration-300 ${
                   pickupTab === "automat"
                     ? "bg-gold text-dark"
@@ -540,7 +589,7 @@ export default function ZamowPage() {
                 <MapPin size={13} /> Wybierz automat
               </button>
               <button
-                onClick={() => setPickupTab("kwiaciarnia")}
+                onClick={() => handlePickupTabChange("kwiaciarnia")}
                 className={`flex-1 flex items-center justify-center gap-2 font-jost text-xs tracking-widest uppercase px-4 py-3.5 border-l border-cream/10 transition-all duration-300 ${
                   pickupTab === "kwiaciarnia"
                     ? "bg-gold text-dark"
@@ -552,39 +601,25 @@ export default function ZamowPage() {
             </div>
 
             <div className="space-y-6">
+              {/* Automat — jedna lokalizacja */}
               {pickupTab === "automat" && (
-                <div>
-                  <label className="flex items-center gap-2 font-jost text-xs tracking-widest uppercase text-gold mb-3">
-                    <MapPin size={13} /> Wybierz automat
-                  </label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {kwiatomaty.map((k) => (
-                      <button
-                        key={k.id}
-                        onClick={() =>
-                          setForm((f) => ({ ...f, automat: k.id }))
-                        }
-                        className={`text-left p-4 border transition-all duration-300 ${
-                          form.automat === k.id
-                            ? "border-gold bg-gold/5"
-                            : "border-cream/10 hover:border-gold/30 bg-dark-800"
-                        }`}
-                      >
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="font-jost text-xs text-gold/60 tracking-wider uppercase">
-                            {k.dzielnica}
-                          </span>
-                          {form.automat === k.id && (
-                            <Check size={12} className="text-gold" />
-                          )}
-                        </div>
-                        <p className="font-jost text-sm text-cream">{k.nazwa}</p>
-                      </button>
-                    ))}
+                <div className="border border-gold/20 bg-gold/5 p-5">
+                  <div className="flex items-start gap-3">
+                    <MapPin size={16} className="text-gold mt-0.5 flex-shrink-0" />
+                    <div className="space-y-1">
+                      <p className="font-jost text-[10px] tracking-[0.3em] uppercase text-gold/60">
+                        Lokalizacja kwiatomatu
+                      </p>
+                      <p className="font-jost text-sm text-cream">{AUTOMAT_ADDRESS}</p>
+                      <p className="font-jost text-xs text-cream/40 pt-1">
+                        Automat działa 24/7. Kod odbioru otrzymasz SMS-em po złożeniu zamówienia.
+                      </p>
+                    </div>
                   </div>
                 </div>
               )}
 
+              {/* Kwiaciarnia */}
               {pickupTab === "kwiaciarnia" && (
                 <div className="border border-gold/20 bg-gold/5 p-6 space-y-4">
                   <div className="flex items-start gap-3">
@@ -620,7 +655,9 @@ export default function ZamowPage() {
                 </div>
               )}
 
+              {/* Data i godzina */}
               <div className="grid grid-cols-2 gap-4">
+                {/* Data odbioru */}
                 <div>
                   <label className="flex items-center gap-2 font-jost text-xs tracking-widest uppercase text-gold mb-3">
                     <Calendar size={13} /> Data odbioru
@@ -629,28 +666,57 @@ export default function ZamowPage() {
                     type="date"
                     value={form.data}
                     min={new Date().toISOString().split("T")[0]}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, data: e.target.value }))
-                    }
-                    className="w-full bg-dark-800 border border-cream/10 text-cream font-jost text-sm px-4 py-3 focus:outline-none focus:border-gold/50 transition-colors duration-300 [color-scheme:dark]"
+                    onChange={(e) => handleDateChange(e.target.value)}
+                    className={`w-full bg-dark-800 border text-cream font-jost text-sm px-4 py-3 focus:outline-none transition-colors duration-300 [color-scheme:dark] ${
+                      dataError
+                        ? "border-red-400/60 focus:border-red-400"
+                        : "border-cream/10 focus:border-gold/50"
+                    }`}
                   />
+                  {dataError && (
+                    <p className="font-jost text-[10px] text-red-400 mt-1.5 leading-relaxed">
+                      {dataError}
+                    </p>
+                  )}
                 </div>
+
+                {/* Godzina odbioru */}
                 <div>
                   <label className="font-jost text-xs tracking-widest uppercase text-gold mb-3 block">
                     Godzina odbioru
                   </label>
-                  <select
-                    value={form.godzina}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, godzina: e.target.value }))
-                    }
-                    className="w-full bg-dark-800 border border-cream/10 text-cream font-jost text-sm px-4 py-3 focus:outline-none focus:border-gold/50 transition-colors duration-300 appearance-none"
-                  >
-                    <option value="">Wybierz godzinę</option>
-                    {["08:00","10:00","12:00","14:00","16:00","18:00","20:00","22:00"].map((h) => (
-                      <option key={h} value={h}>{h}</option>
-                    ))}
-                  </select>
+
+                  {noHoursAvailable ? (
+                    <p className="font-jost text-[10px] text-amber-400/90 border border-amber-400/20 bg-amber-400/5 px-3 py-2.5 leading-relaxed">
+                      W wybranym dniu nie ma już dostępnych godzin. Wybierz następny dzień roboczy.
+                    </p>
+                  ) : (
+                    <select
+                      value={form.godzina}
+                      onChange={(e) =>
+                        setForm((f) => ({ ...f, godzina: e.target.value }))
+                      }
+                      disabled={!form.data || !!dataError}
+                      className="w-full bg-dark-800 border border-cream/10 text-cream font-jost text-sm px-4 py-3 focus:outline-none focus:border-gold/50 transition-colors duration-300 appearance-none disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      <option value="">
+                        {!form.data || dataError ? "Najpierw wybierz datę" : "Wybierz godzinę"}
+                      </option>
+                      {availableHours.map((h) => (
+                        <option key={h} value={h}>{h}</option>
+                      ))}
+                    </select>
+                  )}
+
+                  {/* Deadline odbioru */}
+                  {deadline && (
+                    <p className="font-jost text-[10px] text-gold/70 mt-2 tracking-wide">
+                      Odbierz do:{" "}
+                      <span className="text-gold font-medium">
+                        {formatDeadlineDate(deadline.dateStr)} godz. {deadline.time}
+                      </span>
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -837,7 +903,7 @@ export default function ZamowPage() {
                   val: form.kwota ? `${form.kwota} zł` : undefined,
                 },
                 pickupTab === "automat"
-                  ? { label: "Automat", val: selectedAutomat?.nazwa }
+                  ? { label: "Automat", val: AUTOMAT_ADDRESS }
                   : { label: "Odbiór", val: KWIACIARNIA_ADRES },
                 { label: "Data odbioru", val: form.data },
                 { label: "Godzina", val: form.godzina },
@@ -866,7 +932,6 @@ export default function ZamowPage() {
                   setForm({
                     kompozycja: null,
                     kwota: "",
-                    automat: null,
                     data: "",
                     godzina: "",
                     imie: "",
@@ -877,6 +942,7 @@ export default function ZamowPage() {
                   });
                   setZdajKwota("");
                   setZdajTouched(false);
+                  setDataError(null);
                   setSendError(null);
                 }}
                 className="inline-flex items-center justify-center gap-2 font-jost text-xs tracking-widest uppercase border border-gold/30 text-gold px-8 py-3 hover:border-gold hover:bg-gold/5 transition-all duration-300"

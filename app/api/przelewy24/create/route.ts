@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
+import { validatePickup, type PickupType } from "@/lib/orderRules";
 
 function sha384hex(json: string): string {
   return crypto.createHash("sha384").update(json, "utf8").digest("hex");
@@ -31,12 +32,29 @@ export async function POST(req: Request) {
   });
 
   try {
-    const { orderCode, amountPLN, email, description } = await req.json();
+    const { orderCode, amountPLN, email, description, data, godzina, pickupType } = await req.json();
 
     const amount = Math.round(parseFloat(amountPLN) * 100);
     if (!amount || isNaN(amount) || amount < 15000) {
       return NextResponse.json(
         { error: "Minimalna kwota zamówienia to 150 zł." },
+        { status: 400 }
+      );
+    }
+
+    // Walidacja trybu odbioru
+    if (pickupType !== "automat" && pickupType !== "kwiaciarnia") {
+      return NextResponse.json(
+        { error: "Nieprawidłowy tryb odbioru." },
+        { status: 400 }
+      );
+    }
+
+    // Walidacja daty i godziny — identyczna logika jak w UI
+    const pickupValidation = validatePickup(data, godzina, pickupType as PickupType, new Date());
+    if (!pickupValidation.ok) {
+      return NextResponse.json(
+        { error: pickupValidation.error },
         { status: 400 }
       );
     }
