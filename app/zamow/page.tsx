@@ -2,37 +2,24 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, ArrowLeft, Check, Flower2, MapPin, Calendar, User, Phone, MessageSquare, Store, Mail } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowLeft,
+  Check,
+  Flower2,
+  MapPin,
+  Calendar,
+  User,
+  Phone,
+  MessageSquare,
+  Store,
+  Mail,
+} from "lucide-react";
 
-const bukiety = [
-  { id: 1,  nazwa: "Romantyczne Czerwone Róże", emoji: "🌹", kategoria: "Klasyka"     },
-  { id: 2,  nazwa: "Pastelowe Peonie",           emoji: "🌸", kategoria: "Premium"     },
-  { id: 3,  nazwa: "Słoneczny Tulipan Mix",      emoji: "🌷", kategoria: "Wiosna"      },
-  { id: 4,  nazwa: "Biały Elegancki Bukiet",     emoji: "🤍", kategoria: "Ślub"        },
-  { id: 5,  nazwa: "Lila Lawenda & Frezja",      emoji: "💜", kategoria: "Aromatyczny" },
-  { id: 6,  nazwa: "Złota Mimoza & Tulipan",     emoji: "🌼", kategoria: "Wiosna"      },
-  { id: 7,  nazwa: "Orchidea Premium",           emoji: "🪷", kategoria: "Premium"     },
-  { id: 8,  nazwa: "Rustykalny Polny Mix",       emoji: "🌾", kategoria: "Boho"        },
-  { id: 9,  nazwa: "Chryzantema Biała",          emoji: "🌺", kategoria: "Klasyka"     },
-  { id: 10, nazwa: "Egzotyczna Anthurium",       emoji: "🔴", kategoria: "Egzotyczny"  },
-];
-
-const kwiatomaty = [
-  { id: 1, nazwa: "ul. Wincentego Witosa 110",               dzielnica: "Nowy Sącz"  },
-  { id: 2, nazwa: "Naprzeciwko Galerii Trzy Korony",          dzielnica: "Nowy Sącz"  },
-  { id: 3, nazwa: "al. Wolności 10A",                        dzielnica: "Nowy Sącz"  },
-  { id: 4, nazwa: "Plac Dąbrowskiego 2",                     dzielnica: "Nowy Sącz"  },
-  { id: 5, nazwa: "Przy wejściu do Galerii Gołąbkowice",     dzielnica: "Nowy Sącz"  },
-  { id: 6, nazwa: "Przed wejściem Stacja Orlen",             dzielnica: "Stary Sącz" },
-];
-
-const KWIACIARNIA_ADRES = "Al. Wolności 10/A, Nowy Sącz";
-
-type Step = 1 | 2 | 3;
-type PickupTab = "automat" | "kwiaciarnia";
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface FormData {
-  bukiet: number | null;
+  kompozycja: string | null;
   kwota: string;
   automat: number | null;
   data: string;
@@ -44,9 +31,43 @@ interface FormData {
   regulamin: boolean;
 }
 
+type Step = 1 | 2 | 3;
+type PickupTab = "automat" | "kwiaciarnia";
+
+// ─── Static data ──────────────────────────────────────────────────────────────
+
+const KOMPOZYCJE = [
+  { emoji: "🌹", tag: "KLASYKA",     title: "Róża z przybraniem"  },
+  { emoji: "🌸", tag: "PREMIUM",     title: "Bukiet Pastelowy"    },
+  { emoji: "💐", tag: "ROMANTYCZNY", title: "Bukiet Romantyczny"  },
+  { emoji: "🌻", tag: "KOLOROWY",    title: "Mix Kwiatów"         },
+  { emoji: "🤍", tag: "ELEGANCJA",   title: "Bukiet Biały"        },
+  { emoji: "🌹", tag: "KLASYKA",     title: "Róże Solo"           },
+];
+
+const CHIPY = [
+  { label: "Mały",   value: 150 },
+  { label: "Średni", value: 250 },
+  { label: "Duży",   value: 350 },
+  { label: "MEGA",   value: 500 },
+];
+
+const kwiatomaty = [
+  { id: 1, nazwa: "ul. Wincentego Witosa 110",          dzielnica: "Nowy Sącz"  },
+  { id: 2, nazwa: "Naprzeciwko Galerii Trzy Korony",    dzielnica: "Nowy Sącz"  },
+  { id: 3, nazwa: "al. Wolności 10A",                   dzielnica: "Nowy Sącz"  },
+  { id: 4, nazwa: "Plac Dąbrowskiego 2",                dzielnica: "Nowy Sącz"  },
+  { id: 5, nazwa: "Przy wejściu do Galerii Gołąbkowice",dzielnica: "Nowy Sącz"  },
+  { id: 6, nazwa: "Przed wejściem Stacja Orlen",        dzielnica: "Stary Sącz" },
+];
+
+const KWIACIARNIA_ADRES = "Al. Wolności 10/A, Nowy Sącz";
+
+// ─── StepIndicator ────────────────────────────────────────────────────────────
+
 function StepIndicator({ current }: { current: Step }) {
   const steps = [
-    { n: 1, label: "Wybierz bukiet" },
+    { n: 1, label: "Wybierz kompozycję" },
     { n: 2, label: "Szczegóły" },
     { n: 3, label: "Potwierdzenie" },
   ];
@@ -92,20 +113,117 @@ function StepIndicator({ current }: { current: Step }) {
   );
 }
 
+// ─── KartaKompozycji ──────────────────────────────────────────────────────────
+
+function KartaKompozycji({
+  emoji,
+  tag,
+  title,
+  onZamow,
+}: {
+  emoji: string;
+  tag: string;
+  title: string;
+  onZamow: (title: string, kwota: string) => void;
+}) {
+  const [kwota, setKwota] = useState("");
+  const [touched, setTouched] = useState(false);
+  const kwotaNum = parseFloat(kwota);
+  const invalid = touched && kwota !== "" && kwotaNum < 1; // TEST: tymczasowo 1 zł, wrócić do 150 po teście P24
+  const empty = touched && kwota === "";
+
+  function handleZamow() {
+    setTouched(true);
+    if (!kwota || kwotaNum < 1) return; // TEST: tymczasowo 1 zł, wrócić do 150 po teście P24
+    onZamow(title, kwota);
+  }
+
+  return (
+    <div className="flex flex-col border border-cream/10 hover:border-gold/40 transition-all duration-300 bg-dark-800/30">
+      <div className="flex flex-col items-center pt-8 pb-6 px-5 gap-3">
+        <span className="text-4xl">{emoji}</span>
+        <span className="font-jost text-[9px] tracking-[0.3em] uppercase text-gold/70 border border-gold/25 px-3 py-1">
+          {tag}
+        </span>
+        <h3 className="font-cormorant text-xl font-light text-cream text-center">
+          {title}
+        </h3>
+      </div>
+
+      <div className="px-5 pb-6 space-y-3 mt-auto">
+        <div>
+          <input
+            type="number"
+            placeholder="wpisz kwotę (min 1 zł)"
+            value={kwota}
+            onChange={(e) => {
+              setKwota(e.target.value);
+              setTouched(false);
+            }}
+            className={`w-full bg-dark border text-cream font-jost text-sm px-4 py-3 placeholder:text-cream/20 focus:outline-none transition-colors duration-300 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${
+              invalid || empty
+                ? "border-red-400/60 focus:border-red-400"
+                : "border-cream/10 focus:border-gold/50"
+            }`}
+          />
+          {invalid && (
+            <p className="font-jost text-[10px] text-red-400 mt-1">
+              Minimalna kwota to 1 zł {/* TEST: wrócić do 150 zł po teście P24 */}
+            </p>
+          )}
+          {empty && (
+            <p className="font-jost text-[10px] text-red-400 mt-1">
+              Podaj kwotę
+            </p>
+          )}
+        </div>
+
+        <div className="flex gap-1.5">
+          {CHIPY.map((c) => (
+            <button
+              key={c.value}
+              onClick={() => {
+                setKwota(String(c.value));
+                setTouched(false);
+              }}
+              className={`flex-1 font-jost text-[9px] tracking-widest uppercase py-1.5 border transition-all duration-200 ${
+                kwota === String(c.value)
+                  ? "bg-gold border-gold text-dark"
+                  : "border-cream/15 bg-dark/40 text-cream/50 hover:border-gold/40 hover:text-cream/80"
+              }`}
+            >
+              {c.label}
+            </button>
+          ))}
+        </div>
+
+        <button
+          onClick={handleZamow}
+          className="w-full font-jost text-xs tracking-widest uppercase px-4 py-3 border border-gold/40 text-gold hover:bg-gold hover:text-dark transition-all duration-300"
+        >
+          Zamów
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── generateCode ─────────────────────────────────────────────────────────────
+
 function generateCode(): string {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   let code = "RF-";
-  for (let i = 0; i < 6; i++) {
-    code += chars[Math.floor(Math.random() * chars.length)];
-  }
+  for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
   return code;
 }
+
+// ─── ZamowPage ────────────────────────────────────────────────────────────────
 
 export default function ZamowPage() {
   const [step, setStep] = useState<Step>(1);
   const [pickupTab, setPickupTab] = useState<PickupTab>("automat");
   const [form, setForm] = useState<FormData>({
-    bukiet: null,
+    kompozycja: null,
     kwota: "",
     automat: null,
     data: "",
@@ -117,21 +235,19 @@ export default function ZamowPage() {
     regulamin: false,
   });
   const [kod] = useState(generateCode());
-  const [kwoty, setKwoty] = useState<Record<number, string>>({});
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
 
-  const selectedBukiet = bukiety.find((b) => b.id === form.bukiet);
+  // Sekcja 2 "Zdaj się na nas" — lokalny stan kwoty
+  const [zdajKwota, setZdajKwota] = useState("");
+  const [zdajTouched, setZdajTouched] = useState(false);
+  const zdajKwotaNum = parseFloat(zdajKwota);
+  const zdajInvalid = zdajTouched && zdajKwota !== "" && zdajKwotaNum < 1; // TEST: tymczasowo 1 zł, wrócić do 150 po teście P24
+  const zdajEmpty = zdajTouched && zdajKwota === "";
+
   const selectedAutomat = kwiatomaty.find((k) => k.id === form.automat);
 
-  const isAmountInvalid = (bouquetId: number): boolean => {
-    const val = kwoty[bouquetId];
-    return !!val && val !== "" && parseFloat(val) < 100;
-  };
-
-  const canGoStep2 =
-    form.bukiet !== null &&
-    !isAmountInvalid(form.bukiet);
+  const kwotaInvalid = form.kwota !== "" && parseFloat(form.kwota) < 1; // TEST: tymczasowo 1 zł, wrócić do 150 po teście P24
   const canGoStep3 =
     (pickupTab === "automat" ? form.automat !== null : true) &&
     form.data !== "" &&
@@ -139,8 +255,19 @@ export default function ZamowPage() {
     form.imie.trim() !== "" &&
     form.telefon.trim() !== "" &&
     form.kwota.trim() !== "" &&
-    parseFloat(form.kwota) >= 100 &&
+    !kwotaInvalid &&
     form.regulamin === true;
+
+  function goToStep2(kompozycja: string, kwota: string) {
+    setForm((f) => ({ ...f, kompozycja, kwota }));
+    setStep(2);
+  }
+
+  function handleZdajZamow() {
+    setZdajTouched(true);
+    if (!zdajKwota || zdajKwotaNum < 1) return; // TEST: tymczasowo 1 zł, wrócić do 150 po teście P24
+    goToStep2("Zdaj się na nas", zdajKwota);
+  }
 
   async function handleSubmit() {
     setSending(true);
@@ -151,20 +278,19 @@ export default function ZamowPage() {
         ? `Automat: ${selectedAutomat?.nazwa}, ${selectedAutomat?.dzielnica}`
         : `Kwiaciarnia: ${KWIACIARNIA_ADRES}`;
 
-    // Zapisz dane zamówienia w sessionStorage – strona /potwierdzenie wyśle maile po powrocie z P24
     sessionStorage.setItem(
       "royalflowers_order",
       JSON.stringify({
-        orderCode:   kod,
-        bukiet:      selectedBukiet ? `${selectedBukiet.emoji} ${selectedBukiet.nazwa}` : "",
-        kwota:       form.kwota,
+        orderCode: kod,
+        bukiet: form.kompozycja ?? "Royal Flowers",
+        kwota: form.kwota,
         pickupInfo,
-        data:        form.data,
-        godzina:     form.godzina,
-        imie:        form.imie,
-        telefon:     form.telefon,
-        email:       form.email,
-        uwagi:       form.uwagi,
+        data: form.data,
+        godzina: form.godzina,
+        imie: form.imie,
+        telefon: form.telefon,
+        email: form.email,
+        uwagi: form.uwagi,
         pickupTab,
         automatNazwa: selectedAutomat?.nazwa,
       })
@@ -172,13 +298,13 @@ export default function ZamowPage() {
 
     try {
       const res = await fetch("/api/przelewy24/create", {
-        method:  "POST",
+        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify({
-          orderCode:   kod,
-          amountPLN:   form.kwota,
-          email:       form.email,
-          description: `Royal Flowers – ${selectedBukiet?.nazwa}`,
+        body: JSON.stringify({
+          orderCode: kod,
+          amountPLN: form.kwota,
+          email: form.email,
+          description: `Royal Flowers – ${form.kompozycja ?? "Kompozycja"}`,
         }),
       });
 
@@ -191,7 +317,9 @@ export default function ZamowPage() {
 
       window.location.href = data.redirectUrl;
     } catch {
-      setSendError("Nie udało się połączyć z bramką płatności. Sprawdź połączenie i spróbuj ponownie.");
+      setSendError(
+        "Nie udało się połączyć z bramką płatności. Sprawdź połączenie i spróbuj ponownie."
+      );
     } finally {
       setSending(false);
     }
@@ -199,11 +327,14 @@ export default function ZamowPage() {
 
   return (
     <main className="pt-20 min-h-screen bg-dark">
-      {/* Hero */}
+      {/* Hero nagłówek */}
       <section className="py-16 px-6 text-center border-b border-gold/10 relative overflow-hidden">
         <div
           className="absolute inset-0 opacity-10"
-          style={{ background: "radial-gradient(ellipse at 50% 80%, #c9a84c33 0%, transparent 60%)" }}
+          style={{
+            background:
+              "radial-gradient(ellipse at 50% 80%, #c9a84c33 0%, transparent 60%)",
+          }}
         />
         <p className="font-jost text-xs tracking-[0.5em] uppercase text-gold mb-4 relative">
           Royal Flowers
@@ -213,101 +344,130 @@ export default function ZamowPage() {
         </h1>
       </section>
 
-      {/* Content */}
-      <section className="py-16 px-6 md:px-16 max-w-5xl mx-auto">
-        <StepIndicator current={step} />
+      {/* ── STEP 1 ─────────────────────────────────────────────────────────── */}
+      {step === 1 && (
+        <>
+          {/* Sekcja 1 — "Wybierz kompozycję" */}
+          <section className="py-20 px-6 md:px-16">
+            <div className="max-w-6xl mx-auto">
+              <StepIndicator current={1} />
 
-        {/* STEP 1 – Wybierz bukiet */}
-        {step === 1 && (
-          <div className="animate-fade-in">
-            <h2 className="font-cormorant text-3xl font-light text-cream text-center mb-2">
-              Wybierz kompozycję
-            </h2>
-            <p className="font-jost text-xs text-cream/40 text-center tracking-wider mb-10">
-              10 wyjątkowych propozycji od naszych florystów
-            </p>
+              <div className="text-center mb-14">
+                <p className="font-jost text-xs tracking-[0.4em] uppercase text-gold mb-3">
+                  Krok 1 z 2
+                </p>
+                <h2 className="font-cormorant text-4xl md:text-5xl font-light text-cream mb-3">
+                  Wybierz kompozycję
+                </h2>
+                <p className="font-jost text-xs text-cream/40 tracking-wider">
+                  Wybierz styl i podaj budżet — florysta dobierze najpiękniejsze kwiaty
+                </p>
+              </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-12">
-              {bukiety.map((b) => (
-                <div
-                  key={b.id}
-                  className={`relative flex flex-col border transition-all duration-300 ${
-                    form.bukiet === b.id
-                      ? "border-gold"
-                      : "border-cream/10 hover:border-gold/30"
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {KOMPOZYCJE.map((k) => (
+                  <KartaKompozycji
+                    key={k.title}
+                    emoji={k.emoji}
+                    tag={k.tag}
+                    title={k.title}
+                    onZamow={goToStep2}
+                  />
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Sekcja 2 — "Zdaj się na nas" */}
+          <section
+            className="relative flex items-center justify-center px-6 py-28"
+            style={{
+              backgroundImage: "url('/images/zdaj-sie-na-nas.png')",
+              backgroundSize: "cover",
+              backgroundPosition: "center 30%",
+            }}
+          >
+            <div
+              className="absolute inset-0"
+              style={{ background: "rgba(0,0,0,0.55)" }}
+            />
+
+            <div className="relative z-10 w-full max-w-lg mx-auto text-center">
+              <p className="font-jost text-xs tracking-[0.6em] uppercase text-gold/80 mb-5">
+                lub
+              </p>
+              <h2 className="font-cormorant text-6xl md:text-8xl font-light text-cream mb-5 leading-none">
+                Zdaj się na nas
+              </h2>
+              <p className="font-jost text-sm text-cream/60 tracking-wide mb-10 leading-relaxed">
+                Florysta przygotuje wyjątkowy bukiet
+                <br />z aktualnie najświeższych kwiatów
+              </p>
+
+              {/* Pole kwoty */}
+              <div className="mb-5">
+                <input
+                  type="number"
+                  placeholder="Twoja kwota (zł)"
+                  value={zdajKwota}
+                  onChange={(e) => {
+                    setZdajKwota(e.target.value);
+                    setZdajTouched(false);
+                  }}
+                  className={`w-full max-w-xs mx-auto block bg-dark/50 backdrop-blur-sm border text-cream font-cormorant text-2xl text-center px-6 py-4 placeholder:text-cream/35 focus:outline-none transition-colors duration-300 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${
+                    zdajInvalid || zdajEmpty
+                      ? "border-red-400/70 focus:border-red-400"
+                      : "border-cream/30 focus:border-gold"
                   }`}
-                >
-                  <div
-                    onClick={() => setForm((f) => ({ ...f, bukiet: b.id, kwota: kwoty[b.id] ?? "" }))}
-                    className={`relative p-6 cursor-pointer flex-1 transition-colors duration-300 ${
-                      form.bukiet === b.id ? "bg-gold/5" : "bg-dark-800"
+                />
+                {zdajInvalid && (
+                  <p className="font-jost text-[11px] text-red-400 mt-2">
+                    Minimalna kwota to 1 zł {/* TEST: wrócić do 150 zł po teście P24 */}
+                  </p>
+                )}
+                {zdajEmpty && (
+                  <p className="font-jost text-[11px] text-red-400 mt-2">
+                    Podaj kwotę
+                  </p>
+                )}
+              </div>
+
+              {/* Chip-buttony sugerowanych kwot */}
+              <div className="flex flex-wrap justify-center gap-2.5 mb-10">
+                {CHIPY.map((c) => (
+                  <button
+                    key={c.value}
+                    onClick={() => {
+                      setZdajKwota(String(c.value));
+                      setZdajTouched(false);
+                    }}
+                    className={`font-jost text-xs tracking-widest uppercase px-5 py-2.5 border transition-all duration-200 ${
+                      zdajKwota === String(c.value)
+                        ? "bg-gold border-gold text-dark"
+                        : "border-cream/35 text-cream/70 hover:border-gold/60 hover:text-cream"
                     }`}
                   >
-                    {form.bukiet === b.id && (
-                      <div className="absolute top-3 right-3 w-5 h-5 bg-gold flex items-center justify-center">
-                        <Check size={11} className="text-dark" />
-                      </div>
-                    )}
-                    <div className="text-3xl mb-4">{b.emoji}</div>
-                    <span className="font-jost text-xs text-gold/60 tracking-[0.3em] uppercase block mb-1">
-                      {b.kategoria}
-                    </span>
-                    <h3 className="font-cormorant text-base font-medium text-cream leading-tight">
-                      {b.nazwa}
-                    </h3>
-                  </div>
+                    {c.label} · {c.value} zł
+                  </button>
+                ))}
+              </div>
 
-                  <div className={`px-4 py-3 border-t transition-colors duration-300 ${
-                    form.bukiet === b.id ? "border-gold/30 bg-gold/5" : "border-cream/5 bg-dark-800"
-                  }`}>
-                    <label className="font-jost text-[10px] tracking-[0.25em] uppercase text-gold/50 block mb-1.5">
-                      Twoja kwota (zł)
-                    </label>
-                    <input
-                      type="number"
-                      placeholder="wpisz kwotę"
-                      value={kwoty[b.id] ?? ""}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        setKwoty((prev) => ({ ...prev, [b.id]: val }));
-                        if (form.bukiet === b.id) {
-                          setForm((f) => ({ ...f, kwota: val }));
-                        }
-                      }}
-                      className={`w-full bg-transparent border text-cream font-jost text-xs px-3 py-2 placeholder:text-cream/20 focus:outline-none transition-colors duration-300 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${
-                        isAmountInvalid(b.id)
-                          ? "border-red-400/60 focus:border-red-400"
-                          : "border-cream/10 focus:border-gold/50"
-                      }`}
-                    />
-                    {isAmountInvalid(b.id) && (
-                      <p className="font-jost text-[10px] text-red-400 mt-1.5">
-                        Minimalna kwota to 100 zł
-                      </p>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex justify-end">
               <button
-                onClick={() => setStep(2)}
-                disabled={!canGoStep2}
-                className={`inline-flex items-center gap-3 font-jost text-sm tracking-widest uppercase px-10 py-4 transition-all duration-300 ${
-                  canGoStep2
-                    ? "bg-gold text-dark hover:bg-gold-light"
-                    : "bg-cream/10 text-cream/25 cursor-not-allowed"
-                }`}
+                onClick={handleZdajZamow}
+                className="inline-flex items-center gap-3 font-jost text-sm tracking-widest uppercase px-12 py-4 bg-gold text-dark hover:bg-gold-light transition-all duration-300"
               >
-                Dalej <ArrowRight size={16} />
+                Zamów <ArrowRight size={16} />
               </button>
             </div>
-          </div>
-        )}
+          </section>
+        </>
+      )}
 
-        {/* STEP 2 – Szczegóły */}
-        {step === 2 && (
+      {/* ── STEP 2 ─────────────────────────────────────────────────────────── */}
+      {step === 2 && (
+        <section className="py-16 px-6 md:px-16 max-w-6xl mx-auto">
+          <StepIndicator current={2} />
+
           <div className="animate-fade-in max-w-2xl mx-auto">
             <h2 className="font-cormorant text-3xl font-light text-cream text-center mb-2">
               Szczegóły zamówienia
@@ -316,18 +476,56 @@ export default function ZamowPage() {
               Uzupełnij dane odbioru
             </p>
 
-            {/* Wybrany bukiet */}
-            {selectedBukiet && (
+            {/* Wybrana kompozycja */}
+            {form.kompozycja && (
               <div className="flex items-center gap-4 border border-gold/20 p-4 bg-gold/5 mb-8">
-                <span className="text-2xl">{selectedBukiet.emoji}</span>
                 <div className="flex-1">
-                  <p className="font-cormorant text-lg text-cream">{selectedBukiet.nazwa}</p>
+                  <p className="font-jost text-[10px] tracking-[0.3em] uppercase text-gold/60 mb-0.5">
+                    Wybrana kompozycja
+                  </p>
+                  <p className="font-cormorant text-lg text-cream">
+                    {form.kompozycja}
+                  </p>
                 </div>
-                {form.kwota && (
-                  <p className="font-cormorant text-xl text-gold">{form.kwota} zł</p>
-                )}
+                <div className="text-right shrink-0">
+                  <p className="font-jost text-[10px] tracking-[0.3em] uppercase text-gold/60 mb-0.5">
+                    Kwota
+                  </p>
+                  <p className="font-jost text-sm text-cream">{form.kwota} zł</p>
+                </div>
+                <button
+                  onClick={() => setStep(1)}
+                  className="font-jost text-[10px] tracking-wider uppercase text-gold/50 hover:text-gold transition-colors shrink-0 ml-2"
+                >
+                  Zmień
+                </button>
               </div>
             )}
+
+            {/* Kwota — edytowalna */}
+            <div className="mb-8">
+              <label className="font-jost text-xs tracking-widest uppercase text-gold mb-3 block">
+                Budżet zamówienia (zł)
+              </label>
+              <input
+                type="number"
+                placeholder="np. 1"
+                value={form.kwota}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, kwota: e.target.value }))
+                }
+                className={`w-full bg-dark-800 border text-cream font-jost text-sm px-4 py-3 placeholder:text-cream/20 focus:outline-none transition-colors duration-300 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${
+                  kwotaInvalid
+                    ? "border-red-400/60 focus:border-red-400"
+                    : "border-cream/10 focus:border-gold/50"
+                }`}
+              />
+              {kwotaInvalid && (
+                <p className="font-jost text-[10px] text-red-400 mt-1.5">
+                  Minimalna kwota to 1 zł {/* TEST: wrócić do 150 zł po teście P24 */}
+                </p>
+              )}
+            </div>
 
             {/* Zakładki odbioru */}
             <div className="flex border border-cream/10 mb-8">
@@ -354,7 +552,6 @@ export default function ZamowPage() {
             </div>
 
             <div className="space-y-6">
-              {/* Automat */}
               {pickupTab === "automat" && (
                 <div>
                   <label className="flex items-center gap-2 font-jost text-xs tracking-widest uppercase text-gold mb-3">
@@ -364,7 +561,9 @@ export default function ZamowPage() {
                     {kwiatomaty.map((k) => (
                       <button
                         key={k.id}
-                        onClick={() => setForm((f) => ({ ...f, automat: k.id }))}
+                        onClick={() =>
+                          setForm((f) => ({ ...f, automat: k.id }))
+                        }
                         className={`text-left p-4 border transition-all duration-300 ${
                           form.automat === k.id
                             ? "border-gold bg-gold/5"
@@ -386,7 +585,6 @@ export default function ZamowPage() {
                 </div>
               )}
 
-              {/* Kwiaciarnia */}
               {pickupTab === "kwiaciarnia" && (
                 <div className="border border-gold/20 bg-gold/5 p-6 space-y-4">
                   <div className="flex items-start gap-3">
@@ -396,26 +594,32 @@ export default function ZamowPage() {
                         <p className="font-jost text-[10px] tracking-[0.3em] uppercase text-gold/60 mb-1">
                           Adres
                         </p>
-                        <p className="font-jost text-sm text-cream">{KWIACIARNIA_ADRES}</p>
+                        <p className="font-jost text-sm text-cream">
+                          {KWIACIARNIA_ADRES}
+                        </p>
                       </div>
                       <div>
                         <p className="font-jost text-[10px] tracking-[0.3em] uppercase text-gold/60 mb-1">
                           Godziny otwarcia
                         </p>
-                        <p className="font-jost text-sm text-cream">Pon – Pt: 9:00 – 17:00</p>
-                        <p className="font-jost text-sm text-cream">Sobota: 9:00 – 14:00</p>
+                        <p className="font-jost text-sm text-cream">
+                          Pon – Pt: 9:00 – 17:00
+                        </p>
+                        <p className="font-jost text-sm text-cream">
+                          Sobota: 9:00 – 14:00
+                        </p>
                       </div>
                     </div>
                   </div>
                   <div className="border-t border-gold/15 pt-4">
                     <p className="font-jost text-xs text-cream/40 leading-relaxed">
-                      Po złożeniu zamówienia otrzymasz unikalny kod odbioru widoczny w podsumowaniu — okaż go w kwiaciarni.
+                      Po złożeniu zamówienia otrzymasz unikalny kod odbioru —
+                      okaż go w kwiaciarni.
                     </p>
                   </div>
                 </div>
               )}
 
-              {/* Data i godzina */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="flex items-center gap-2 font-jost text-xs tracking-widest uppercase text-gold mb-3">
@@ -425,7 +629,9 @@ export default function ZamowPage() {
                     type="date"
                     value={form.data}
                     min={new Date().toISOString().split("T")[0]}
-                    onChange={(e) => setForm((f) => ({ ...f, data: e.target.value }))}
+                    onChange={(e) =>
+                      setForm((f) => ({ ...f, data: e.target.value }))
+                    }
                     className="w-full bg-dark-800 border border-cream/10 text-cream font-jost text-sm px-4 py-3 focus:outline-none focus:border-gold/50 transition-colors duration-300 [color-scheme:dark]"
                   />
                 </div>
@@ -435,18 +641,19 @@ export default function ZamowPage() {
                   </label>
                   <select
                     value={form.godzina}
-                    onChange={(e) => setForm((f) => ({ ...f, godzina: e.target.value }))}
+                    onChange={(e) =>
+                      setForm((f) => ({ ...f, godzina: e.target.value }))
+                    }
                     className="w-full bg-dark-800 border border-cream/10 text-cream font-jost text-sm px-4 py-3 focus:outline-none focus:border-gold/50 transition-colors duration-300 appearance-none"
                   >
                     <option value="">Wybierz godzinę</option>
-                    {["08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"].map((h) => (
+                    {["08:00","10:00","12:00","14:00","16:00","18:00","20:00","22:00"].map((h) => (
                       <option key={h} value={h}>{h}</option>
                     ))}
                   </select>
                 </div>
               </div>
 
-              {/* Dane osobowe */}
               <div>
                 <label className="flex items-center gap-2 font-jost text-xs tracking-widest uppercase text-gold mb-3">
                   <User size={13} /> Imię i nazwisko
@@ -455,33 +662,41 @@ export default function ZamowPage() {
                   type="text"
                   placeholder="Anna Kowalska"
                   value={form.imie}
-                  onChange={(e) => setForm((f) => ({ ...f, imie: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, imie: e.target.value }))
+                  }
                   className="w-full bg-dark-800 border border-cream/10 text-cream font-jost text-sm px-4 py-3 placeholder:text-cream/20 focus:outline-none focus:border-gold/50 transition-colors duration-300"
                 />
               </div>
 
               <div>
                 <label className="flex items-center gap-2 font-jost text-xs tracking-widest uppercase text-gold mb-3">
-                  <Phone size={13} /> Numer telefonu{pickupTab === "automat" ? " (SMS z kodem)" : ""}
+                  <Phone size={13} /> Numer telefonu
+                  {pickupTab === "automat" ? " (SMS z kodem)" : ""}
                 </label>
                 <input
                   type="tel"
                   placeholder="+48 600 000 000"
                   value={form.telefon}
-                  onChange={(e) => setForm((f) => ({ ...f, telefon: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, telefon: e.target.value }))
+                  }
                   className="w-full bg-dark-800 border border-cream/10 text-cream font-jost text-sm px-4 py-3 placeholder:text-cream/20 focus:outline-none focus:border-gold/50 transition-colors duration-300"
                 />
               </div>
 
               <div>
                 <label className="flex items-center gap-2 font-jost text-xs tracking-widest uppercase text-gold mb-3">
-                  <Mail size={13} /> E-mail (opcjonalnie – potwierdzenie zamówienia)
+                  <Mail size={13} /> E-mail (opcjonalnie – potwierdzenie
+                  zamówienia)
                 </label>
                 <input
                   type="email"
                   placeholder="anna@example.com"
                   value={form.email}
-                  onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, email: e.target.value }))
+                  }
                   className="w-full bg-dark-800 border border-cream/10 text-cream font-jost text-sm px-4 py-3 placeholder:text-cream/20 focus:outline-none focus:border-gold/50 transition-colors duration-300"
                 />
               </div>
@@ -493,28 +708,34 @@ export default function ZamowPage() {
                 <textarea
                   placeholder="Np. dedykacja na karteczce, szczególne życzenia..."
                   value={form.uwagi}
-                  onChange={(e) => setForm((f) => ({ ...f, uwagi: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, uwagi: e.target.value }))
+                  }
                   rows={3}
                   className="w-full bg-dark-800 border border-cream/10 text-cream font-jost text-sm px-4 py-3 placeholder:text-cream/20 focus:outline-none focus:border-gold/50 transition-colors duration-300 resize-none"
                 />
               </div>
             </div>
 
-            {/* Akceptacja regulaminu */}
+            {/* Regulamin */}
             <div className="mt-6">
               <label className="flex items-start gap-3 cursor-pointer group">
                 <button
                   type="button"
                   role="checkbox"
                   aria-checked={form.regulamin}
-                  onClick={() => setForm((f) => ({ ...f, regulamin: !f.regulamin }))}
+                  onClick={() =>
+                    setForm((f) => ({ ...f, regulamin: !f.regulamin }))
+                  }
                   className={`mt-0.5 w-4 h-4 shrink-0 border flex items-center justify-center transition-all duration-200 ${
                     form.regulamin
                       ? "bg-gold border-gold"
                       : "border-cream/30 hover:border-gold/50"
                   }`}
                 >
-                  {form.regulamin && <Check size={10} className="text-dark" />}
+                  {form.regulamin && (
+                    <Check size={10} className="text-dark" />
+                  )}
                 </button>
                 <span className="font-jost text-xs text-cream/60 leading-relaxed group-hover:text-cream/80 transition-colors duration-200">
                   Akceptuję{" "}
@@ -553,15 +774,21 @@ export default function ZamowPage() {
                     : "bg-cream/10 text-cream/25 cursor-not-allowed"
                 }`}
               >
-                {sending ? "Przekierowanie do płatności…" : "Zamów i zapłać"}
+                {sending
+                  ? "Przekierowanie do płatności…"
+                  : "Zamów i zapłać"}
                 {!sending && <ArrowRight size={16} />}
               </button>
             </div>
           </div>
-        )}
+        </section>
+      )}
 
-        {/* STEP 3 – Potwierdzenie */}
-        {step === 3 && (
+      {/* ── STEP 3 ─────────────────────────────────────────────────────────── */}
+      {step === 3 && (
+        <section className="py-16 px-6 md:px-16 max-w-6xl mx-auto">
+          <StepIndicator current={3} />
+
           <div className="animate-scale-in max-w-xl mx-auto text-center">
             <div className="w-20 h-20 border border-gold mx-auto mb-8 flex items-center justify-center">
               <Check size={32} className="text-gold" />
@@ -577,16 +804,16 @@ export default function ZamowPage() {
             {pickupTab === "automat" ? (
               <p className="font-jost text-sm text-cream/50 mb-10 leading-relaxed">
                 Wysłaliśmy SMS z kodem odbioru na numer{" "}
-                <span className="text-cream">{form.telefon}</span>. Okaż kod przy
-                automacie, aby odebrać kwiaty.
+                <span className="text-cream">{form.telefon}</span>. Okaż kod
+                przy automacie, aby odebrać kwiaty.
               </p>
             ) : (
               <p className="font-jost text-sm text-cream/50 mb-10 leading-relaxed">
-                Twoje zamówienie zostało przyjęte. Okaż poniższy kod w kwiaciarni przy odbiorze.
+                Twoje zamówienie zostało przyjęte. Okaż poniższy kod w
+                kwiaciarni przy odbiorze.
               </p>
             )}
 
-            {/* Kod odbioru */}
             <div className="border border-gold/30 bg-gold/5 px-12 py-8 mb-10 inline-block">
               <p className="font-jost text-xs tracking-[0.6em] uppercase text-gold/60 mb-3">
                 Twój kod odbioru
@@ -596,26 +823,35 @@ export default function ZamowPage() {
               </p>
             </div>
 
-            {/* Podsumowanie */}
             <div className="border border-cream/10 bg-dark-800 p-6 text-left space-y-4 mb-10">
-              <h3 className="font-cormorant text-lg text-cream mb-4">Podsumowanie zamówienia</h3>
+              <h3 className="font-cormorant text-lg text-cream mb-4">
+                Podsumowanie zamówienia
+              </h3>
               {[
-                { label: "Bukiet",       val: selectedBukiet?.nazwa },
-                { label: "Kwota",        val: form.kwota ? `${form.kwota} zł` : undefined },
+                {
+                  label: "Kompozycja",
+                  val: form.kompozycja ?? undefined,
+                },
+                {
+                  label: "Kwota",
+                  val: form.kwota ? `${form.kwota} zł` : undefined,
+                },
                 pickupTab === "automat"
-                  ? { label: "Automat",      val: selectedAutomat?.nazwa }
-                  : { label: "Odbiór",       val: KWIACIARNIA_ADRES },
-                pickupTab === "kwiaciarnia"
-                  ? { label: "Kod odbioru",  val: kod }
-                  : null,
+                  ? { label: "Automat", val: selectedAutomat?.nazwa }
+                  : { label: "Odbiór", val: KWIACIARNIA_ADRES },
                 { label: "Data odbioru", val: form.data },
-                { label: "Godzina",      val: form.godzina },
+                { label: "Godzina", val: form.godzina },
               ]
                 .filter(Boolean)
                 .map((row) => (
-                  <div key={row!.label} className="flex justify-between items-center py-2 border-b border-cream/5 last:border-0">
-                    <span className="font-jost text-xs text-cream/40 tracking-wider uppercase">{row!.label}</span>
-                    <span className={`font-jost text-sm ${row!.label === "Kod odbioru" ? "text-gold font-medium tracking-widest" : "text-cream"}`}>
+                  <div
+                    key={row!.label}
+                    className="flex justify-between items-center py-2 border-b border-cream/5 last:border-0"
+                  >
+                    <span className="font-jost text-xs text-cream/40 tracking-wider uppercase">
+                      {row!.label}
+                    </span>
+                    <span className="font-jost text-sm text-cream">
                       {row!.val}
                     </span>
                   </div>
@@ -627,8 +863,20 @@ export default function ZamowPage() {
                 onClick={() => {
                   setStep(1);
                   setPickupTab("automat");
-                  setForm({ bukiet: null, kwota: "", automat: null, data: "", godzina: "", imie: "", telefon: "", email: "", uwagi: "", regulamin: false });
-                  setKwoty({});
+                  setForm({
+                    kompozycja: null,
+                    kwota: "",
+                    automat: null,
+                    data: "",
+                    godzina: "",
+                    imie: "",
+                    telefon: "",
+                    email: "",
+                    uwagi: "",
+                    regulamin: false,
+                  });
+                  setZdajKwota("");
+                  setZdajTouched(false);
                   setSendError(null);
                 }}
                 className="inline-flex items-center justify-center gap-2 font-jost text-xs tracking-widest uppercase border border-gold/30 text-gold px-8 py-3 hover:border-gold hover:bg-gold/5 transition-all duration-300"
@@ -643,8 +891,8 @@ export default function ZamowPage() {
               </a>
             </div>
           </div>
-        )}
-      </section>
+        </section>
+      )}
 
       <footer className="border-t border-gold/10 py-8 px-6 mt-16">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">

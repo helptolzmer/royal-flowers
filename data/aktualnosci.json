@@ -8,10 +8,11 @@
   },
   {
     "id": "2",
-    "tytul": "Dzień Mamy już wkrótce!",
-    "opis": "Przygotuj wyjątkowy bukiet dla swojej Mamy. Zapraszamy do kwiaciarni lub zamów online.",
-    "data": "26 MAJA 2026",
-    "zdjecie": "/images/matka.jpg"
+    "tytul": "Sezon ślubny w Royal Flowers",
+    "opis": "Bukiety panny młodej, butonierki, dekoracje sali i samochodu — kompleksowa obsługa Twojego wesela. Sprawdź ofertę i zarezerwuj termin.",
+    "data": "CZERWIEC 2026",
+    "zdjecie": "/images/sezon-ślubny.png",
+    "link": "/wesele"
   },
   {
     "id": "3",
@@ -22,9 +23,10 @@
   },
   {
     "id": "4",
-    "tytul": "Nowe kwiaty w ofercie",
-    "opis": "Świeże dostawy, nowe kompozycje i sezonowe nowości czekają na Ciebie w Royal Flowers.",
-    "data": "KWIECIEŃ 2026",
-    "zdjecie": "/images/nowe.jpg"
+    "tytul": "Lato w pełni",
+    "opis": "Piwonie, słoneczniki, lawenda, hortensje — letnie kompozycje już dostępne w kwiaciarni i kwiatomatach.",
+    "data": "LATO 2026",
+    "zdjecie": "/images/latowpełni.png",
+    "link": "/zamow"
   }
 ]

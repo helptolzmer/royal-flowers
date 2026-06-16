@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 
 export type Aktualnosc = {
   id: string;
@@ -8,6 +9,7 @@ export type Aktualnosc = {
   opis: string;
   data: string;
   zdjecie: string;
+  link?: string;
 };
 
 
@@ -55,9 +57,17 @@ export default function AktualnosciSlider({ items }: { items: Aktualnosc[] }) {
                     {item.tytul}
                   </h3>
                   <div className="w-8 h-px bg-gold mb-6" />
-                  <p className="font-jost text-sm text-cream/60 leading-relaxed">
+                  <p className="font-jost text-sm text-cream/60 leading-relaxed mb-6">
                     {item.opis}
                   </p>
+                  {item.link && (
+                    <Link
+                      href={item.link}
+                      className="inline-flex items-center gap-2 font-jost text-xs tracking-widest uppercase text-gold border border-gold/40 px-5 py-2.5 hover:bg-gold hover:text-dark transition-all duration-300 self-start"
+                    >
+                      Sprawdź ofertę <ArrowRight size={13} />
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>
