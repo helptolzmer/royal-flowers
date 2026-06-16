@@ -179,7 +179,7 @@ export function getEarliestPickupTime(now: Date): Date {
 export function getAvailableHours(
   dateStr: string,
   now: Date,
-  pickupType: PickupType   // zarezerwowany na przyszłe rozróżnienie logiki
+  _pickupType: PickupType   // zarezerwowany na przyszłe rozróżnienie logiki
 ): string[] {
   const date = parseDateStr(dateStr);
 
