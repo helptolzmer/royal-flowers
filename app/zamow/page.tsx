@@ -129,12 +129,12 @@ function KartaKompozycji({
   const [kwota, setKwota] = useState("");
   const [touched, setTouched] = useState(false);
   const kwotaNum = parseFloat(kwota);
-  const invalid = touched && kwota !== "" && kwotaNum < 1; // TEST: tymczasowo 1 zł, wrócić do 150 po teście P24
+  const invalid = touched && kwota !== "" && kwotaNum < 150;
   const empty = touched && kwota === "";
 
   function handleZamow() {
     setTouched(true);
-    if (!kwota || kwotaNum < 1) return; // TEST: tymczasowo 1 zł, wrócić do 150 po teście P24
+    if (!kwota || kwotaNum < 150) return;
     onZamow(title, kwota);
   }
 
@@ -154,7 +154,7 @@ function KartaKompozycji({
         <div>
           <input
             type="number"
-            placeholder="wpisz kwotę (min 1 zł)"
+            placeholder="wpisz kwotę (min 150 zł)"
             value={kwota}
             onChange={(e) => {
               setKwota(e.target.value);
@@ -168,7 +168,7 @@ function KartaKompozycji({
           />
           {invalid && (
             <p className="font-jost text-[10px] text-red-400 mt-1">
-              Minimalna kwota to 1 zł {/* TEST: wrócić do 150 zł po teście P24 */}
+              Minimalna kwota to 150 zł
             </p>
           )}
           {empty && (
@@ -242,12 +242,12 @@ export default function ZamowPage() {
   const [zdajKwota, setZdajKwota] = useState("");
   const [zdajTouched, setZdajTouched] = useState(false);
   const zdajKwotaNum = parseFloat(zdajKwota);
-  const zdajInvalid = zdajTouched && zdajKwota !== "" && zdajKwotaNum < 1; // TEST: tymczasowo 1 zł, wrócić do 150 po teście P24
+  const zdajInvalid = zdajTouched && zdajKwota !== "" && zdajKwotaNum < 150;
   const zdajEmpty = zdajTouched && zdajKwota === "";
 
   const selectedAutomat = kwiatomaty.find((k) => k.id === form.automat);
 
-  const kwotaInvalid = form.kwota !== "" && parseFloat(form.kwota) < 1; // TEST: tymczasowo 1 zł, wrócić do 150 po teście P24
+  const kwotaInvalid = form.kwota !== "" && parseFloat(form.kwota) < 150;
   const canGoStep3 =
     (pickupTab === "automat" ? form.automat !== null : true) &&
     form.data !== "" &&
@@ -265,7 +265,7 @@ export default function ZamowPage() {
 
   function handleZdajZamow() {
     setZdajTouched(true);
-    if (!zdajKwota || zdajKwotaNum < 1) return; // TEST: tymczasowo 1 zł, wrócić do 150 po teście P24
+    if (!zdajKwota || zdajKwotaNum < 150) return;
     goToStep2("Zdaj się na nas", zdajKwota);
   }
 
@@ -422,7 +422,7 @@ export default function ZamowPage() {
                 />
                 {zdajInvalid && (
                   <p className="font-jost text-[11px] text-red-400 mt-2">
-                    Minimalna kwota to 1 zł {/* TEST: wrócić do 150 zł po teście P24 */}
+                    Minimalna kwota to 150 zł
                   </p>
                 )}
                 {zdajEmpty && (
@@ -509,7 +509,7 @@ export default function ZamowPage() {
               </label>
               <input
                 type="number"
-                placeholder="np. 1"
+                placeholder="np. 150"
                 value={form.kwota}
                 onChange={(e) =>
                   setForm((f) => ({ ...f, kwota: e.target.value }))
@@ -522,7 +522,7 @@ export default function ZamowPage() {
               />
               {kwotaInvalid && (
                 <p className="font-jost text-[10px] text-red-400 mt-1.5">
-                  Minimalna kwota to 1 zł {/* TEST: wrócić do 150 zł po teście P24 */}
+                  Minimalna kwota to 150 zł
                 </p>
               )}
             </div>

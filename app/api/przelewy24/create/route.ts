@@ -34,9 +34,9 @@ export async function POST(req: Request) {
     const { orderCode, amountPLN, email, description } = await req.json();
 
     const amount = Math.round(parseFloat(amountPLN) * 100);
-    if (!amount || isNaN(amount) || amount < 100) { // TEST: tymczasowo 1 zł, wrócić do 15000 po teście P24
+    if (!amount || isNaN(amount) || amount < 15000) {
       return NextResponse.json(
-        { error: "Minimalna kwota zamówienia to 1 zł." }, // TEST: wrócić do 100 zł po teście P24
+        { error: "Minimalna kwota zamówienia to 150 zł." },
         { status: 400 }
       );
     }
