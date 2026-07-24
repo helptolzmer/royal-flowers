@@ -226,7 +226,7 @@ function generateCode(): string {
 
 export default function ZamowPage() {
   const [step, setStep] = useState<Step>(1);
-  const [pickupTab, setPickupTab] = useState<PickupTab>("automat");
+  const [pickupTab, setPickupTab] = useState<PickupTab>("kwiaciarnia");
   const [form, setForm] = useState<FormData>({
     kompozycja: null,
     kwota: "",
@@ -578,16 +578,18 @@ export default function ZamowPage() {
 
             {/* Zakładki odbioru */}
             <div className="flex border border-cream/10 mb-8">
-              <button
-                onClick={() => handlePickupTabChange("automat")}
-                className={`flex-1 flex items-center justify-center gap-2 font-jost text-xs tracking-widest uppercase px-4 py-3.5 transition-all duration-300 ${
-                  pickupTab === "automat"
-                    ? "bg-gold text-dark"
-                    : "text-cream/50 hover:text-cream hover:bg-cream/5"
-                }`}
-              >
-                <MapPin size={13} /> Wybierz automat
-              </button>
+              {/* TYMCZASOWO wyłączony automat — przywrócić: usunąć wrapper div + tooltip, przywrócić onClick i className */}
+              <div className="flex-1 relative group">
+                <button
+                  disabled
+                  className="w-full flex items-center justify-center gap-2 font-jost text-xs tracking-widest uppercase px-4 py-3.5 cursor-not-allowed opacity-35 text-cream/30"
+                >
+                  <MapPin size={13} /> Wybierz automat
+                </button>
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-dark border border-gold/30 text-gold/80 font-jost text-[10px] tracking-wide whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
+                  Kwiatomat tymczasowo niedostępny – trwa przebudowa
+                </div>
+              </div>
               <button
                 onClick={() => handlePickupTabChange("kwiaciarnia")}
                 className={`flex-1 flex items-center justify-center gap-2 font-jost text-xs tracking-widest uppercase px-4 py-3.5 border-l border-cream/10 transition-all duration-300 ${
@@ -601,20 +603,15 @@ export default function ZamowPage() {
             </div>
 
             <div className="space-y-6">
-              {/* Automat — jedna lokalizacja */}
+              {/* Automat — TYMCZASOWO niedostępny; kod przywrócić po przebudowie */}
               {pickupTab === "automat" && (
-                <div className="border border-gold/20 bg-gold/5 p-5">
+                <div className="border border-amber-400/30 bg-amber-400/5 p-5">
                   <div className="flex items-start gap-3">
-                    <MapPin size={16} className="text-gold mt-0.5 flex-shrink-0" />
-                    <div className="space-y-1">
-                      <p className="font-jost text-[10px] tracking-[0.3em] uppercase text-gold/60">
-                        Lokalizacja kwiatomatu
-                      </p>
-                      <p className="font-jost text-sm text-cream">{AUTOMAT_ADDRESS}</p>
-                      <p className="font-jost text-xs text-cream/40 pt-1">
-                        Automat działa 24/7. Kod odbioru otrzymasz SMS-em po złożeniu zamówienia.
-                      </p>
-                    </div>
+                    <MapPin size={16} className="text-amber-400 mt-0.5 flex-shrink-0" />
+                    <p className="font-jost text-sm text-amber-300/80 leading-relaxed">
+                      Odbiór z kwiatomatu jest tymczasowo niedostępny z powodu przebudowy.
+                      Prosimy o odbiór w kwiaciarni.
+                    </p>
                   </div>
                 </div>
               )}
@@ -928,7 +925,7 @@ export default function ZamowPage() {
               <button
                 onClick={() => {
                   setStep(1);
-                  setPickupTab("automat");
+                  setPickupTab("kwiaciarnia");
                   setForm({
                     kompozycja: null,
                     kwota: "",
