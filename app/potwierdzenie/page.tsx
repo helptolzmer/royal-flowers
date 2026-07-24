@@ -29,8 +29,9 @@ interface StoredOrder {
 function PotwierdzeniePage() {
   const params    = useSearchParams();
   const orderCode = params.get("orderCode") || "";
-  const [order, setOrder]       = useState<StoredOrder | null>(null);
+  const [order, setOrder]         = useState<StoredOrder | null>(null);
   const [emailSent, setEmailSent] = useState(false);
+  const [emailError, setEmailError] = useState<string | null>(null);
 
   useEffect(() => {
     const raw = sessionStorage.getItem("royalflowers_order");
@@ -53,16 +54,18 @@ function PotwierdzeniePage() {
     }
 
     const baseParams = {
-      order_code:     stored.orderCode,
-      client_name:    stored.imie,
-      client_phone:   stored.telefon,
-      client_email:   stored.email || "nie podano",
-      bukiet:         stored.bukiet,
-      kwota:          stored.kwota ? `${stored.kwota} zł` : "nie podano",
-      pickup_type:    stored.pickupInfo,
-      data_odbioru:   stored.data,
+      order_code:      stored.orderCode,
+      client_name:     stored.imie,
+      client_phone:    stored.telefon,
+      client_email:    stored.email || "nie podano",
+      bukiet:          stored.bukiet,
+      kwota:           stored.kwota ? `${stored.kwota} zł` : "nie podano",
+      pickup_type:     stored.pickupInfo,
+      pickup_tab:      stored.pickupTab,
+      automat_address: stored.automatNazwa || "",
+      data_odbioru:    stored.data,
       godzina_odbioru: stored.godzina,
-      uwagi:          stored.uwagi || "brak",
+      uwagi:           stored.uwagi || "brak",
     };
 
     emailjs
@@ -76,10 +79,11 @@ function PotwierdzeniePage() {
         sessionStorage.setItem(flagKey, "1");
         setEmailSent(true);
       })
-      .catch((err) => {
+      .catch((err: unknown) => {
+        const msg = err instanceof Error ? err.message : JSON.stringify(err);
         console.error("EmailJS error:", err);
-        sessionStorage.setItem(flagKey, "1");
-        setEmailSent(true);
+        setEmailError(`Błąd wysyłki potwierdzenia (${msg}). Skontaktuj się z kwiaciarnią telefonicznie.`);
+        // Nie ustawiamy flagi — przy odświeżeniu strony wysyłka zostanie ponowiona.
       });
   }, []);
 
@@ -181,6 +185,11 @@ function PotwierdzeniePage() {
           {emailSent && order?.email && (
             <p className="font-jost text-xs text-cream/30 mt-8">
               Potwierdzenie wysłano na adres {order.email}
+            </p>
+          )}
+          {emailError && (
+            <p className="font-jost text-xs text-amber-400/80 mt-8 border border-amber-400/20 bg-amber-400/5 px-4 py-3 leading-relaxed">
+              {emailError}
             </p>
           )}
         </div>
