@@ -167,6 +167,16 @@ function PotwierdzeniePage() {
             </div>
           )}
 
+          <p className="font-jost text-[10px] text-cream/30 text-center mb-8">
+            Nie dostałeś potwierdzenia na maila?{" "}
+            <a
+              href="mailto:kwiaciarniaroyalflowers@gmail.com"
+              className="text-gold/50 hover:text-gold transition-colors duration-200"
+            >
+              Skontaktuj się z nami
+            </a>
+          </p>
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/zamow"
