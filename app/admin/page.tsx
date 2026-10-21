@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Plus, Pencil, Trash2, X, Check } from "lucide-react";
-import { Aktualnosc } from "@/components/AktualnosciSlider";
+import type { Aktualnosc } from "@/lib/aktualnosci";
 
 type FormData = Omit<Aktualnosc, "id">;
 
@@ -75,7 +75,7 @@ export default function AdminPage() {
   const field = "w-full bg-dark border border-gold/20 text-cream font-jost text-sm px-4 py-3 focus:outline-none focus:border-gold/50 placeholder:text-cream/20";
 
   return (
-    <main className="pt-24 pb-20 px-6 min-h-screen bg-dark">
+    <main className="pt-32 pb-20 px-6 min-h-screen bg-dark">
       <div className="max-w-3xl mx-auto">
 
         {/* Header */}

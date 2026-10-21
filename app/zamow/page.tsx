@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -23,6 +23,8 @@ import {
   AUTOMAT_ADDRESS,
   SHOP_ADDRESS,
 } from "@/lib/orderRules";
+import { useParallax, useReveal } from "@/lib/animations";
+import { findProduct, type Category, type Product, type ProductVariant } from "@/lib/products";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -43,21 +45,28 @@ type PickupTab = "automat" | "kwiaciarnia";
 
 // ─── Static data ──────────────────────────────────────────────────────────────
 
-const KOMPOZYCJE = [
-  { emoji: "🌹", tag: "KLASYKA",     title: "Róża z przybraniem"  },
-  { emoji: "🌸", tag: "PREMIUM",     title: "Bukiet Pastelowy"    },
-  { emoji: "💐", tag: "ROMANTYCZNY", title: "Bukiet Romantyczny"  },
-  { emoji: "🌻", tag: "KOLOROWY",    title: "Mix Kwiatów"         },
-  { emoji: "🤍", tag: "ELEGANCJA",   title: "Bukiet Biały"        },
-  { emoji: "🌹", tag: "KLASYKA",     title: "Róże Solo"           },
+// 6 produktów ze sklepu (lib/products.ts) — ceny, zdjęcia i opisy z danych sklepu.
+// Każdy ma Mały ≥ 150 zł (minimalna kwota zamówienia).
+// Krótki, jednolinijkowy opis — to strona szybkiego zamówienia
+const WYBRANE: { kategoria: string; slug: string; tag: string; opis: string }[] = [
+  { kategoria: "bukiety-roz",        slug: "bukiet-biale-roze",                 tag: "ELEGANCJA",   opis: "Eleganckie białe róże premium" },
+  { kategoria: "bukiety-roz",        slug: "bukiet-czerwona-namietnosc",        tag: "KLASYKA",     opis: "Klasyczne czerwone róże na każdą okazję" },
+  { kategoria: "flowerboxy",         slug: "flowerbox-premium",                 tag: "PREMIUM",     opis: "Kwiaty w eleganckim pudełku — gotowy prezent" },
+  { kategoria: "bukiety-nowoczesne", slug: "bukiet-pastelowe-hortensje",        tag: "NOWOCZESNY",  opis: "Pastelowe hortensje z delikatną gipsówką" },
+  { kategoria: "bukiety-naturalne",  slug: "bukiet-piwoniowy-roz",              tag: "ROMANTYCZNY", opis: "Różowe piwonie i róże w pudrowym papierze" },
+  { kategoria: "bukiety-polne",      slug: "bukiet-sloneczniki-i-kwiaty-polne", tag: "POLNY",       opis: "Słoneczniki i polne kwiaty w naturalnym stylu" },
 ];
 
-const CHIPY = [
-  { label: "Mały",   value: 150 },
-  { label: "Średni", value: 250 },
-  { label: "Duży",   value: 350 },
-  { label: "MEGA",   value: 500 },
-];
+const KOMPOZYCJE = WYBRANE.flatMap(({ kategoria, slug, tag, opis }) => {
+  const found = findProduct(kategoria, slug);
+  return found ? [{ ...found, tag, opis }] : [];
+}) as { category: Category; product: Product; tag: string; opis: string }[];
+
+const ZDAJ_MIN = 150;
+const ZDAJ_MAX = 1000;
+const ZDAJ_STEP = 50;
+const IMG_FADE_OUT_MS = 200;
+const KATALOG_LICZBA = 100; // "ponad 100" produktów w sklepie
 
 const KWIACIARNIA_ADRES = SHOP_ADDRESS;
 
@@ -106,11 +115,12 @@ function StepIndicator({ current }: { current: Step }) {
             </p>
           </div>
           {i < steps.length - 1 && (
-            <div
-              className={`w-20 md:w-32 h-px mx-3 mb-5 transition-all duration-500 ${
-                current > s.n ? "bg-gold" : "bg-cream/10"
-              }`}
-            />
+            <div className="relative w-20 md:w-32 h-px mx-3 mb-5 bg-cream/10 overflow-hidden">
+              <div
+                className="absolute inset-0 bg-gold origin-left transition-transform duration-700 ease-out"
+                style={{ transform: current > s.n ? "scaleX(1)" : "scaleX(0)" }}
+              />
+            </div>
           )}
         </div>
       ))}
@@ -121,93 +131,108 @@ function StepIndicator({ current }: { current: Step }) {
 // ─── KartaKompozycji ──────────────────────────────────────────────────────────
 
 function KartaKompozycji({
-  emoji,
-  tag,
-  title,
+  k,
+  index,
+  visible,
   onZamow,
 }: {
-  emoji: string;
-  tag: string;
-  title: string;
+  k: (typeof KOMPOZYCJE)[number];
+  index: number;
+  visible: boolean;
   onZamow: (title: string, kwota: string) => void;
 }) {
-  const [kwota, setKwota] = useState("");
-  const [touched, setTouched] = useState(false);
-  const kwotaNum = parseFloat(kwota);
-  const invalid = touched && kwota !== "" && kwotaNum < 150;
-  const empty = touched && kwota === "";
+  const { product, category, tag, opis } = k;
+  const href = `/sklep/${category.slug}/${product.slug}`;
+  const [rozmiar, setRozmiar] = useState<ProductVariant>(product.variants[0]);
+  // Zdjęcie: najpierw wygasa (0.2s), potem podmiana i pojawienie się (0.3s)
+  const [pokazany, setPokazany] = useState<ProductVariant>(product.variants[0]);
+  const [wygaszanie, setWygaszanie] = useState(false);
+  const timer = useRef<number>();
 
-  function handleZamow() {
-    setTouched(true);
-    if (!kwota || kwotaNum < 150) return;
-    onZamow(title, kwota);
+  useEffect(() => () => window.clearTimeout(timer.current), []);
+
+  function wybierz(v: ProductVariant) {
+    if (v.size === rozmiar.size) return;
+    setRozmiar(v);
+    window.clearTimeout(timer.current);
+    setWygaszanie(true);
+    timer.current = window.setTimeout(() => {
+      setPokazany(v);
+      setWygaszanie(false);
+    }, IMG_FADE_OUT_MS);
   }
 
   return (
-    <div className="flex flex-col border border-cream/10 hover:border-gold/40 transition-all duration-300 bg-dark-800/30">
-      <div className="flex flex-col items-center pt-8 pb-6 px-5 gap-3">
-        <span className="text-4xl">{emoji}</span>
-        <span className="font-jost text-[9px] tracking-[0.3em] uppercase text-gold/70 border border-gold/25 px-3 py-1">
-          {tag}
-        </span>
-        <h3 className="font-cormorant text-xl font-light text-cream text-center">
-          {title}
-        </h3>
-      </div>
+    <div
+      className={`transition-all duration-700 ease-out ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+      style={{ transitionDelay: visible ? `${index * 100}ms` : "0ms" }}
+    >
+      <div className="group h-full flex flex-col rounded-xl border border-cream/10 bg-dark-800/30 transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[#D4A843]/60 hover:shadow-[0_12px_30px_rgba(0,0,0,0.4)]">
+        {/* Zdjęcie (zmienia się z rozmiarem) — klik prowadzi do produktu w sklepie */}
+        <Link href={href} aria-label={`${product.name} — zobacz w sklepie`} className="relative block aspect-[3/4] min-h-[350px] rounded-t-xl overflow-hidden bg-gradient-to-br from-[#1a1a1a] to-[#2a2a2a]">
+          <div
+            className={`absolute inset-0 transition-opacity ease-out ${wygaszanie ? "opacity-0 duration-200" : "opacity-100 duration-300"}`}
+          >
+            {pokazany.image && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={pokazany.image}
+                src={pokazany.image}
+                alt={`${product.name} — rozmiar ${pokazany.size}`}
+                className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+              />
+            )}
+          </div>
+          <span className="absolute top-3 left-3 rounded-[6px] bg-black/70 backdrop-blur-sm px-3 py-1 font-jost text-[10px] tracking-[0.25em] uppercase text-gold">
+            {tag}
+          </span>
+        </Link>
 
-      <div className="px-5 pb-6 space-y-3 mt-auto">
-        <div>
-          <input
-            type="number"
-            placeholder="wpisz kwotę (min 150 zł)"
-            value={kwota}
-            onChange={(e) => {
-              setKwota(e.target.value);
-              setTouched(false);
-            }}
-            className={`w-full bg-dark border text-cream font-jost text-sm px-4 py-3 placeholder:text-cream/20 focus:outline-none transition-colors duration-300 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${
-              invalid || empty
-                ? "border-red-400/60 focus:border-red-400"
-                : "border-cream/10 focus:border-gold/50"
-            }`}
-          />
-          {invalid && (
-            <p className="font-jost text-[10px] text-red-400 mt-1">
-              Minimalna kwota to 150 zł
-            </p>
-          )}
-          {empty && (
-            <p className="font-jost text-[10px] text-red-400 mt-1">
-              Podaj kwotę
-            </p>
-          )}
+        <p className="mt-2 px-4 text-center font-jost text-xs italic text-[#999]">
+          Zdjęcie poglądowe — kwiaty sezonowe mogą się różnić od prezentowanych
+        </p>
+        <div className="flex flex-col flex-1 p-5 pt-3">
+          <h3 className="font-jost text-lg font-bold text-cream">
+            <Link href={href} className="hover:text-[#D4A843] transition-colors duration-200">{product.name}</Link>
+          </h3>
+          <p className="font-jost text-[13px] text-[#888] mt-1 mb-5 truncate">{opis}</p>
+
+          {/* Rozmiary — kafelki z ceną z danych sklepu */}
+          <div role="radiogroup" aria-label={`Rozmiar: ${product.name}`} className="grid grid-cols-2 gap-2 mb-5 mt-auto">
+            {product.variants.map((v) => {
+              const active = v.size === rozmiar.size;
+              return (
+                <button
+                  key={v.size}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => wybierz(v)}
+                  className={`rounded-lg border p-2.5 text-center transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 ${
+                    active
+                      ? "border-[#D4A843] bg-[rgba(212,168,67,0.1)]"
+                      : "border-white/10 hover:border-[rgba(212,168,67,0.4)]"
+                  }`}
+                >
+                  <span className={`block font-jost text-xs uppercase tracking-wider ${active ? "text-cream" : "text-cream/60"}`}>
+                    {v.size}
+                  </span>
+                  <span className="block font-jost text-base font-bold text-[#D4A843]">{v.price} zł</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => onZamow(`${product.name} — ${rozmiar.size}`, String(rozmiar.price))}
+            className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#b8952f] via-[#D4A843] to-[#e0bf5c] text-dark font-jost text-sm font-medium uppercase tracking-[1px] px-4 py-3.5 transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(212,168,67,0.3)]"
+          >
+            Zamów —{" "}
+            <span key={rozmiar.size} className="price-bounce">{rozmiar.price} zł</span>
+            <ArrowRight size={15} />
+          </button>
         </div>
-
-        <div className="flex gap-1.5">
-          {CHIPY.map((c) => (
-            <button
-              key={c.value}
-              onClick={() => {
-                setKwota(String(c.value));
-                setTouched(false);
-              }}
-              className={`flex-1 font-jost text-[9px] tracking-widest uppercase py-1.5 border transition-all duration-200 ${
-                kwota === String(c.value)
-                  ? "bg-gold border-gold text-dark"
-                  : "border-cream/15 bg-dark/40 text-cream/50 hover:border-gold/40 hover:text-cream/80"
-              }`}
-            >
-              {c.label}
-            </button>
-          ))}
-        </div>
-
-        <button
-          onClick={handleZamow}
-          className="w-full font-jost text-xs tracking-widest uppercase px-4 py-3 border border-gold/40 text-gold hover:bg-gold hover:text-dark transition-all duration-300"
-        >
-          Zamów
-        </button>
       </div>
     </div>
   );
@@ -243,12 +268,13 @@ export default function ZamowPage() {
   const [sendError, setSendError] = useState<string | null>(null);
   const [dataError, setDataError] = useState<string | null>(null);
 
-  // Sekcja 2 "Zdaj się na nas" — lokalny stan kwoty
-  const [zdajKwota, setZdajKwota] = useState("");
-  const [zdajTouched, setZdajTouched] = useState(false);
-  const zdajKwotaNum = parseFloat(zdajKwota);
-  const zdajInvalid = zdajTouched && zdajKwota !== "" && zdajKwotaNum < 150;
-  const zdajEmpty = zdajTouched && zdajKwota === "";
+  // Sekcja 2 "Zdaj się na nas" — kwota z suwaka
+  const [zdajKwota, setZdajKwota] = useState(250);
+  const zdajPct = ((zdajKwota - ZDAJ_MIN) / (ZDAJ_MAX - ZDAJ_MIN)) * 100;
+
+  const [kartyRef, kartyVisible] = useReveal<HTMLDivElement>(0.1);
+  const [zdajRef, zdajVisible] = useReveal<HTMLDivElement>(0.2);
+  const zdajBgRef = useParallax<HTMLDivElement>(0.25);
 
   // Dynamiczne sloty godzinowe — przeliczane przy zmianie daty lub trybu odbioru
   const availableHours = form.data && !dataError
@@ -310,9 +336,7 @@ export default function ZamowPage() {
   }
 
   function handleZdajZamow() {
-    setZdajTouched(true);
-    if (!zdajKwota || zdajKwotaNum < 150) return;
-    goToStep2("Zdaj się na nas", zdajKwota);
+    goToStep2("Zdaj się na nas", String(zdajKwota));
   }
 
   async function handleSubmit() {
@@ -375,7 +399,7 @@ export default function ZamowPage() {
   }
 
   return (
-    <main className="pt-20 min-h-screen bg-dark">
+    <main className="pt-28 min-h-screen bg-dark">
       {/* Hero nagłówek */}
       <section className="py-16 px-6 text-center border-b border-gold/10 relative overflow-hidden">
         <div
@@ -389,8 +413,17 @@ export default function ZamowPage() {
           Royal Flowers
         </p>
         <h1 className="font-cormorant text-5xl md:text-6xl font-light text-cream relative">
-          Złóż zamówienie
+          Szybkie zamówienie
         </h1>
+        <p className="relative mt-4 font-jost text-base text-[#999]">
+          Wybierz bukiet, rozmiar i zamów — gotowe w 3 godziny
+        </p>
+        <Link
+          href="/sklep"
+          className="relative inline-block mt-3 font-jost text-[13px] text-[#D4A843] underline-offset-4 hover:underline"
+        >
+          Szukasz czegoś więcej? Zobacz nasz sklep →
+        </Link>
       </section>
 
       {/* ── STEP 1 ─────────────────────────────────────────────────────────── */}
@@ -409,39 +442,70 @@ export default function ZamowPage() {
                   Wybierz kompozycję
                 </h2>
                 <p className="font-jost text-xs text-cream/40 tracking-wider">
-                  Wybierz styl i podaj budżet — florysta dobierze najpiękniejsze kwiaty
+                  Wybierz styl i rozmiar — florysta dobierze najpiękniejsze kwiaty
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {KOMPOZYCJE.map((k) => (
+              <div ref={kartyRef} className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
+                {KOMPOZYCJE.map((k, i) => (
                   <KartaKompozycji
-                    key={k.title}
-                    emoji={k.emoji}
-                    tag={k.tag}
-                    title={k.title}
+                    key={k.product.slug}
+                    k={k}
+                    index={i}
+                    visible={kartyVisible}
                     onZamow={goToStep2}
                   />
                 ))}
+              </div>
+
+              {/* Baner — więcej w sklepie */}
+              <div className="relative mt-12 overflow-hidden rounded-xl border border-[#D4A843]/25 bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] px-6 py-8 md:px-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div aria-hidden="true" className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#D4A843] via-[#D4A843]/60 to-transparent" />
+                <div
+                  aria-hidden="true"
+                  className="absolute -right-20 -top-20 w-60 h-60 rounded-full"
+                  style={{ background: "radial-gradient(circle, rgba(212,168,67,0.15) 0%, transparent 70%)" }}
+                />
+                <div className="relative">
+                  <p className="font-jost text-[11px] tracking-[0.4em] uppercase text-[#D4A843] mb-2">Szukasz czegoś innego?</p>
+                  <p className="font-cormorant text-2xl md:text-3xl font-light text-cream leading-snug">
+                    W naszym sklepie znajdziesz ponad {KATALOG_LICZBA} bukietów, flowerboxów i kompozycji
+                  </p>
+                </div>
+                <Link
+                  href="/sklep"
+                  className="relative shrink-0 inline-flex items-center gap-3 rounded-lg border border-[#D4A843] px-7 py-3.5 font-jost text-xs font-medium uppercase tracking-[0.2em] text-[#D4A843] transition-all duration-300 hover:bg-[#D4A843] hover:text-dark hover:shadow-[0_0_20px_rgba(212,168,67,0.3)]"
+                >
+                  Przejdź do sklepu <ArrowRight size={15} />
+                </Link>
               </div>
             </div>
           </section>
 
           {/* Sekcja 2 — "Zdaj się na nas" */}
-          <section
-            className="relative flex items-center justify-center px-6 py-28"
-            style={{
-              backgroundImage: "url('/images/zdaj-sie-na-nas.png')",
-              backgroundSize: "cover",
-              backgroundPosition: "center 30%",
-            }}
-          >
+          <section className="relative flex items-center justify-center px-6 py-28 overflow-hidden">
+            {/* Tło z parallaxem */}
+            <div
+              ref={zdajBgRef}
+              aria-hidden="true"
+              className="absolute -inset-y-[20%] inset-x-0 will-change-transform"
+              style={{
+                backgroundImage: "url('/images/zdaj-sie-na-nas.png')",
+                backgroundSize: "cover",
+                backgroundPosition: "center 30%",
+              }}
+            />
             <div
               className="absolute inset-0"
               style={{ background: "rgba(0,0,0,0.55)" }}
             />
 
-            <div className="relative z-10 w-full max-w-lg mx-auto text-center">
+            <div
+              ref={zdajRef}
+              className={`relative z-10 w-full max-w-lg mx-auto text-center transition-all duration-1000 ease-out ${
+                zdajVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              }`}
+            >
               <p className="font-jost text-xs tracking-[0.6em] uppercase text-gold/80 mb-5">
                 lub
               </p>
@@ -453,59 +517,40 @@ export default function ZamowPage() {
                 <br />z aktualnie najświeższych kwiatów
               </p>
 
-              {/* Pole kwoty */}
-              <div className="mb-5">
+              {/* Suwak kwoty */}
+              <div className="rounded-2xl border border-white/10 bg-dark/50 backdrop-blur-sm px-6 sm:px-10 py-8 mb-8">
+                <label htmlFor="zdaj-kwota" className="block font-jost text-[10px] tracking-[0.4em] uppercase text-cream/50 mb-2">
+                  Twój budżet
+                </label>
+                <p className="font-jost text-4xl font-bold text-[#D4A843] tabular-nums mb-6" aria-live="polite">
+                  {zdajKwota} zł
+                </p>
                 <input
-                  type="number"
-                  placeholder="Twoja kwota (zł)"
+                  id="zdaj-kwota"
+                  type="range"
+                  min={ZDAJ_MIN}
+                  max={ZDAJ_MAX}
+                  step={ZDAJ_STEP}
                   value={zdajKwota}
-                  onChange={(e) => {
-                    setZdajKwota(e.target.value);
-                    setZdajTouched(false);
-                  }}
-                  className={`w-full max-w-xs mx-auto block bg-dark/50 backdrop-blur-sm border text-cream font-cormorant text-2xl text-center px-6 py-4 placeholder:text-cream/35 focus:outline-none transition-colors duration-300 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${
-                    zdajInvalid || zdajEmpty
-                      ? "border-red-400/70 focus:border-red-400"
-                      : "border-cream/30 focus:border-gold"
-                  }`}
+                  onChange={(e) => setZdajKwota(Number(e.target.value))}
+                  aria-valuetext={`${zdajKwota} zł`}
+                  className="gold-range"
+                  style={{ ["--pct" as string]: `${zdajPct}%` }}
                 />
-                {zdajInvalid && (
-                  <p className="font-jost text-[11px] text-red-400 mt-2">
-                    Minimalna kwota to 150 zł
-                  </p>
-                )}
-                {zdajEmpty && (
-                  <p className="font-jost text-[11px] text-red-400 mt-2">
-                    Podaj kwotę
-                  </p>
-                )}
-              </div>
-
-              {/* Chip-buttony sugerowanych kwot */}
-              <div className="flex flex-wrap justify-center gap-2.5 mb-10">
-                {CHIPY.map((c) => (
-                  <button
-                    key={c.value}
-                    onClick={() => {
-                      setZdajKwota(String(c.value));
-                      setZdajTouched(false);
-                    }}
-                    className={`font-jost text-xs tracking-widest uppercase px-5 py-2.5 border transition-all duration-200 ${
-                      zdajKwota === String(c.value)
-                        ? "bg-gold border-gold text-dark"
-                        : "border-cream/35 text-cream/70 hover:border-gold/60 hover:text-cream"
-                    }`}
-                  >
-                    {c.label} · {c.value} zł
-                  </button>
-                ))}
+                <div className="flex justify-between font-jost text-[11px] text-cream/35 mt-2">
+                  <span>{ZDAJ_MIN} zł</span>
+                  <span>{ZDAJ_MAX} zł</span>
+                </div>
+                <p className="font-jost text-[13px] text-[#999] mt-4">
+                  Im większa kwota, tym bogatszy bukiet
+                </p>
               </div>
 
               <button
                 onClick={handleZdajZamow}
-                className="inline-flex items-center gap-3 font-jost text-sm tracking-widest uppercase px-12 py-4 bg-gold text-dark hover:bg-gold-light transition-all duration-300"
+                className="inline-flex items-center gap-3 rounded-lg font-jost text-sm tracking-widest uppercase px-12 py-4 bg-gradient-to-r from-[#b8952f] via-[#D4A843] to-[#e0bf5c] text-dark transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(212,168,67,0.3)]"
               >
-                Zamów <ArrowRight size={16} />
+                Zamów — {zdajKwota} zł <ArrowRight size={16} />
               </button>
             </div>
           </section>
@@ -937,8 +982,7 @@ export default function ZamowPage() {
                     uwagi: "",
                     regulamin: false,
                   });
-                  setZdajKwota("");
-                  setZdajTouched(false);
+                  setZdajKwota(250);
                   setDataError(null);
                   setSendError(null);
                 }}

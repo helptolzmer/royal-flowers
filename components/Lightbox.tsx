@@ -1,17 +1,22 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useRef, type TouchEvent } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Props {
-  images: { src: string; alt: string }[];
+  images: { src: string; alt: string; kategoria?: string }[];
   index: number;
   onClose: () => void;
   onPrev: () => void;
   onNext: () => void;
 }
 
+// Minimalna długość przesunięcia palcem (px), żeby uznać gest za swipe
+const SWIPE_MIN = 50;
+
 export default function Lightbox({ images, index, onClose, onPrev, onNext }: Props) {
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+
   const handleKey = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -30,10 +35,36 @@ export default function Lightbox({ images, index, onClose, onPrev, onNext }: Pro
     };
   }, [handleKey]);
 
+  const onTouchStart = (e: TouchEvent) => {
+    const t = e.touches[0];
+    touchStart.current = { x: t.clientX, y: t.clientY };
+  };
+
+  const onTouchEnd = (e: TouchEvent) => {
+    const start = touchStart.current;
+    touchStart.current = null;
+    if (!start) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - start.x;
+    const dy = t.clientY - start.y;
+    // Tylko wyraźnie poziomy gest
+    if (Math.abs(dx) < SWIPE_MIN || Math.abs(dx) < Math.abs(dy)) return;
+    if (dx < 0) onNext();
+    else onPrev();
+  };
+
+  const current = images[index];
+
   return (
     <div
-      className="fixed inset-0 z-[100] bg-dark/95 backdrop-blur-sm flex items-center justify-center"
+      role="dialog"
+      aria-modal="true"
+      aria-label={current.alt}
+      className="fixed inset-0 z-[100] bg-dark/90 backdrop-blur-md flex items-center justify-center animate-fade-in"
+      style={{ animationDuration: "300ms" }}
       onClick={onClose}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
     >
       {/* Close */}
       <button
@@ -58,19 +89,27 @@ export default function Lightbox({ images, index, onClose, onPrev, onNext }: Pro
         <ChevronLeft size={36} />
       </button>
 
-      {/* Image */}
-      <div
-        className="max-w-[90vw] max-h-[85vh] flex items-center justify-center"
+      {/* Image + podpis */}
+      <figure
+        className="lightbox-in max-w-[90vw] flex flex-col items-center"
         onClick={(e) => e.stopPropagation()}
       >
         <img
-          key={images[index].src}
-          src={images[index].src}
-          alt={images[index].alt}
-          className="max-w-full max-h-[85vh] object-contain shadow-2xl"
-          style={{ borderRadius: "2px" }}
+          key={current.src}
+          src={current.src}
+          alt={current.alt}
+          className="max-w-full max-h-[78vh] object-contain shadow-2xl animate-fade-in"
+          style={{ borderRadius: "2px", animationDuration: "400ms" }}
         />
-      </div>
+        <figcaption className="mt-4 text-center px-4">
+          {current.kategoria && (
+            <p className="font-jost text-[10px] tracking-[0.3em] uppercase text-gold mb-1">
+              {current.kategoria}
+            </p>
+          )}
+          <p className="font-jost text-xs text-cream/50 tracking-wider">{current.alt}</p>
+        </figcaption>
+      </figure>
 
       {/* Next */}
       <button
@@ -80,11 +119,6 @@ export default function Lightbox({ images, index, onClose, onPrev, onNext }: Pro
       >
         <ChevronRight size={36} />
       </button>
-
-      {/* Alt / caption */}
-      <p className="absolute bottom-6 left-1/2 -translate-x-1/2 font-jost text-xs text-cream/30 tracking-wider text-center px-4">
-        {images[index].alt}
-      </p>
     </div>
   );
 }

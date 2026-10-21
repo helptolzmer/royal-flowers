@@ -3,89 +3,97 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
+import { useReveal } from "@/lib/animations";
 
-function IconInstagram() {
+function IconInstagram({ className = "w-5 h-5" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
       <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
     </svg>
   );
 }
 
-function IconFacebook() {
+function IconFacebook({ className = "w-5 h-5" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
       <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
     </svg>
   );
 }
 
-function IconGlobe() {
+function IconGlobe({ className = "w-5 h-5" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
       <circle cx="12" cy="12" r="10" />
       <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
     </svg>
   );
 }
 
-const socialKolumny = [
+const socialKafelki = [
   {
-    tytul: "Kwiaciarnia Royal Flowers",
-    linki: [
-      {
-        ikona: "ig" as const,
-        label: "Instagram",
-        handle: "@kwiaciarnia_royal_flowers",
-        href: "https://www.instagram.com/kwiaciarnia_royal_flowers/",
-      },
-      {
-        ikona: "fb" as const,
-        label: "Facebook",
-        handle: "KwiaciarniaRoyalFlowers",
-        href: "https://www.facebook.com/KwiaciarniaRoyalFlowers",
-      },
-    ],
+    ikona: "ig" as const,
+    handle: "@kwiaciarnia_royal_flowers",
+    nazwa: "Instagram – Kwiaciarnia Royal Flowers",
+    href: "https://instagram.com/kwiaciarnia_royal_flowers",
+    tlo: "linear-gradient(135deg, #833AB4, #E1306C, #F77737)",
+    glow: "rgba(225,48,108,0.45)",
   },
   {
-    tytul: "Kwiatomaty Royal Flowers",
-    linki: [
-      {
-        ikona: "ig" as const,
-        label: "Instagram",
-        handle: "@kwiatomaty_royalflowers",
-        href: "https://www.instagram.com/kwiatomaty_royalflowers/",
-      },
-    ],
+    ikona: "ig" as const,
+    handle: "@kwiatomaty_royalflowers",
+    nazwa: "Instagram – Kwiatomaty Royal Flowers",
+    href: "https://instagram.com/kwiatomaty_royalflowers",
+    tlo: "linear-gradient(135deg, #F77737, #E1306C, #833AB4)",
+    glow: "rgba(247,119,55,0.45)",
   },
   {
-    tytul: "Wypożyczalnia by Megi",
-    linki: [
-      {
-        ikona: "ig" as const,
-        label: "Instagram",
-        handle: "@wypozyczalniabymegi",
-        href: "https://www.instagram.com/wypozyczalniabymegi/",
-      },
-      {
-        ikona: "fb" as const,
-        label: "Facebook",
-        handle: "Wypożyczalnia by Megi",
-        href: "https://www.facebook.com/profile.php?id=61585446016344",
-      },
-      {
-        ikona: "web" as const,
-        label: "Strona www",
-        handle: "partyrenting.pl",
-        href: "https://partyrenting.pl",
-      },
-    ],
+    ikona: "fb" as const,
+    handle: "KwiaciarniaRoyalFlowers",
+    nazwa: "Facebook – Kwiaciarnia Royal Flowers",
+    href: "https://facebook.com/KwiaciarniaRoyalFlowers",
+    tlo: "#1877F2",
+    glow: "rgba(24,119,242,0.45)",
+  },
+  {
+    ikona: "web" as const,
+    handle: "partyrenting.pl",
+    nazwa: "Party Renting – partyrenting.pl",
+    href: "https://partyrenting.pl",
+    tlo: "linear-gradient(135deg, #D4A843, #B8942E)",
+    glow: "rgba(212,168,67,0.45)",
   },
 ];
+
+const kontakt = [
+  // Link do wizytówki kwiaciarni w Google Maps (ten sam co przy kwiatomacie #3)
+  { ikona: "📍", tekst: "ul. Długosza 23, Nowy Sącz", href: "https://maps.app.goo.gl/qoMMwg95DWk7NCGd7", zewn: true },
+  { ikona: "📞", tekst: "694 285 505", href: "tel:+48694285505" },
+  { ikona: "✉️", tekst: "kwiaciarniaroyalflowers@gmail.com", href: "mailto:kwiaciarniaroyalflowers@gmail.com" },
+  { ikona: "🕐", tekst: "Pon–Pt: 9:00–17:00 · Sob: 9:00–14:00" },
+];
+
+const szybkieLinki = [
+  { label: "Kwiaciarnia", href: "/kwiaciarnia" },
+  { label: "Sklep", href: "/sklep" },
+  { label: "Kwiatomaty", href: "/kwiatomaty" },
+  { label: "Realizacje", href: "/realizacje" },
+  { label: "O nas", href: "/o-nas" },
+  { label: "Social Media", href: "/social-media" },
+];
+
+function SocialIkona({ typ, className }: { typ: "ig" | "fb" | "web"; className?: string }) {
+  if (typ === "ig") return <IconInstagram className={className} />;
+  if (typ === "fb") return <IconFacebook className={className} />;
+  return <IconGlobe className={className} />;
+}
 
 export default function Home() {
   const [hoveredLeft, setHoveredLeft] = useState(false);
   const [hoveredRight, setHoveredRight] = useState(false);
+  const [socialRef, socialVisible] = useReveal<HTMLDivElement>(0.15);
+  const [stopkaRef, stopkaVisible] = useReveal<HTMLDivElement>(0.15);
+  const [glow, setGlow] = useState<number | null>(null);
 
   return (
     <main>
@@ -204,136 +212,140 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ── Social Media ── */}
+      {/* ── Obserwuj nas ── */}
       <section className="bg-dark border-t border-gold/10 py-20 px-6 md:px-16">
         <div className="max-w-5xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-14">
+          <div
+            className={`text-center mb-12 transition-all duration-700 ease-out ${socialVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+          >
             <p className="font-jost text-xs tracking-[0.5em] uppercase text-gold mb-4">
               Bądź z nami w kontakcie
             </p>
             <h2 className="font-cormorant text-4xl md:text-5xl font-light text-cream">
-              Znajdź nas w social mediach
+              Obserwuj nas
             </h2>
-            <p className="font-jost text-sm text-cream/40 mt-3 tracking-wider">
-              Obserwuj nas i bądź na bieżąco
-            </p>
             <div className="w-12 h-px bg-gold mx-auto mt-6" />
           </div>
 
-          {/* Trzy karty */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {socialKolumny.map((kol) => (
+          <div ref={socialRef} className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-[880px] mx-auto">
+            {socialKafelki.map((k, i) => (
               <div
-                key={kol.tytul}
-                className="border border-gold/15 bg-dark-800 px-8 py-10 flex flex-col items-center text-center gap-6 hover:border-gold/30 transition-colors duration-300"
+                key={k.href}
+                className={`transition-all duration-700 ease-out ${socialVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+                style={{ transitionDelay: socialVisible ? `${i * 100}ms` : "0ms" }}
               >
-                <h3 className="font-cormorant text-xl font-light text-cream leading-tight">
-                  {kol.tytul}
-                </h3>
+                <a
+                  href={k.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${k.nazwa} (otwiera się w nowej karcie)`}
+                  onMouseEnter={() => setGlow(i)}
+                  onMouseLeave={() => setGlow(null)}
+                  onFocus={() => setGlow(i)}
+                  onBlur={() => setGlow(null)}
+                  className="group flex aspect-square w-full max-w-[200px] mx-auto flex-col items-center justify-center gap-3 rounded-2xl overflow-hidden text-white transition-all duration-300 ease-out hover:scale-105 focus-visible:scale-105 focus-visible:outline-none"
+                  style={{
+                    background: k.tlo,
+                    boxShadow: glow === i ? `0 0 32px 4px ${k.glow}` : "0 8px 20px rgba(0,0,0,0.3)",
+                  }}
+                >
+                  <span className="transition-transform duration-300 ease-out group-hover:rotate-[10deg] group-focus-visible:rotate-[10deg]">
+                    <SocialIkona typ={k.ikona} className="w-10 h-10" />
+                  </span>
+                  <span className="font-jost text-xs px-3 text-center break-all leading-snug">{k.handle}</span>
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-                <div className="w-8 h-px bg-gold/30" />
-
-                <div className="flex flex-col gap-3 w-full">
-                  {kol.linki.map((l) => (
+      {/* ── Stopka z danymi kontaktowymi ── */}
+      <footer className="bg-dark-800 border-t border-gold/10 pt-16 pb-8 px-6 md:px-16">
+        <div
+          ref={stopkaRef}
+          className={`max-w-6xl mx-auto transition-all duration-700 ease-out ${stopkaVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 pb-12">
+            {/* Kolumna 1 — marka */}
+            <div>
+              <p className="font-cormorant text-xl tracking-[0.25em] text-gold mb-4">ROYAL FLOWERS</p>
+              <p className="font-jost text-[13px] text-[#888] leading-relaxed max-w-[280px] mb-6">
+                Kwiaciarnia artystyczna w Nowym Sączu. Bukiety, dekoracje, kwiatomaty 24/7.
+              </p>
+              <div className="flex items-center gap-3">
+                {socialKafelki
+                  .filter((k) => k.ikona !== "web")
+                  .map((k) => (
                     <a
-                      key={l.href}
-                      href={l.href}
+                      key={k.href}
+                      href={k.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex flex-col items-center gap-2 border border-gold/12 px-5 py-4 hover:border-gold/50 transition-all duration-300"
-                      style={{
-                        boxShadow: "0 0 0 0 #c9a84c00",
-                      }}
-                      onMouseEnter={(e) => {
-                        (e.currentTarget as HTMLElement).style.boxShadow = "0 0 16px 0 #c9a84c22";
-                      }}
-                      onMouseLeave={(e) => {
-                        (e.currentTarget as HTMLElement).style.boxShadow = "0 0 0 0 #c9a84c00";
-                      }}
+                      aria-label={`${k.nazwa} (otwiera się w nowej karcie)`}
+                      className="text-gold transition-transform duration-200 ease-out hover:scale-[1.15] hover:rotate-[5deg] focus-visible:scale-[1.15] focus-visible:outline-none"
                     >
-                      <span className="text-gold/70 group-hover:text-gold transition-colors duration-300">
-                        {l.ikona === "ig" ? (
-                          <IconInstagram />
-                        ) : l.ikona === "fb" ? (
-                          <IconFacebook />
-                        ) : (
-                          <IconGlobe />
-                        )}
-                      </span>
-                      <span className="font-jost text-[10px] tracking-[0.3em] uppercase text-gold/50 group-hover:text-gold transition-colors duration-300">
-                        {l.label}
-                      </span>
-                      <span className="font-jost text-xs text-cream/35 group-hover:text-cream/60 transition-colors duration-300">
-                        {l.handle}
-                      </span>
+                      <SocialIkona typ={k.ikona} className="w-5 h-5" />
                     </a>
                   ))}
-                </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
+            </div>
 
-      {/* ── Dane kontaktowe ── */}
-      <section className="bg-dark-800 border-t border-gold/10 py-20 px-6 md:px-16">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <p className="font-jost text-xs tracking-[0.5em] uppercase text-gold mb-4">
-              Kontakt
+            {/* Kolumna 2 — kontakt */}
+            <div>
+              <h3 className="font-jost text-xs tracking-[0.3em] uppercase text-cream mb-5">Kontakt</h3>
+              <ul className="space-y-3.5">
+                {kontakt.map((c) => (
+                  <li key={c.tekst} className="flex items-start gap-3 font-jost text-sm text-[#999]">
+                    <span aria-hidden="true" className="w-5 shrink-0 text-center">{c.ikona}</span>
+                    {c.href ? (
+                      <a
+                        href={c.href}
+                        {...(c.zewn ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                        className="break-all transition-all duration-200 hover:text-[#D4A843] hover:translate-x-[3px]"
+                      >
+                        {c.tekst}
+                      </a>
+                    ) : (
+                      <span>{c.tekst}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Kolumna 3 — szybkie linki */}
+            <div>
+              <h3 className="font-jost text-xs tracking-[0.3em] uppercase text-cream mb-5">Szybkie linki</h3>
+              <ul className="space-y-3">
+                {szybkieLinki.map((l) => (
+                  <li key={l.href}>
+                    <Link
+                      href={l.href}
+                      className="inline-block font-jost text-xs uppercase tracking-[1px] text-[#888] transition-all duration-200 hover:text-[#D4A843] hover:translate-x-[3px]"
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Dół stopki */}
+          <div className="border-t border-white/[0.06] pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="font-jost text-xs text-[#666]">
+              © {new Date().getFullYear()} Royal Flowers. Wszelkie prawa zastrzeżone.
             </p>
-            <h2 className="font-cormorant text-4xl md:text-5xl font-light text-cream">
-              Dane kontaktowe
-            </h2>
-            <div className="w-12 h-px bg-gold mx-auto mt-6" />
+            <div className="flex items-center gap-5">
+              <Link href="/regulamin" className="font-jost text-xs text-[#666] transition-colors duration-200 hover:text-[#D4A843]">
+                Regulamin sprzedaży
+              </Link>
+              <Link href="/polityka-prywatnosci" className="font-jost text-xs text-[#666] transition-colors duration-200 hover:text-[#D4A843]">
+                Polityka prywatności
+              </Link>
+            </div>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-gold/10">
-            {[
-              { label: "Firma",   value: "Małgorzata Pasiut Partyserwis Kwiaciarnia Royal Flowers" },
-              { label: "NIP",     value: "7342527300" },
-              { label: "Adres",   value: "Podgrodzie 416, 33-386 Podgrodzie" },
-              { label: "Telefon", value: "532 688 820" },
-              { label: "E-mail",  value: "kwiaciarniaroyalflowers@gmail.com" },
-              { label: "Godziny", value: "Pon–Pt: 9:00–17:00  ·  Sob: 9:00–14:00" },
-            ].map((row) => (
-              <div key={row.label} className="bg-dark-800 px-8 py-6 flex items-center gap-6">
-                <span className="font-jost text-[10px] tracking-[0.3em] uppercase text-gold/50 w-20 shrink-0">
-                  {row.label}
-                </span>
-                <span className="font-jost text-sm text-cream/75">{row.value}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-8 flex flex-wrap gap-6 justify-center">
-            <Link
-              href="/regulamin"
-              className="font-jost text-xs tracking-widest uppercase text-cream/35 hover:text-gold transition-colors duration-300"
-            >
-              Regulamin sprzedaży
-            </Link>
-            <span className="text-cream/15">·</span>
-            <Link
-              href="/polityka-prywatnosci"
-              className="font-jost text-xs tracking-widest uppercase text-cream/35 hover:text-gold transition-colors duration-300"
-            >
-              Polityka prywatności
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-gold/10 bg-dark py-8 px-6">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-cormorant text-xl tracking-widest text-cream/50">
-            ROYAL <span className="text-gold">FLOWERS</span>
-          </p>
-          <p className="font-jost text-xs text-cream/30">
-            © 2026 Royal Flowers. Wszystkie prawa zastrzeżone.
-          </p>
         </div>
       </footer>
     </main>

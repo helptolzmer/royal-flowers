@@ -5,8 +5,8 @@ export type PickupType = "automat" | "kwiaciarnia";
 
 // ─── Adresy ───────────────────────────────────────────────────────────────────
 
-export const AUTOMAT_ADDRESS = "al. Wolności 10A, Nowy Sącz";
-export const SHOP_ADDRESS    = "Al. Wolności 10/A, Nowy Sącz";
+export const AUTOMAT_ADDRESS = "ul. Długosza 23, Nowy Sącz";
+export const SHOP_ADDRESS    = "ul. Długosza 23, Nowy Sącz";
 
 // ─── Godziny pracy ────────────────────────────────────────────────────────────
 
@@ -96,7 +96,7 @@ const FLOWER_DAYS: Array<{ month: number; day: number }> = [
 ];
 
 const FLOWER_DAY_MSG =
-  "W ten dzień obsługujemy tylko zamówienia osobiste w kwiaciarni przy al. Wolności 10A. Zapraszamy serdecznie!";
+  "W ten dzień obsługujemy tylko zamówienia osobiste w kwiaciarni przy ul. Długosza 23. Zapraszamy serdecznie!";
 
 // ─── Publiczne funkcje diagnostyczne ─────────────────────────────────────────
 

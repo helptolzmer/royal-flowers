@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Jost } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import CartDrawer from "@/components/CartDrawer";
+import { CartProvider } from "@/lib/CartContext";
+import ReviewPopup from "@/components/ReviewPopup";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -31,8 +34,12 @@ export default function RootLayout({
   return (
     <html lang="pl" className={`${cormorant.variable} ${jost.variable}`}>
       <body className="bg-dark text-cream min-h-screen">
-        <Navbar />
-        {children}
+        <CartProvider>
+          <Navbar />
+          {children}
+          <CartDrawer />
+          <ReviewPopup />
+        </CartProvider>
       </body>
     </html>
   );

@@ -8,7 +8,7 @@ export const metadata = {
 
 const FIRMA = "Małgorzata Pasiut Partyserwis Kwiaciarnia Royal Flowers";
 const ADRES_SIEDZIBY = "Podgrodzie 416, 33-386 Podgrodzie";
-const ADRES = "Al. Wolności 10/A, 33-300 Nowy Sącz";
+const ADRES = "ul. Długosza 23, 33-300 Nowy Sącz";
 const NIP   = "7342527300";
 const EMAIL = "kwiaciarniaroyalflowers@gmail.com";
 const TEL   = "532 688 820";
@@ -97,7 +97,7 @@ const sekcje = [
 
 export default function RegulaminPage() {
   return (
-    <main className="pt-20 min-h-screen bg-dark">
+    <main className="pt-28 min-h-screen bg-dark">
       {/* Hero */}
       <section className="py-16 px-6 border-b border-gold/10 relative overflow-hidden">
         <div

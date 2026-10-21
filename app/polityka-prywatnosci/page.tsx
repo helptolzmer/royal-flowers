@@ -92,7 +92,7 @@ const sekcje = [
 
 export default function PolitykaPrywatnosciPage() {
   return (
-    <main className="pt-20 min-h-screen bg-dark">
+    <main className="pt-28 min-h-screen bg-dark">
       {/* Hero */}
       <section className="py-16 px-6 border-b border-gold/10 relative overflow-hidden">
         <div

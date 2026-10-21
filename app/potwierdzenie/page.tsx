@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import emailjs from "@emailjs/browser";
 import { Check, Flower2 } from "lucide-react";
+import { useCart } from "@/lib/CartContext";
 
 const EJS_SERVICE  = "service_pw7x0df";
 const EJS_KEY      = "-Yp8zoOj7V9bdLb_O";
@@ -24,6 +25,7 @@ interface StoredOrder {
   uwagi:       string;
   pickupTab:   "automat" | "kwiaciarnia";
   automatNazwa?: string;
+  fromShopCart?: boolean;
 }
 
 function PotwierdzeniePage() {
@@ -32,6 +34,7 @@ function PotwierdzeniePage() {
   const [order, setOrder]         = useState<StoredOrder | null>(null);
   const [emailSent, setEmailSent] = useState(false);
   const [emailError, setEmailError] = useState<string | null>(null);
+  const { clearCart } = useCart();
 
   useEffect(() => {
     const raw = sessionStorage.getItem("royalflowers_order");
@@ -45,6 +48,7 @@ function PotwierdzeniePage() {
     }
 
     setOrder(stored);
+    if (stored.fromShopCart) clearCart();
 
     // Wyślij maile tylko raz po powrocie z P24
     const flagKey = `rf_email_sent_${stored.orderCode}`;
@@ -85,12 +89,13 @@ function PotwierdzeniePage() {
         setEmailError(`Błąd wysyłki potwierdzenia (${msg}). Skontaktuj się z kwiaciarnią telefonicznie.`);
         // Nie ustawiamy flagi — przy odświeżeniu strony wysyłka zostanie ponowiona.
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const displayCode = orderCode || order?.orderCode || "";
 
   return (
-    <main className="pt-20 min-h-screen bg-dark">
+    <main className="pt-28 min-h-screen bg-dark">
       <section
         className="py-16 px-6 text-center border-b border-gold/10 relative overflow-hidden"
       >

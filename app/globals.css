@@ -44,9 +44,29 @@ body {
   background: #c9a84c99;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 
   .gold-underline {
@@ -69,4 +89,516 @@ body {
   .gold-underline:hover::after {
     transform: scaleX(1);
   }
+
+  /* Suwak z dwoma uchwytami (filtr cen) — dwa nałożone input[type=range],
+     ścieżka nie łapie kliknięć, tylko uchwyty. */
+  .dual-range {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    pointer-events: none;
+  }
+
+  .dual-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    pointer-events: auto;
+    width: 18px;
+    height: 18px;
+    border-radius: 9999px;
+    background: #fff;
+    border: 2px solid #c9a84c;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+  }
+
+  .dual-range::-moz-range-thumb {
+    pointer-events: auto;
+    width: 14px;
+    height: 14px;
+    border-radius: 9999px;
+    background: #fff;
+    border: 2px solid #c9a84c;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+  }
+
+  .dual-range:focus-visible::-webkit-slider-thumb {
+    outline: 2px solid #c9a84c;
+    outline-offset: 2px;
+  }
+}
+
+/* ── Social Media: animacje ─────────────────────────────── */
+
+/* Powolne przesuwanie kolorów gradientu na kafelkach */
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+.animated-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 10s ease-in-out infinite alternate;
+}
+
+/* Pulsowanie ikony na hover kafelka */
+@keyframes icon-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+.group:hover .icon-pulse,
+.group:focus-visible .icon-pulse {
+  animation: icon-pulse 1.4s ease-in-out infinite;
+}
+
+/* Shimmer — skeleton loading */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(245, 239, 230, 0.06) 50%, transparent 100%);
+  animation: shimmer 2.2s ease-in-out infinite;
+}
+
+/* Spadające płatki — wrapper ma wysokość sekcji i zjeżdża o 100%,
+   płatek siedzi na jego dolnej krawędzi, więc przelatuje całą sekcję. */
+@keyframes petal-fall {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(0%); }
+}
+@keyframes petal-sway {
+  0% { transform: translateX(-18px) rotate(-25deg); }
+  100% { transform: translateX(18px) rotate(35deg); }
+}
+.petal-track {
+  position: absolute;
+  top: 0;
+  height: calc(100% + 30px);
+  width: 0;
+  animation: petal-fall linear infinite;
+}
+.petal {
+  position: absolute;
+  bottom: 0;
+  border-radius: 150% 0 150% 0;
+  animation: petal-sway ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-gradient,
+  .group:hover .icon-pulse,
+  .group:focus-visible .icon-pulse,
+  .shimmer::after {
+    animation: none;
+  }
+  .petal-track {
+    display: none;
+  }
+}
+
+/* ── O nas: animacje ────────────────────────────────────── */
+
+/* Pulsujący złoty glow na głównym przycisku CTA */
+@keyframes gold-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201, 168, 76, 0.35); }
+  50% { box-shadow: 0 0 28px 4px rgba(201, 168, 76, 0.35); }
+}
+.gold-pulse {
+  animation: gold-pulse 2.8s ease-in-out infinite;
+}
+
+/* Migający kursor w efekcie pisania */
+@keyframes caret-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.typing-caret {
+  animation: caret-blink 1s step-end infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gold-pulse,
+  .typing-caret {
+    animation: none;
+  }
+}
+
+/* Podpis zdjęcia wysuwany z dołu na hover (tylko urządzenia z kursorem —
+   na dotykowych podpis jest widoczny cały czas). */
+@media (hover: hover) {
+  .hover-caption {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  .group:hover .hover-caption,
+  .group:focus-within .hover-caption {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Realizacje / Lightbox: animacje ────────────────────── */
+
+/* Otwarcie lightboxa: scale 0.8 → 1 */
+@keyframes lightbox-in {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.lightbox-in {
+  animation: lightbox-in 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Litery nagłówka pojawiające się po kolei */
+@keyframes letter-in {
+  0% { opacity: 0; transform: translateY(0.35em); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.letter-in {
+  display: inline-block;
+  opacity: 0;
+  animation: letter-in 600ms ease-out forwards;
+}
+
+/* Złota linia rysująca się od lewej */
+@keyframes line-grow {
+  0% { width: 0; }
+  100% { width: var(--line-w, 100px); }
+}
+.line-grow {
+  width: 0;
+  animation: line-grow 800ms ease-out forwards;
+}
+
+/* Łagodne pojawienie się (podtytuł) */
+@keyframes fade-up {
+  0% { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.fade-up {
+  opacity: 0;
+  animation: fade-up 800ms ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox-in,
+  .letter-in,
+  .line-grow,
+  .fade-up {
+    animation: none;
+    opacity: 1;
+  }
+  .line-grow {
+    width: var(--line-w, 100px);
+  }
+}
+
+/* ── Wesele: formularz krokowy ──────────────────────────── */
+
+/* Wejście kroku: z prawej (Dalej) lub z lewej (Wstecz) */
+@keyframes step-in-right {
+  0% { opacity: 0; transform: translateX(48px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+@keyframes step-in-left {
+  0% { opacity: 0; transform: translateX(-48px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+.step-in-right { animation: step-in-right 400ms ease-out; }
+.step-in-left { animation: step-in-left 400ms ease-out; }
+
+/* Znaczek ✓ w rogu wybranego kafelka */
+@keyframes check-pop {
+  0% { opacity: 0; transform: scale(0.3); }
+  70% { opacity: 1; transform: scale(1.15); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.check-pop { animation: check-pop 300ms ease-out; }
+
+/* Rysowanie ✓ na przycisku "Wysłano!" */
+@keyframes check-draw {
+  0% { stroke-dashoffset: 1; }
+  100% { stroke-dashoffset: 0; }
+}
+.check-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: check-draw 450ms ease-out 100ms forwards;
+}
+
+/* Confetti z przycisku — kierunek z CSS vars --dx/--dy/--rot */
+@keyframes confetti-burst {
+  0% { opacity: 1; transform: translate(0, 0) rotate(0deg); }
+  60% { opacity: 1; transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); }
+  100% { opacity: 0; transform: translate(calc(var(--dx) * 1.2), calc(var(--dy) + 60px)) rotate(calc(var(--rot) * 1.5)); }
+}
+.confetti-piece {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 1px;
+  pointer-events: none;
+  animation: confetti-burst 2s cubic-bezier(0.2, 0.7, 0.4, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step-in-right,
+  .step-in-left,
+  .check-pop {
+    animation: none;
+  }
+  .check-draw {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .confetti-piece {
+    display: none;
+  }
+}
+
+/* ── Dekoracje ślubne ───────────────────────────────────── */
+
+/* Marquee opinii — treść zduplikowana, przesunięcie o -50% = płynna pętla */
+@keyframes marquee-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes marquee-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+.marquee-left { animation: marquee-left 30s linear infinite; }
+.marquee-right { animation: marquee-right 35s linear infinite; }
+.marquee-left:hover,
+.marquee-right:hover,
+.marquee-left:focus-within,
+.marquee-right:focus-within {
+  animation-play-state: paused;
+}
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+/* Telefon "dzwoni" na hover przycisku */
+@keyframes phone-ring {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-18deg); }
+  40% { transform: rotate(14deg); }
+  60% { transform: rotate(-10deg); }
+  80% { transform: rotate(6deg); }
+}
+.group:hover .phone-ring,
+.group:focus-visible .phone-ring {
+  animation: phone-ring 700ms ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-left,
+  .marquee-right,
+  .group:hover .phone-ring {
+    animation: none;
+  }
+}
+
+/* ── Kwiatomaty ─────────────────────────────────────────── */
+
+/* Zielona kropka "Online" — rozchodząca się fala */
+@keyframes status-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.6); }
+  70% { box-shadow: 0 0 0 8px rgba(74, 222, 128, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+}
+.status-pulse {
+  animation: status-pulse 2s infinite;
+}
+
+/* Złoty puls tylko na hover */
+.hover-pulse:hover,
+.hover-pulse:focus-visible {
+  animation: gold-pulse 1.6s ease-in-out infinite;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .status-pulse,
+  .hover-pulse:hover {
+    animation: none;
+  }
+}
+
+/* Pin na mapie kwiatomatów — pulsujący złoty ring */
+@keyframes pin-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(212, 168, 67, 0.4); }
+  70% { box-shadow: 0 0 0 12px rgba(212, 168, 67, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(212, 168, 67, 0); }
+}
+.pin-pulse {
+  animation: pin-pulse 2s infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pin-pulse { animation: none; }
+}
+
+/* ── Kwiaciarnia ────────────────────────────────────────── */
+
+/* Wejście tekstu w hero: opacity 0→1, translateY 30px→0 */
+@keyframes hero-in {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.hero-in {
+  opacity: 0;
+  animation: hero-in 800ms ease-out forwards;
+}
+
+/* Bardzo delikatne ziarno na tle strony */
+.grain-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.02;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-in {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* Delikatne "oddychanie" emoji w kafelkach usług */
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+.breathe {
+  display: inline-block;
+  animation: breathe 3s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .breathe { animation: none; }
+}
+
+/* Język kwiatów — opis pod kartą: na urządzeniach z kursorem rozwija się na hover,
+   na dotykowych jest widoczny zawsze (pod kartą, w normalnym układzie). */
+.flower-desc {
+  display: grid;
+  grid-template-rows: 1fr;
+}
+@media (hover: hover) {
+  .flower-desc {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    z-index: 20;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: grid-template-rows 300ms ease, opacity 300ms ease;
+  }
+  .group:hover .flower-desc,
+  .group:focus-within .flower-desc {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+}
+
+/* Realizacje — krótki puls aktywnego filtra po kliknięciu */
+@keyframes pill-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+.pill-pulse {
+  animation: pill-pulse 200ms ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pill-pulse { animation: none; }
+}
+
+/* ── Zamówienia ─────────────────────────────────────────── */
+
+/* Suwak kwoty "Zdaj się na nas" — złoty gradient do pozycji uchwytu (--pct) */
+.gold-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #8a6a1f 0%, #D4A843 var(--pct, 0%), rgba(255, 255, 255, 0.15) var(--pct, 0%));
+  cursor: pointer;
+}
+.gold-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 9999px;
+  background: #fff;
+  border: 3px solid #D4A843;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  transition: transform 150ms ease;
+}
+.gold-range::-webkit-slider-thumb:hover { transform: scale(1.12); }
+.gold-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  background: #fff;
+  border: 3px solid #D4A843;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+.gold-range:focus-visible {
+  outline: 2px solid #D4A843;
+  outline-offset: 6px;
+}
+
+/* Krótkie "odbicie" ceny przy zmianie rozmiaru */
+@keyframes price-bounce {
+  0% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+.price-bounce {
+  display: inline-block;
+  animation: price-bounce 200ms ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .price-bounce { animation: none; }
+}
+
+/* ── Popup opinii ───────────────────────────────────────── */
+@keyframes popup-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes popup-backdrop-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes popup-modal-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes popup-modal-out {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.95); }
+}
+@keyframes popup-emoji-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+.popup-backdrop-in { animation: popup-backdrop-in 300ms ease-out forwards; }
+.popup-backdrop-out { animation: popup-backdrop-out 200ms ease-in forwards; }
+.popup-modal-in { animation: popup-modal-in 300ms ease-out forwards; }
+.popup-modal-out { animation: popup-modal-out 200ms ease-in forwards; }
+.popup-emoji-pulse { display: inline-block; animation: popup-emoji-pulse 2s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .popup-emoji-pulse { animation: none; }
+}
+@keyframes popup-emoji-bounce {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-12px); }
+  50% { transform: translateY(0); }
+  65% { transform: translateY(-5px); }
+  80% { transform: translateY(0); }
+}
+.popup-emoji-bounce { display: inline-block; animation: popup-emoji-bounce 1.6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .popup-emoji-bounce { animation: none; }
 }
