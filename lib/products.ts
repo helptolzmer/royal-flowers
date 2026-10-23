@@ -556,15 +556,13 @@ const NOWE_PRODUKTY: Record<string, Product[]> = {
       id: "rf-b09", // B09
       slug: "bukiet-slonecznikowy-klasyczny",
       name: "Bukiet Słonecznikowy Klasyczny",
-      priceFrom: 130,
+      priceFrom: 169,
       description:
         "Bukiet Słonecznikowy Klasyczny łączy słoneczniki w prostym papierze kraftowym. Układamy go ręcznie, zachowując charakter kompozycji widocznej na zdjęciach Royal Flowers. Gatunki i odcienie mogą nieznacznie zmieniać się w zależności od sezonu i dostępności, przy zachowaniu kolorystyki, formy oraz wielkości zamówionego wariantu.",
       details: ["Skład: Słoneczniki w prostym papierze kraftowym", ...POLNE_DETAILS.slice(1)],
       variants: [
-        { size: "Mały", price: 130, image: "/images/produkty/bukiet-slonecznikowy-klasyczny-maly.jpg", description: "Zgrabna wersja, którą wygodnie trzyma się w jednej dłoni." },
-        { size: "Średni", price: 200, image: "/images/produkty/bukiet-slonecznikowy-klasyczny-sredni.jpg", description: "Pełniejszy bukiet, który daje kwiatom więcej miejsca i objętości." },
-        { size: "Duży", price: 300, image: "/images/produkty/bukiet-slonecznikowy-klasyczny-duzy.jpg", description: "Wyrazista, obfita kompozycja o większej średnicy." },
-        { size: "MEGA", price: 450, image: "/images/produkty/bukiet-slonecznikowy-klasyczny-mega.jpg", description: "Najbardziej okazała odsłona tej kompozycji, przygotowana z rozmachem." },
+        { size: "Mały", price: 169, image: "/images/produkty/bukiet-slonecznikowy-klasyczny-maly.jpg", description: "Zgrabna wersja, którą wygodnie trzyma się w jednej dłoni." },
+        { size: "Średni", price: 229, image: "/images/produkty/bukiet-slonecznikowy-klasyczny-sredni.jpg", description: "Pełniejszy bukiet, który daje kwiatom więcej miejsca i objętości." },
       ],
     },
     {
@@ -663,15 +661,15 @@ const NOWE_PRODUKTY: Record<string, Product[]> = {
       id: "rf-b16", // B16
       slug: "bukiet-blekitna-hortensja",
       name: "Bukiet Błękitna Hortensja",
-      priceFrom: 260,
+      priceFrom: 210,
       description:
         "Bukiet Błękitna Hortensja łączy błękitna hortensja, kremowe róże, delikatna zieleń i niebieska wstążka. Układamy go ręcznie, zachowując charakter kompozycji widocznej na zdjęciach Royal Flowers. Gatunki i odcienie mogą nieznacznie zmieniać się w zależności od sezonu i dostępności, przy zachowaniu kolorystyki, formy oraz wielkości zamówionego wariantu.",
       details: ["Skład: Błękitna hortensja, kremowe róże, delikatna zieleń i niebieska wstążka", ...NOWOCZESNE_DETAILS.slice(1)],
       variants: [
-        { size: "Mały", price: 260, image: "/images/produkty/bukiet-blekitna-hortensja-maly.jpg", description: "Zgrabna wersja, którą wygodnie trzyma się w jednej dłoni." },
-        { size: "Średni", price: 390, image: "/images/produkty/bukiet-blekitna-hortensja-sredni.jpg", description: "Pełniejszy bukiet, który daje kwiatom więcej miejsca i objętości." },
-        { size: "Duży", price: 570, image: "/images/produkty/bukiet-blekitna-hortensja-duzy.jpg", description: "Wyrazista, obfita kompozycja o większej średnicy." },
-        { size: "MEGA", price: 830, image: "/images/produkty/bukiet-blekitna-hortensja-mega.jpg", description: "Najbardziej okazała odsłona tej kompozycji, przygotowana z rozmachem." },
+        { size: "Mały", price: 210, image: "/images/produkty/bukiet-blekitna-hortensja-maly.jpg", description: "Zgrabna wersja, którą wygodnie trzyma się w jednej dłoni." },
+        { size: "Średni", price: 299, image: "/images/produkty/bukiet-blekitna-hortensja-sredni.jpg", description: "Pełniejszy bukiet, który daje kwiatom więcej miejsca i objętości." },
+        { size: "Duży", price: 499, image: "/images/produkty/bukiet-blekitna-hortensja-duzy.jpg", description: "Wyrazista, obfita kompozycja o większej średnicy." },
+        { size: "MEGA", price: 799, image: "/images/produkty/bukiet-blekitna-hortensja-mega.jpg", description: "Najbardziej okazała odsłona tej kompozycji, przygotowana z rozmachem." },
       ],
     },
     {
@@ -772,15 +770,13 @@ const NOWE_PRODUKTY: Record<string, Product[]> = {
       id: "rf-f02", // F02
       slug: "flowerbox-swiateczna-czerwien",
       name: "Flowerbox Świąteczna Czerwień",
-      priceFrom: 260,
+      priceFrom: 240,
       description:
         "Flowerbox Świąteczna Czerwień to kompozycja z czerwone róże, biała bawełna, ciemnozielony pojemnik, świąteczne detale. Kwiaty układamy w pudełku tak, by zachować lekkość i proporcje pierwowzoru. Gatunki i odcienie mogą nieznacznie zmieniać się w zależności od sezonu i dostępności, przy zachowaniu kolorystyki, formy oraz wielkości zamówionego wariantu.",
       details: ["Skład: Czerwone róże, biała bawełna, ciemnozielony pojemnik, świąteczne detale", ...FLOWERBOX_DETAILS.slice(1)],
       variants: [
-        { size: "Mały", price: 260, image: "/images/produkty/flowerbox-swiateczna-czerwien-maly.jpg", description: "Niewielki box, który łatwo postawić na biurku lub stoliku." },
-        { size: "Średni", price: 370, image: "/images/produkty/flowerbox-swiateczna-czerwien-sredni.jpg", description: "Pełniejsza kompozycja w pudełku o średniej wielkości." },
-        { size: "Duży", price: 530, image: "/images/produkty/flowerbox-swiateczna-czerwien-duzy.jpg", description: "Duży box z bogatszą liczbą kwiatów." },
-        { size: "MEGA", price: 740, image: "/images/produkty/flowerbox-swiateczna-czerwien-mega.jpg", description: "Najbardziej obfita wersja tej kompozycji w dużym pudełku." },
+        { size: "Mały", price: 240, image: "/images/produkty/flowerbox-swiateczna-czerwien-maly.jpg", description: "Niewielki box, który łatwo postawić na biurku lub stoliku." },
+        { size: "Średni", price: 340, image: "/images/produkty/flowerbox-swiateczna-czerwien-sredni.jpg", description: "Pełniejsza kompozycja w pudełku o średniej wielkości." },
       ],
     },
     {
@@ -879,120 +875,103 @@ const NOWE_PRODUKTY: Record<string, Product[]> = {
       id: "rf-w01", // W01
       slug: "wieniec-fioletowe-pozegnanie",
       name: "Wieniec Fioletowe Pożegnanie",
-      priceFrom: 450,
+      priceFrom: 699,
       description:
         "Wieniec Fioletowe Pożegnanie to kompozycja pożegnalna: wysoki wieniec na stojaku, fioletowe hortensje, różowe kwiaty i biała szarfa. Każdy egzemplarz układamy ręcznie, z dbałością o spokojną i godną formę. Gatunki i odcienie mogą nieznacznie zmieniać się w zależności od sezonu i dostępności, przy zachowaniu kolorystyki, formy oraz wielkości zamówionego wariantu.",
       details: ["Skład: Wysoki wieniec na stojaku, fioletowe hortensje, różowe kwiaty i biała szarfa", ...POGRZEBOWE_DETAILS.slice(1)],
       variants: [
-        { size: "Mały", price: 450, image: "/images/produkty/wieniec-fioletowe-pozegnanie-maly.jpg", description: "Kameralna kompozycja na stojaku, zachowująca charakter wzoru." },
-        { size: "Średni", price: 620, image: "/images/produkty/wieniec-fioletowe-pozegnanie-sredni.jpg", description: "Pełniejszy wieniec na stojaku, przeznaczony na uroczystość pożegnalną." },
-        { size: "Duży", price: 850, image: "/images/produkty/wieniec-fioletowe-pozegnanie-duzy.jpg", description: "Duży wieniec o wyraźnie bogatszym układzie kwiatów." },
-        { size: "MEGA", price: 1160, image: "/images/produkty/wieniec-fioletowe-pozegnanie-mega.jpg", description: "Najbardziej okazała wersja, z dużą konstrukcją i pełnym układem kwiatów." },
+        { size: "Klasyczny", price: 699, image: "/images/produkty/wieniec-fioletowe-pozegnanie-maly.jpg", description: "Klasyczna wersja kompozycji, zachowująca charakter i kolorystykę wzoru." },
+        { size: "Premium", price: 1200, image: "/images/produkty/wieniec-fioletowe-pozegnanie-sredni.jpg", description: "Okazalsza wersja z bogatszym układem kwiatów i pełniejszą formą." },
       ],
     },
     {
       id: "rf-w02", // W02
       slug: "wieniec-roz-i-kremu",
       name: "Wieniec Róż i Kremu",
-      priceFrom: 490,
+      priceFrom: 799,
       description:
         "Wieniec Róż i Kremu to kompozycja pożegnalna: wysoki wieniec na stojaku, jasne róże, kremowe lilie, różowe kwiaty i szarfa. Każdy egzemplarz układamy ręcznie, z dbałością o spokojną i godną formę. Gatunki i odcienie mogą nieznacznie zmieniać się w zależności od sezonu i dostępności, przy zachowaniu kolorystyki, formy oraz wielkości zamówionego wariantu.",
       details: ["Skład: Wysoki wieniec na stojaku, jasne róże, kremowe lilie, różowe kwiaty i szarfa", ...POGRZEBOWE_DETAILS.slice(1)],
       variants: [
-        { size: "Mały", price: 490, image: "/images/produkty/wieniec-roz-i-kremu-maly.jpg", description: "Kameralna kompozycja na stojaku, zachowująca charakter wzoru." },
-        { size: "Średni", price: 680, image: "/images/produkty/wieniec-roz-i-kremu-sredni.jpg", description: "Pełniejszy wieniec na stojaku, przeznaczony na uroczystość pożegnalną." },
-        { size: "Duży", price: 930, image: "/images/produkty/wieniec-roz-i-kremu-duzy.jpg", description: "Duży wieniec o wyraźnie bogatszym układzie kwiatów." },
-        { size: "MEGA", price: 1270, image: "/images/produkty/wieniec-roz-i-kremu-mega.jpg", description: "Najbardziej okazała wersja, z dużą konstrukcją i pełnym układem kwiatów." },
+        { size: "Klasyczny", price: 799, image: "/images/produkty/wieniec-roz-i-kremu-maly.jpg", description: "Klasyczna wersja kompozycji, zachowująca charakter i kolorystykę wzoru." },
+        { size: "Premium", price: 1600, image: "/images/produkty/wieniec-roz-i-kremu-sredni.jpg", description: "Okazalsza wersja z bogatszym układem kwiatów i pełniejszą formą." },
       ],
     },
     {
       id: "rf-w03", // W03
       slug: "wieniec-bordo-i-blekit",
       name: "Wieniec Bordo i Błękit",
-      priceFrom: 520,
+      priceFrom: 3500,
       description:
         "Wieniec Bordo i Błękit to kompozycja pożegnalna: wieniec na stojaku w czerwieni i błękicie z zielenią. Każdy egzemplarz układamy ręcznie, z dbałością o spokojną i godną formę. Gatunki i odcienie mogą nieznacznie zmieniać się w zależności od sezonu i dostępności, przy zachowaniu kolorystyki, formy oraz wielkości zamówionego wariantu.",
       details: ["Skład: Wieniec na stojaku w czerwieni i błękicie z zielenią", ...POGRZEBOWE_DETAILS.slice(1)],
       variants: [
-        { size: "Mały", price: 520, image: "/images/produkty/wieniec-bordo-i-blekit-maly.jpg", description: "Kameralna kompozycja na stojaku, zachowująca charakter wzoru." },
-        { size: "Średni", price: 720, image: "/images/produkty/wieniec-bordo-i-blekit-sredni.jpg", description: "Pełniejszy wieniec na stojaku, przeznaczony na uroczystość pożegnalną." },
-        { size: "Duży", price: 980, image: "/images/produkty/wieniec-bordo-i-blekit-duzy.jpg", description: "Duży wieniec o wyraźnie bogatszym układzie kwiatów." },
-        { size: "MEGA", price: 1340, image: "/images/produkty/wieniec-bordo-i-blekit-mega.jpg", description: "Najbardziej okazała wersja, z dużą konstrukcją i pełnym układem kwiatów." },
+        { size: "Premium", price: 3500, image: "/images/produkty/wieniec-bordo-i-blekit-sredni.jpg", description: "Okazalsza wersja z bogatszym układem kwiatów i pełniejszą formą." },
       ],
     },
     {
       id: "rf-w04", // W04
       slug: "serce-z-czerwonych-roz",
       name: "Serce z Czerwonych Róż",
-      priceFrom: 580,
+      priceFrom: 699,
       description:
         "Serce z Czerwonych Róż to kompozycja pożegnalna: duże serce z czerwonych róż na stojaku, pusty środek. Każdy egzemplarz układamy ręcznie, z dbałością o spokojną i godną formę. Gatunki i odcienie mogą nieznacznie zmieniać się w zależności od sezonu i dostępności, przy zachowaniu kolorystyki, formy oraz wielkości zamówionego wariantu.",
       details: ["Skład: Duże serce z czerwonych róż na stojaku, pusty środek", ...POGRZEBOWE_DETAILS.slice(1)],
       variants: [
-        { size: "Mały", price: 580, image: "/images/produkty/serce-z-czerwonych-roz-maly.jpg", description: "Kameralna kompozycja na stojaku, zachowująca charakter wzoru." },
-        { size: "Średni", price: 800, image: "/images/produkty/serce-z-czerwonych-roz-sredni.jpg", description: "Pełniejszy wieniec na stojaku, przeznaczony na uroczystość pożegnalną." },
-        { size: "Duży", price: 1110, image: "/images/produkty/serce-z-czerwonych-roz-duzy.jpg", description: "Duży wieniec o wyraźnie bogatszym układzie kwiatów." },
-        { size: "MEGA", price: 1530, image: "/images/produkty/serce-z-czerwonych-roz-mega.jpg", description: "Najbardziej okazała wersja, z dużą konstrukcją i pełnym układem kwiatów." },
+        { size: "Klasyczny", price: 699, image: "/images/produkty/serce-z-czerwonych-roz-maly.jpg", description: "Klasyczna wersja kompozycji, zachowująca charakter i kolorystykę wzoru." },
+        { size: "Premium", price: 1500, image: "/images/produkty/serce-z-czerwonych-roz-sredni.jpg", description: "Okazalsza wersja z bogatszym układem kwiatów i pełniejszą formą." },
       ],
     },
     {
       id: "rf-w05", // W05
       slug: "wieniec-kolorowe-wspomnienie",
       name: "Wieniec Kolorowe Wspomnienie",
-      priceFrom: 520,
+      priceFrom: 899,
       description:
         "Wieniec Kolorowe Wspomnienie to kompozycja pożegnalna: okrągły gęsty wieniec mieszany z kremem, różem i bordo. Każdy egzemplarz układamy ręcznie, z dbałością o spokojną i godną formę. Gatunki i odcienie mogą nieznacznie zmieniać się w zależności od sezonu i dostępności, przy zachowaniu kolorystyki, formy oraz wielkości zamówionego wariantu.",
       details: ["Skład: Okrągły gęsty wieniec mieszany z kremem, różem i bordo", ...POGRZEBOWE_DETAILS.slice(1)],
       variants: [
-        { size: "Mały", price: 520, image: "/images/produkty/wieniec-kolorowe-wspomnienie-maly.jpg", description: "Kameralna kompozycja na stojaku, zachowująca charakter wzoru." },
-        { size: "Średni", price: 720, image: "/images/produkty/wieniec-kolorowe-wspomnienie-sredni.jpg", description: "Pełniejszy wieniec na stojaku, przeznaczony na uroczystość pożegnalną." },
-        { size: "Duży", price: 980, image: "/images/produkty/wieniec-kolorowe-wspomnienie-duzy.jpg", description: "Duży wieniec o wyraźnie bogatszym układzie kwiatów." },
-        { size: "MEGA", price: 1340, image: "/images/produkty/wieniec-kolorowe-wspomnienie-mega.jpg", description: "Najbardziej okazała wersja, z dużą konstrukcją i pełnym układem kwiatów." },
+        { size: "Klasyczny", price: 899, image: "/images/produkty/wieniec-kolorowe-wspomnienie-maly.jpg", description: "Klasyczna wersja kompozycji, zachowująca charakter i kolorystykę wzoru." },
+        { size: "Premium", price: 1600, image: "/images/produkty/wieniec-kolorowe-wspomnienie-sredni.jpg", description: "Okazalsza wersja z bogatszym układem kwiatów i pełniejszą formą." },
       ],
     },
     {
       id: "rf-w06", // W06
       slug: "wieniec-bordowa-klasyka",
       name: "Wieniec Bordowa Klasyka",
-      priceFrom: 540,
+      priceFrom: 799,
       description:
         "Wieniec Bordowa Klasyka to kompozycja pożegnalna: wysoki wieniec na stojaku, ciemnoczerwone róże, białe kwiaty i zielona szarfa. Każdy egzemplarz układamy ręcznie, z dbałością o spokojną i godną formę. Gatunki i odcienie mogą nieznacznie zmieniać się w zależności od sezonu i dostępności, przy zachowaniu kolorystyki, formy oraz wielkości zamówionego wariantu.",
       details: ["Skład: Wysoki wieniec na stojaku, ciemnoczerwone róże, białe kwiaty i zielona szarfa", ...POGRZEBOWE_DETAILS.slice(1)],
       variants: [
-        { size: "Mały", price: 540, image: "/images/produkty/wieniec-bordowa-klasyka-maly.jpg", description: "Kameralna kompozycja na stojaku, zachowująca charakter wzoru." },
-        { size: "Średni", price: 750, image: "/images/produkty/wieniec-bordowa-klasyka-sredni.jpg", description: "Pełniejszy wieniec na stojaku, przeznaczony na uroczystość pożegnalną." },
-        { size: "Duży", price: 1020, image: "/images/produkty/wieniec-bordowa-klasyka-duzy.jpg", description: "Duży wieniec o wyraźnie bogatszym układzie kwiatów." },
-        { size: "MEGA", price: 1390, image: "/images/produkty/wieniec-bordowa-klasyka-mega.jpg", description: "Najbardziej okazała wersja, z dużą konstrukcją i pełnym układem kwiatów." },
+        { size: "Klasyczny", price: 799, image: "/images/produkty/wieniec-bordowa-klasyka-maly.jpg", description: "Klasyczna wersja kompozycji, zachowująca charakter i kolorystykę wzoru." },
+        { size: "Premium", price: 1599, image: "/images/produkty/wieniec-bordowa-klasyka-sredni.jpg", description: "Okazalsza wersja z bogatszym układem kwiatów i pełniejszą formą." },
       ],
     },
     {
       id: "rf-w07", // W07
       slug: "wieniec-biala-cisza",
       name: "Wieniec Biała Cisza",
-      priceFrom: 510,
+      priceFrom: 699,
       description:
         "Wieniec Biała Cisza to kompozycja pożegnalna: wysoki wieniec na stojaku, wyłącznie białe kwiaty i gęsta zieleń. Każdy egzemplarz układamy ręcznie, z dbałością o spokojną i godną formę. Gatunki i odcienie mogą nieznacznie zmieniać się w zależności od sezonu i dostępności, przy zachowaniu kolorystyki, formy oraz wielkości zamówionego wariantu.",
       details: ["Skład: Wysoki wieniec na stojaku, wyłącznie białe kwiaty i gęsta zieleń", ...POGRZEBOWE_DETAILS.slice(1)],
       variants: [
-        { size: "Mały", price: 510, image: "/images/produkty/wieniec-biala-cisza-maly.jpg", description: "Kameralna kompozycja na stojaku, zachowująca charakter wzoru." },
-        { size: "Średni", price: 710, image: "/images/produkty/wieniec-biala-cisza-sredni.jpg", description: "Pełniejszy wieniec na stojaku, przeznaczony na uroczystość pożegnalną." },
-        { size: "Duży", price: 970, image: "/images/produkty/wieniec-biala-cisza-duzy.jpg", description: "Duży wieniec o wyraźnie bogatszym układzie kwiatów." },
-        { size: "MEGA", price: 1320, image: "/images/produkty/wieniec-biala-cisza-mega.jpg", description: "Najbardziej okazała wersja, z dużą konstrukcją i pełnym układem kwiatów." },
+        { size: "Klasyczny", price: 699, image: "/images/produkty/wieniec-biala-cisza-maly.jpg", description: "Klasyczna wersja kompozycji, zachowująca charakter i kolorystykę wzoru." },
+        { size: "Premium", price: 1499, image: "/images/produkty/wieniec-biala-cisza-sredni.jpg", description: "Okazalsza wersja z bogatszym układem kwiatów i pełniejszą formą." },
       ],
     },
     {
       id: "rf-w08", // W08
       slug: "wieniec-czerwone-roze",
       name: "Wieniec Czerwone Róże",
-      priceFrom: 580,
+      priceFrom: 599,
       description:
         "Wieniec Czerwone Róże to kompozycja pożegnalna: wysoki okrągły wieniec na stojaku, same czerwone róże, zielona szarfa. Każdy egzemplarz układamy ręcznie, z dbałością o spokojną i godną formę. Gatunki i odcienie mogą nieznacznie zmieniać się w zależności od sezonu i dostępności, przy zachowaniu kolorystyki, formy oraz wielkości zamówionego wariantu.",
       details: ["Skład: Wysoki okrągły wieniec na stojaku, same czerwone róże, zielona szarfa", ...POGRZEBOWE_DETAILS.slice(1)],
       variants: [
-        { size: "Mały", price: 580, image: "/images/produkty/wieniec-czerwone-roze-maly.jpg", description: "Kameralna kompozycja na stojaku, zachowująca charakter wzoru." },
-        { size: "Średni", price: 810, image: "/images/produkty/wieniec-czerwone-roze-sredni.jpg", description: "Pełniejszy wieniec na stojaku, przeznaczony na uroczystość pożegnalną." },
-        { size: "Duży", price: 1130, image: "/images/produkty/wieniec-czerwone-roze-duzy.jpg", description: "Duży wieniec o wyraźnie bogatszym układzie kwiatów." },
-        { size: "MEGA", price: 1560, image: "/images/produkty/wieniec-czerwone-roze-mega.jpg", description: "Najbardziej okazała wersja, z dużą konstrukcją i pełnym układem kwiatów." },
+        { size: "Klasyczny", price: 599, image: "/images/produkty/wieniec-czerwone-roze-maly.jpg", description: "Klasyczna wersja kompozycji, zachowująca charakter i kolorystykę wzoru." },
+        { size: "Premium", price: 1299, image: "/images/produkty/wieniec-czerwone-roze-sredni.jpg", description: "Okazalsza wersja z bogatszym układem kwiatów i pełniejszą formą." },
       ],
     },
   ],
@@ -1010,22 +989,27 @@ const BAZOWE_KATEGORIE: Category[] = [
         id: "bn-1",
         slug: "bukiet-polny",
         name: "Bukiet Polny",
-        priceFrom: 120,
+        priceFrom: 160,
         description:
           "Bukiet Polny to naturalnie piękna kompozycja z sezonowych kwiatów, wiązana ręcznie tak, by zachować lekkość i swobodny, łąkowy charakter.",
         details: NATURALNE_DETAILS,
-        variants: variantsFrom(120, "bukiet-polny"),
+        variants: [
+          { size: "Mały", price: 160, image: "/images/produkty/bukiet-polny-maly.jpg" },
+          { size: "Średni", price: 199, image: "/images/produkty/bukiet-polny-sredni.jpg" },
+        ],
         featured: true,
       },
       {
         id: "bn-2",
         slug: "bukiet-slonecznikowy",
         name: "Bukiet Słonecznikowy",
-        priceFrom: 100,
+        priceFrom: 120,
         description:
           "Bukiet Słonecznikowy to naturalnie piękna kompozycja z sezonowych kwiatów, wiązana ręcznie tak, by zachować lekkość i swobodny, łąkowy charakter.",
         details: NATURALNE_DETAILS,
-        variants: variantsFrom(100, "bukiet-slonecznikowy"),
+        variants: [
+          { size: "Mały", price: 120, image: "/images/produkty/bukiet-slonecznikowy-maly.jpg" },
+        ],
         featured: true,
       },
       {
@@ -1063,11 +1047,13 @@ const BAZOWE_KATEGORIE: Category[] = [
         id: "bn-6",
         slug: "bukiet-ziolowy",
         name: "Bukiet Ziołowy",
-        priceFrom: 140,
+        priceFrom: 160,
         description:
           "Bukiet Ziołowy to naturalnie piękna kompozycja z sezonowych kwiatów, wiązana ręcznie tak, by zachować lekkość i swobodny, łąkowy charakter.",
         details: NATURALNE_DETAILS,
-        variants: variantsFrom(140, "bukiet-ziolowy"),
+        variants: [
+          { size: "Mały", price: 160, image: "/images/produkty/bukiet-ziolowy-maly.jpg" },
+        ],
       },
     ],
   },
@@ -1082,11 +1068,14 @@ const BAZOWE_KATEGORIE: Category[] = [
         id: "bw-1",
         slug: "bukiet-minimal",
         name: "Bukiet Minimal",
-        priceFrom: 180,
+        priceFrom: 160,
         description:
           "Bukiet Minimal łączy odważne zestawienia kolorów i nowoczesną formę — wyrazista kompozycja dla osób ceniących oryginalny styl.",
         details: NOWOCZESNE_DETAILS,
-        variants: variantsFrom(180, "bukiet-minimal"),
+        variants: [
+          { size: "Mały", price: 160, image: "/images/produkty/bukiet-minimal-maly.jpg" },
+          { size: "Średni", price: 240, image: "/images/produkty/bukiet-minimal-sredni.jpg" },
+        ],
         featured: true,
       },
       {
@@ -1164,11 +1153,15 @@ const BAZOWE_KATEGORIE: Category[] = [
         id: "fb-3",
         slug: "flowerbox-premium",
         name: "FlowerBox Premium",
-        priceFrom: 350,
+        priceFrom: 299,
         description:
           "FlowerBox Premium to elegancka kompozycja zamknięta w ozdobnym pudełku — gotowy prezent, który nie wymaga wazonu.",
         details: FLOWERBOX_DETAILS,
-        variants: variantsFrom(350, "flowerbox-premium"),
+        variants: [
+          { size: "Mały", price: 299, image: "/images/produkty/flowerbox-premium-maly.jpg" },
+          { size: "Średni", price: 399, image: "/images/produkty/flowerbox-premium-sredni.jpg" },
+          { size: "Duży", price: 499, image: "/images/produkty/flowerbox-premium-duzy.jpg" },
+        ],
         featured: true,
       },
       {
@@ -1192,6 +1185,96 @@ const BAZOWE_KATEGORIE: Category[] = [
         variants: variantsFrom(260, "flowerbox-z-misiem"),
         featured: true,
       },
+﻿      {
+        id: "fb-6",
+        slug: "flowerbox-czerwona-klasyka",
+        name: "Flowerbox Czerwona Klasyka",
+        priceFrom: 220,
+        description:
+          "Flowerbox Czerwona Klasyka to kompozycja z czerwone róże i gerbery, zielone pomponowe chryzantemy, drobna woskówka i zieleń w czerwonym pudełku. Kwiaty układamy w pudełku tak, by zachować lekkość i proporcje pierwowzoru. Gatunki i odcienie mogą nieznacznie zmieniać się w zależności od sezonu i dostępności, przy zachowaniu kolorystyki, formy oraz wielkości zamówionego wariantu.",
+        details: ["Skład: Czerwone róże i gerbery, zielone pomponowe chryzantemy, drobna woskówka i zieleń w czerwonym pudełku", ...FLOWERBOX_DETAILS.slice(1)],
+        variants: [
+          { size: "Mały", price: 220, image: "/images/produkty/flowerbox-czerwona-klasyka-maly.jpg", description: "Niewielka kompozycja czerwonych kwiatów przełamana świeżą zielenią. Ma wyrazisty kolor, ale zachowuje lekką formę." },
+          { size: "Średni", price: 320, image: "/images/produkty/flowerbox-czerwona-klasyka-sredni.jpg", description: "Pełniejsza wersja z większą liczbą róż, gerber i zielonych pomponów. Drobne białe kwiaty dodają jej oddechu." },
+          { size: "Duży", price: 460, image: "/images/produkty/flowerbox-czerwona-klasyka-duzy.jpg", description: "Okazały czerwony flowerbox z wyraźnie bogatszym ułożeniem kwiatów i zieleni. Przyciąga uwagę, nie tracąc elegancji." },
+          { size: "MEGA", price: 650, image: "/images/produkty/flowerbox-czerwona-klasyka-mega.jpg", description: "Najbardziej rozbudowana wersja tej kompozycji. Liczne czerwone kwiaty i zielone akcenty tworzą szeroki, efektowny układ." },
+        ],
+      },
+      {
+        id: "fb-7",
+        slug: "flowerbox-rubinowy-ogrod",
+        name: "Flowerbox Rubinowy Ogród",
+        priceFrom: 260,
+        description:
+          "Flowerbox Rubinowy Ogród to kompozycja z czerwone róże i goździki, gałązki z czerwonymi owocami i burgundowa zieleń w czerwonym pudełku. Kwiaty układamy w pudełku tak, by zachować lekkość i proporcje pierwowzoru. Gatunki i odcienie mogą nieznacznie zmieniać się w zależności od sezonu i dostępności, przy zachowaniu kolorystyki, formy oraz wielkości zamówionego wariantu.",
+        details: ["Skład: Czerwone róże i goździki, gałązki z czerwonymi owocami i burgundowa zieleń w czerwonym pudełku", ...FLOWERBOX_DETAILS.slice(1)],
+        variants: [
+          { size: "Mały", price: 260, image: "/images/produkty/flowerbox-rubinowy-ogrod-maly.jpg", description: "Mały flowerbox o ogrodowym charakterze. Czerwone róże, goździki i owocowe gałązki tworzą swobodną kompozycję." },
+          { size: "Średni", price: 380, image: "/images/produkty/flowerbox-rubinowy-ogrod-sredni.jpg", description: "Więcej czerwonych kwiatów i delikatnie rozchodzące się gałązki nadają temu wariantowi głębi." },
+          { size: "Duży", price: 540, image: "/images/produkty/flowerbox-rubinowy-ogrod-duzy.jpg", description: "Bogatszy, szeroki układ czerwonych róż i goździków, uzupełniony owocowymi akcentami i ciemną zielenią." },
+          { size: "MEGA", price: 760, image: "/images/produkty/flowerbox-rubinowy-ogrod-mega.jpg", description: "Duża, swobodnie ułożona kompozycja z wieloma czerwonymi kwiatami. Najmocniej pokazuje ogrodowy charakter tej serii." },
+        ],
+      },
+      {
+        id: "fb-8",
+        slug: "flowerbox-karminowa-kokarda",
+        name: "Flowerbox Karminowa Kokarda",
+        priceFrom: 240,
+        description:
+          "Flowerbox Karminowa Kokarda to kompozycja z czerwone róże, bordowe jaskry i czerwone goździki z delikatną zielenią oraz bordową wstążką w czerwonym pudełku. Kwiaty układamy w pudełku tak, by zachować lekkość i proporcje pierwowzoru. Gatunki i odcienie mogą nieznacznie zmieniać się w zależności od sezonu i dostępności, przy zachowaniu kolorystyki, formy oraz wielkości zamówionego wariantu.",
+        details: ["Skład: Czerwone róże, bordowe jaskry i czerwone goździki z delikatną zielenią oraz bordową wstążką w czerwonym pudełku", ...FLOWERBOX_DETAILS.slice(1)],
+        variants: [
+          { size: "Mały", price: 240, image: "/images/produkty/flowerbox-karminowa-kokarda-maly.jpg", description: "Kompaktowy flowerbox w odcieniach czerwieni i bordo, z miękko opadającą wstążką." },
+          { size: "Średni", price: 350, image: "/images/produkty/flowerbox-karminowa-kokarda-sredni.jpg", description: "Pełniejsza kompozycja róż, jaskrów i goździków. Wstążka dodaje jej elegancji bez zasłaniania kwiatów." },
+          { size: "Duży", price: 500, image: "/images/produkty/flowerbox-karminowa-kokarda-duzy.jpg", description: "Wyraźnie bogatszy układ karminowych i bordowych kwiatów w czerwonym pudełku." },
+          { size: "MEGA", price: 700, image: "/images/produkty/flowerbox-karminowa-kokarda-mega.jpg", description: "Najbardziej okazała wersja, gęsto wypełniona czerwonymi i bordowymi kwiatami. Dobra na naprawdę ważny gest." },
+        ],
+      },
+      {
+        id: "fb-9",
+        slug: "flowerbox-aksamitne-roze",
+        name: "Flowerbox Aksamitne Róże",
+        priceFrom: 260,
+        description:
+          "Flowerbox Aksamitne Róże to kompozycja z czerwone róże z niewielką ilością ciemnej zieleni w bordowym, matowym pudełku. Kwiaty układamy w pudełku tak, by zachować lekkość i proporcje pierwowzoru. Gatunki i odcienie mogą nieznacznie zmieniać się w zależności od sezonu i dostępności, przy zachowaniu kolorystyki, formy oraz wielkości zamówionego wariantu.",
+        details: ["Skład: Czerwone róże z niewielką ilością ciemnej zieleni w bordowym, matowym pudełku", ...FLOWERBOX_DETAILS.slice(1)],
+        variants: [
+          { size: "Mały", price: 260, image: "/images/produkty/flowerbox-aksamitne-roze-maly.jpg", description: "Klasyczny flowerbox z czerwonych róż. Prostą formę podkreśla bordowe pudełko i oszczędna zieleń." },
+          { size: "Średni", price: 390, image: "/images/produkty/flowerbox-aksamitne-roze-sredni.jpg", description: "Więcej róż ułożonych w naturalnie zaokrągloną kompozycję. Bez zbędnych dodatków." },
+          { size: "Duży", price: 550, image: "/images/produkty/flowerbox-aksamitne-roze-duzy.jpg", description: "Pełny flowerbox z czerwonych róż w większym pudełku. Mocny kolor i ponadczasowa forma." },
+          { size: "MEGA", price: 790, image: "/images/produkty/flowerbox-aksamitne-roze-mega.jpg", description: "Najbardziej obfita wersja z gęsto ułożonych czerwonych róż. Efektowna, ale nadal prosta i elegancka." },
+        ],
+      },
+      {
+        id: "fb-10",
+        slug: "flowerbox-kolorowy-ogrod",
+        name: "Flowerbox Kolorowy Ogród",
+        priceFrom: 230,
+        description:
+          "Flowerbox Kolorowy Ogród to kompozycja z kwiaty w naturalnych odcieniach różu, brzoskwini, koralu, żółci, lawendy i bieli w czerwonym pudełku. Kwiaty układamy w pudełku tak, by zachować lekkość i proporcje pierwowzoru. Gatunki i odcienie mogą nieznacznie zmieniać się w zależności od sezonu i dostępności, przy zachowaniu kolorystyki, formy oraz wielkości zamówionego wariantu.",
+        details: ["Skład: Kwiaty w naturalnych odcieniach różu, brzoskwini, koralu, żółci, lawendy i bieli w czerwonym pudełku", ...FLOWERBOX_DETAILS.slice(1)],
+        variants: [
+          { size: "Mały", price: 230, image: "/images/produkty/flowerbox-kolorowy-ogrod-maly.jpg", description: "Nieduży, pogodny mix kwiatów w ciepłych i pastelowych odcieniach." },
+          { size: "Średni", price: 340, image: "/images/produkty/flowerbox-kolorowy-ogrod-sredni.jpg", description: "Barwny flowerbox z większą liczbą róż, goździków i drobnych kwiatów. Lekki, radosny charakter." },
+          { size: "Duży", price: 490, image: "/images/produkty/flowerbox-kolorowy-ogrod-duzy.jpg", description: "Pełniejsza kompozycja różnokolorowych kwiatów, w której każdy odcień ma swoje miejsce." },
+          { size: "MEGA", price: 690, image: "/images/produkty/flowerbox-kolorowy-ogrod-mega.jpg", description: "Najbardziej rozbudowany mix. Wiele kwiatów tworzy szeroką, żywą kompozycję w czerwonym pudełku." },
+        ],
+      },
+      {
+        id: "fb-11",
+        slug: "flowerbox-biala-elegancja",
+        name: "Flowerbox Biała Elegancja",
+        priceFrom: 250,
+        description:
+          "Flowerbox Biała Elegancja to kompozycja z białe i kremowe róże, eustomy oraz goździki z drobną woskówką i lekką zielenią w kremowym pudełku. Kwiaty układamy w pudełku tak, by zachować lekkość i proporcje pierwowzoru. Gatunki i odcienie mogą nieznacznie zmieniać się w zależności od sezonu i dostępności, przy zachowaniu kolorystyki, formy oraz wielkości zamówionego wariantu.",
+        details: ["Skład: Białe i kremowe róże, eustomy oraz goździki z drobną woskówką i lekką zielenią w kremowym pudełku", ...FLOWERBOX_DETAILS.slice(1)],
+        variants: [
+          { size: "Mały", price: 250, image: "/images/produkty/flowerbox-biala-elegancja-maly.jpg", description: "Mały, jasny flowerbox o spokojnym charakterze. Białe kwiaty i delikatna zieleń pasują do wielu okazji." },
+          { size: "Średni", price: 370, image: "/images/produkty/flowerbox-biala-elegancja-sredni.jpg", description: "Więcej białych i kremowych kwiatów w lekkim, naturalnym ułożeniu." },
+          { size: "Duży", price: 530, image: "/images/produkty/flowerbox-biala-elegancja-duzy.jpg", description: "Bogatsza kompozycja jasnych róż, eustom i goździków w kremowym pudełku." },
+          { size: "MEGA", price: 750, image: "/images/produkty/flowerbox-biala-elegancja-mega.jpg", description: "Najbardziej okazała biała wersja. Dużo jasnych kwiatów, subtelna zieleń i miękkie wykończenie." },
+        ],
+      },
     ],
   },
   {
@@ -1205,21 +1288,27 @@ const BAZOWE_KATEGORIE: Category[] = [
         id: "kp-1",
         slug: "wieniec-klasyczny",
         name: "Wieniec Klasyczny",
-        priceFrom: 400,
+        priceFrom: 699,
         description:
           "Wieniec Klasyczny to kompozycja przygotowana z szacunkiem i troską o każdy detal, na pożegnanie bliskiej osoby.",
         details: POGRZEBOWE_DETAILS,
-        variants: variantsFrom(400, "wieniec-klasyczny"),
+        variants: [
+          { size: "Klasyczny", price: 699, image: "/images/produkty/wieniec-klasyczny-maly.jpg", description: "Klasyczna wersja kompozycji, zachowująca charakter i kolorystykę wzoru." },
+          { size: "Premium", price: 1200, image: "/images/produkty/wieniec-klasyczny-sredni.jpg", description: "Okazalsza wersja z bogatszym układem kwiatów i pełniejszą formą." },
+        ],
       },
       {
         id: "kp-2",
         slug: "wieniec-premium",
         name: "Wieniec Premium",
-        priceFrom: 600,
+        priceFrom: 800,
         description:
           "Wieniec Premium to kompozycja przygotowana z szacunkiem i troską o każdy detal, na pożegnanie bliskiej osoby.",
         details: POGRZEBOWE_DETAILS,
-        variants: variantsFrom(600, "wieniec-premium"),
+        variants: [
+          { size: "Klasyczny", price: 800, image: "/images/produkty/wieniec-premium-maly.jpg", description: "Klasyczna wersja kompozycji, zachowująca charakter i kolorystykę wzoru." },
+          { size: "Premium", price: 1399, image: "/images/produkty/wieniec-premium-sredni.jpg", description: "Okazalsza wersja z bogatszym układem kwiatów i pełniejszą formą." },
+        ],
       },
       {
         id: "kp-3",
@@ -1235,21 +1324,27 @@ const BAZOWE_KATEGORIE: Category[] = [
         id: "kp-4",
         slug: "serce-z-kwiatow",
         name: "Serce z Kwiatów",
-        priceFrom: 400,
+        priceFrom: 699,
         description:
           "Serce z Kwiatów to kompozycja przygotowana z szacunkiem i troską o każdy detal, na pożegnanie bliskiej osoby.",
         details: POGRZEBOWE_DETAILS,
-        variants: variantsFrom(400, "serce-z-kwiatow"),
+        variants: [
+          { size: "Klasyczny", price: 699, image: "/images/produkty/serce-z-kwiatow-maly.jpg", description: "Klasyczna wersja kompozycji, zachowująca charakter i kolorystykę wzoru." },
+          { size: "Premium", price: 1500, image: "/images/produkty/serce-z-kwiatow-sredni.jpg", description: "Okazalsza wersja z bogatszym układem kwiatów i pełniejszą formą." },
+        ],
       },
       {
         id: "kp-5",
         slug: "wieniec-sosnowy",
         name: "Wieniec Sosnowy",
-        priceFrom: 450,
+        priceFrom: 699,
         description:
           "Wieniec Sosnowy to kompozycja przygotowana z szacunkiem i troską o każdy detal, na pożegnanie bliskiej osoby.",
         details: POGRZEBOWE_DETAILS,
-        variants: variantsFrom(450, "wieniec-sosnowy"),
+        variants: [
+          { size: "Klasyczny", price: 699, image: "/images/produkty/wieniec-sosnowy-maly.jpg", description: "Klasyczna wersja kompozycji, zachowująca charakter i kolorystykę wzoru." },
+          { size: "Premium", price: 1250, image: "/images/produkty/wieniec-sosnowy-sredni.jpg", description: "Okazalsza wersja z bogatszym układem kwiatów i pełniejszą formą." },
+        ],
       },
     ],
   },
@@ -1264,41 +1359,61 @@ const BAZOWE_KATEGORIE: Category[] = [
         id: "km-1",
         slug: "wiazanka-na-grob",
         name: "Wiązanka na Grób",
-        priceFrom: 120,
+        priceFrom: 220,
         description:
           "Wiązanka na Grób to skromna, trwała kompozycja przeznaczona na groby i miejsca pamięci.",
         details: PAMIECI_DETAILS,
-        variants: variantsFrom(120, "wiazanka-na-grob"),
+        variants: [
+          { size: "Mały", price: 220, image: "/images/produkty/wiazanka-na-grob-maly.jpg" },
+          { size: "Średni", price: 299, image: "/images/produkty/wiazanka-na-grob-sredni.jpg" },
+          { size: "Duży", price: 399, image: "/images/produkty/wiazanka-na-grob-duzy.jpg" },
+          { size: "MEGA", price: 699, image: "/images/produkty/wiazanka-na-grob-mega.jpg" },
+        ],
       },
       {
         id: "km-2",
-        slug: "stroik-okolicznosciowy",
-        name: "Stroik Okolicznościowy",
-        priceFrom: 150,
+        slug: "wiazanka-okolicznosciowa",
+        name: "Wiązanka Okolicznościowa",
+        priceFrom: 219,
         description:
-          "Stroik Okolicznościowy to skromna, trwała kompozycja przeznaczona na groby i miejsca pamięci.",
+          "Wiązanka Okolicznościowa to skromna, trwała kompozycja przeznaczona na groby i miejsca pamięci.",
         details: PAMIECI_DETAILS,
-        variants: variantsFrom(150, "stroik-okolicznosciowy"),
+        variants: [
+          { size: "Mały", price: 219, image: "/images/produkty/wiazanka-okolicznosciowa-maly.jpg" },
+          { size: "Średni", price: 299, image: "/images/produkty/wiazanka-okolicznosciowa-sredni.jpg" },
+          { size: "Duży", price: 359, image: "/images/produkty/wiazanka-okolicznosciowa-duzy.jpg" },
+          { size: "MEGA", price: 599, image: "/images/produkty/wiazanka-okolicznosciowa-mega.jpg" },
+        ],
       },
       {
         id: "km-3",
         slug: "kompozycja-w-doniczce",
         name: "Kompozycja w Doniczce",
-        priceFrom: 180,
+        priceFrom: 219,
         description:
           "Kompozycja w Doniczce to skromna, trwała kompozycja przeznaczona na groby i miejsca pamięci.",
         details: PAMIECI_DETAILS,
-        variants: variantsFrom(180, "kompozycja-w-doniczce"),
+        variants: [
+          { size: "Mały", price: 219, image: "/images/produkty/kompozycja-w-doniczce-maly.jpg" },
+          { size: "Średni", price: 269, image: "/images/produkty/kompozycja-w-doniczce-sredni.jpg" },
+          { size: "Duży", price: 359, image: "/images/produkty/kompozycja-w-doniczce-duzy.jpg" },
+          { size: "MEGA", price: 599, image: "/images/produkty/kompozycja-w-doniczce-mega.jpg" },
+        ],
       },
       {
         id: "km-4",
         slug: "wiazanka-pamiatkowa",
         name: "Wiązanka Pamiątkowa",
-        priceFrom: 140,
+        priceFrom: 219,
         description:
           "Wiązanka Pamiątkowa to skromna, trwała kompozycja przeznaczona na groby i miejsca pamięci.",
         details: PAMIECI_DETAILS,
-        variants: variantsFrom(140, "wiazanka-pamiatkowa"),
+        variants: [
+          { size: "Mały", price: 219, image: "/images/produkty/wiazanka-pamiatkowa-maly.jpg" },
+          { size: "Średni", price: 279, image: "/images/produkty/wiazanka-pamiatkowa-sredni.jpg" },
+          { size: "Duży", price: 389, image: "/images/produkty/wiazanka-pamiatkowa-duzy.jpg" },
+          { size: "MEGA", price: 589, image: "/images/produkty/wiazanka-pamiatkowa-mega.jpg" },
+        ],
       },
     ],
   },
@@ -1372,31 +1487,43 @@ const BAZOWE_KATEGORIE: Category[] = [
         id: "bp-1",
         slug: "bukiet-lakowy-sen",
         name: "Bukiet Łąkowy Sen",
-        priceFrom: 120,
+        priceFrom: 169,
         description:
           "Bukiet Łąkowy Sen to naturalne piękno prosto z łąki — sezonowe kwiaty polne w artystycznej aranżacji.",
         details: POLNE_DETAILS,
-        variants: variantsFrom(120, "bukiet-lakowy-sen"),
+        variants: [
+          { size: "Mały", price: 169, image: "/images/produkty/bukiet-lakowy-sen-maly.jpg" },
+          { size: "Średni", price: 199, image: "/images/produkty/bukiet-lakowy-sen-sredni.jpg" },
+          { size: "Duży", price: 289, image: "/images/produkty/bukiet-lakowy-sen-duzy.jpg" },
+          { size: "MEGA", price: 449, image: "/images/produkty/bukiet-lakowy-sen-mega.jpg" },
+        ],
       },
       {
         id: "bp-2",
         slug: "bukiet-polna-fantazja",
         name: "Bukiet Polna Fantazja",
-        priceFrom: 150,
+        priceFrom: 169,
         description:
           "Bukiet Polna Fantazja to naturalne piękno prosto z łąki — sezonowe kwiaty polne w artystycznej aranżacji.",
         details: POLNE_DETAILS,
-        variants: variantsFrom(150, "bukiet-polna-fantazja"),
+        variants: [
+          { size: "Mały", price: 169, image: "/images/produkty/bukiet-polna-fantazja-maly.jpg" },
+          { size: "Średni", price: 239, image: "/images/produkty/bukiet-polna-fantazja-sredni.jpg" },
+          { size: "Duży", price: 339, image: "/images/produkty/bukiet-polna-fantazja-duzy.jpg" },
+          { size: "MEGA", price: 479, image: "/images/produkty/bukiet-polna-fantazja-mega.jpg" },
+        ],
       },
       {
         id: "bp-3",
         slug: "bukiet-sloneczne-pole",
         name: "Bukiet Słoneczne Pole",
-        priceFrom: 140,
+        priceFrom: 169,
         description:
           "Bukiet Słoneczne Pole to naturalne piękno prosto z łąki — sezonowe kwiaty polne w artystycznej aranżacji.",
         details: POLNE_DETAILS,
-        variants: variantsFrom(140, "bukiet-sloneczne-pole"),
+        variants: [
+          { size: "Mały", price: 169, image: "/images/produkty/bukiet-sloneczne-pole-maly.jpg" },
+        ],
       },
       {
         id: "bp-4",
@@ -1431,11 +1558,16 @@ const BAZOWE_KATEGORIE: Category[] = [
         id: "kk-1",
         slug: "kosz-obfitosc",
         name: "Kosz Obfitość",
-        priceFrom: 250,
+        priceFrom: 339,
         description:
           "Kosz Obfitość to piękna kompozycja w koszu — idealny prezent, który robi wrażenie.",
         details: KOSZE_DETAILS,
-        variants: variantsFrom(250, "kosz-obfitosc"),
+        variants: [
+          { size: "Mały", price: 339, image: "/images/produkty/kosz-obfitosc-maly.jpg" },
+          { size: "Średni", price: 399, image: "/images/produkty/kosz-obfitosc-sredni.jpg" },
+          { size: "Duży", price: 459, image: "/images/produkty/kosz-obfitosc-duzy.jpg" },
+          { size: "MEGA", price: 699, image: "/images/produkty/kosz-obfitosc-mega.jpg" },
+        ],
       },
       {
         id: "kk-2",
@@ -1500,11 +1632,14 @@ const BAZOWE_KATEGORIE: Category[] = [
         id: "na-3",
         slug: "bukiet-botanical",
         name: "Bukiet Botanical",
-        priceFrom: 200,
+        priceFrom: 220,
         description:
           "Bukiet Botanical to naturalność w nowoczesnym wydaniu — minimalizm i świeżość w każdym detalu.",
         details: NATURALNOSC_DETAILS,
-        variants: variantsFrom(200, "bukiet-botanical"),
+        variants: [
+          { size: "Mały", price: 220, image: "/images/produkty/bukiet-botanical-maly.jpg" },
+          { size: "Średni", price: 280, image: "/images/produkty/bukiet-botanical-sredni.jpg" },
+        ],
       },
       {
         id: "na-4",
