@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
+import emailjs from "@emailjs/browser";
 import { ArrowLeft, ArrowRight, Check, ImagePlus, X } from "lucide-react";
 import { prefersReducedMotion, useCountUp, useParallax, useReveal } from "@/lib/animations";
 
@@ -42,7 +43,10 @@ const galeriaSlubna = [
 
 const KROKI = ["Para & uroczystość", "Styl & usługi", "Wizja & kontakt"];
 const STEP_OUT_MS = 250;
-const SEND_MS = 1300;     // symulowane wysyłanie (patrz handleSubmit)
+// EmailJS — to samo konto i szablon właściciela co zamówienia ze sklepu (app/potwierdzenie/page.tsx)
+const EJS_SERVICE = "service_pw7x0df";
+const EJS_KEY     = "-Yp8zoOj7V9bdLb_O";
+const EJS_T_OWNER = "template_jn31zqm";
 const SUCCESS_MS = 2400;  // czas na "✓ Wysłano!" + confetti przed ekranem podziękowania
 
 // Confetti — stałe kierunki rozrzutu
@@ -419,7 +423,7 @@ export default function WeselePage() {
   const [step, setStep] = useState(0);
   const [dir, setDir] = useState<1 | -1>(1);
   const [leaving, setLeaving] = useState(false);
-  const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const timers = useRef<number[]>([]);
   const formTopRef = useRef<HTMLDivElement>(null);
   const [pliki, setPliki] = useState<Plik[]>([]);
@@ -453,15 +457,33 @@ export default function WeselePage() {
     });
   }
 
-  // Dane formularza + zdjęcia inspiracji, gotowe do wysłania (multipart/form-data)
-  function zbudujPayload(): FormData {
-    const fd = new FormData();
-    (Object.keys(form) as (keyof FormState)[]).forEach((k) => {
-      const v = form[k];
-      fd.append(k, Array.isArray(v) ? v.join(", ") : v);
-    });
-    pliki.forEach((p) => fd.append("zdjecia", p.file, p.file.name));
-    return fd;
+  // Dane formularza jako tekst do maila (EmailJS nie przyjmuje plików — wysyłamy tylko informację o zdjęciach)
+  function zbudujTresc(): string {
+    const lub = (v: string) => v.trim() || "nie podano";
+    const lista = (v: string[]) => (v.length ? v.join(", ") : "nie wybrano");
+    return [
+      "ZAPYTANIE WESELNE",
+      "",
+      `Para: ${form.imieOna} & ${form.imieOn}`,
+      `Data ślubu: ${form.data}`,
+      `Kościół / ceremonia: ${lub(form.kosciol)}`,
+      `Sala: ${lub(form.sala)}`,
+      `Liczba gości: ${lub(form.goscie)}`,
+      `Budżet: ${lub(form.budzet)}`,
+      "",
+      `Styl: ${lista(form.style)}`,
+      `Opis stylu: ${lub(form.styleOpis)}`,
+      `Interesuje nas: ${lista(form.interesy)}`,
+      `Opis usług: ${lub(form.interesyOpis)}`,
+      "",
+      `Wizja / dodatkowe informacje: ${lub(form.info)}`,
+      "",
+      `Telefon: ${form.telefon}`,
+      `Email: ${form.email}`,
+      pliki.length
+        ? `\nZdjęcia inspiracji: klient dodał ${pliki.length} (nie są załączone — poproś o przesłanie mailem).`
+        : "",
+    ].join("\n");
   }
 
   function later(fn: () => void, ms: number) {
@@ -525,17 +547,38 @@ export default function WeselePage() {
       goTo(step + 1);
       return;
     }
-    if (status !== "idle" || !validateStep(step)) return;
+    if (status === "sending" || status === "sent" || !validateStep(step)) return;
 
-    // UWAGA: formularz nie wysyła jeszcze danych (tak jak wcześniej) — opóźnienie tylko symuluje wysyłkę.
-    // TODO: wysłać payload (EmailJS / endpoint API) zamiast symulacji.
-    const payload = zbudujPayload();
-    void payload;
+    const tresc = zbudujTresc();
+    // Pola jak w zamówieniach ze sklepu (szablon właściciela) + pełna treść w "uwagi" / "message"
+    const params = {
+      to_email:        "kwiaciarniaroyalflowers@gmail.com",
+      order_code:      `WESELE-${form.data}`,
+      client_name:     `${form.imieOna} & ${form.imieOn}`,
+      client_phone:    form.telefon,
+      client_email:    form.email,
+      bukiet:          "Zapytanie weselne",
+      kwota:           form.budzet || "nie podano",
+      pickup_type:     "Wesele",
+      pickup_tab:      "wesele",
+      automat_address: "",
+      data_odbioru:    form.data,
+      godzina_odbioru: "",
+      uwagi:           tresc,
+      message:         tresc,
+    };
+
     setStatus("sending");
-    later(() => {
-      setStatus("sent");
-      later(() => setSubmitted(true), SUCCESS_MS);
-    }, SEND_MS);
+    emailjs
+      .send(EJS_SERVICE, EJS_T_OWNER, params, EJS_KEY)
+      .then(() => {
+        setStatus("sent");
+        later(() => setSubmitted(true), SUCCESS_MS);
+      })
+      .catch((err: unknown) => {
+        console.error("EmailJS error:", err);
+        setStatus("error");
+      });
   }
 
   function reset() {
@@ -708,7 +751,7 @@ export default function WeselePage() {
                 <button
                   type="button"
                   onClick={() => goTo(step - 1)}
-                  disabled={status !== "idle"}
+                  disabled={status === "sending" || status === "sent"}
                   className="inline-flex items-center gap-2 font-jost text-xs tracking-widest uppercase text-cream/50 hover:text-gold transition-colors duration-300 disabled:opacity-40"
                 >
                   <ArrowLeft size={14} /> Wstecz
@@ -730,7 +773,7 @@ export default function WeselePage() {
                 <div className="relative shrink-0">
                   <button
                     type="submit"
-                    disabled={status !== "idle"}
+                    disabled={status === "sending" || status === "sent"}
                     aria-live="polite"
                     className={`relative inline-flex items-center justify-center gap-3 min-w-[260px] font-jost text-sm tracking-widest uppercase px-12 py-4 transition-colors duration-500 ${
                       status === "sent"
@@ -739,6 +782,7 @@ export default function WeselePage() {
                     }`}
                   >
                     {status === "idle" && (<>Wyślij zapytanie <ArrowRight size={16} /></>)}
+                    {status === "error" && (<>Wyślij ponownie <ArrowRight size={16} /></>)}
                     {status === "sending" && (
                       <>
                         <span className="w-4 h-4 rounded-full border-2 border-dark/25 border-t-dark animate-spin" aria-hidden="true" />
@@ -776,6 +820,11 @@ export default function WeselePage() {
                 </div>
               )}
             </div>
+            {status === "error" && (
+              <p role="alert" className="font-jost text-sm text-red-400 text-center mt-6">
+                Nie udało się wysłać zapytania. Spróbuj ponownie lub zadzwoń do kwiaciarni.
+              </p>
+            )}
           </form>
         )}
       </section>
