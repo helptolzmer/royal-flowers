@@ -16,17 +16,19 @@ import Footer from "@/components/Footer";
 const galeria = [
   { src: "/images/kwiaciarnia/DSCF1768.jpg", alt: "Kompozycja w wazonie – róże pomarańczowe", kategoria: "Kompozycje" },
   { src: "/images/kwiaciarnia/DSCF1834.jpg", alt: "Różowy bukiet z protea", kategoria: "Bukiety" },
-  { src: "/images/kwiaciarnia/DSCF1861.jpg", alt: "Kolorowa kompozycja w pomarańczowym wazonie", kategoria: "Kompozycje" },
-  { src: "/images/kwiaciarnia/DSCF1874.jpg", alt: "Niebieskie tulipany", kategoria: "Bukiety" },
-  { src: "/images/kwiaciarnia/DSCF1885.jpg", alt: "Zbliżenie niebieskich kwiatów", kategoria: "Detale" },
-  { src: "/images/kwiaciarnia/DSCF1887.jpg", alt: "Kompozycja z orchideami", kategoria: "Kompozycje" },
-  { src: "/images/kwiaciarnia/DSCF1256.jpg", alt: "Box Royal Flowers", kategoria: "Opakowania" },
-  { src: "/images/kwiaciarnia/DSCF1275.jpg", alt: "Box z zewnątrz", kategoria: "Opakowania" },
-  { src: "/images/kwiaciarnia/DSCF1285.jpg", alt: "Żółta kompozycja w zielonym wazonie", kategoria: "Kompozycje" },
+  { src: "/images/kwiaciarnia/kulisami-tulipany.jpg", alt: "Niebieskie tulipany", kategoria: "Detale" },
+  { src: "/images/kwiaciarnia/DSCF1231.jpg", alt: "Florystka Royal Flowers z kompozycją w czarnym boxie", kategoria: "Zespół" },
+  { src: "/images/kwiaciarnia/DSCF1887.jpg", alt: "Kompozycja z niebieskimi różami i orchideami w pomarańczowym wazonie", kategoria: "Kompozycje" },
+  { src: "/images/kwiaciarnia/kulisami-wianek.jpg", alt: "Wianek z drobnych kwiatów we włosach", kategoria: "Dekoracje" },
+  { src: "/images/kwiaciarnia/kulisami-maki.jpg", alt: "Kolorowe maki i letnie kwiaty", kategoria: "Kompozycje" },
+  { src: "/images/kwiaciarnia/DSCF1285.jpg", alt: "Kompozycja z orchideami w czarnym boxie Royal Flowers", kategoria: "Opakowania" },
+  { src: "/images/kwiaciarnia/kulisami-roze-protea.jpg", alt: "Róże i protea w kwiaciarni", kategoria: "Kwiaciarnia" },
+  { src: "/images/kwiaciarnia/realizacja-frezje-miks.jpg", alt: "Białe frezje i kolorowe kwiaty", kategoria: "Detale" },
+  { src: "/images/kwiaciarnia/DSCF1666.jpg", alt: "Florystka przy regale z bukietami w kwiaciarni", kategoria: "Zespół" },
 ];
 
 // Masonry: przeplatane proporcje między 3:4 a 4:3 (stałe, żeby SSR i klient się zgadzały)
-const PROPORCJE = ["3 / 4", "4 / 3", "1 / 1", "4 / 5", "5 / 4", "3 / 4", "4 / 3", "4 / 5", "1 / 1"];
+const PROPORCJE = ["3 / 4", "4 / 3", "1 / 1", "4 / 5", "5 / 4", "3 / 4", "4 / 3", "4 / 5", "1 / 1", "5 / 4", "3 / 4"];
 
 const uslugi = [
   { emoji: "💒", label: "Wesela & Śluby", desc: "Kompleksowa florystyka ślubna", href: "/wesele" },
