@@ -265,7 +265,7 @@ export default function KwiaciarniaContent({ aktualnosci }: { aktualnosci: Aktua
               Zamów teraz <ArrowRight size={16} />
             </Link>
             <a
-              href="tel:+48600000000"
+              href="tel:+48694285505"
               className="inline-flex items-center justify-center gap-3 border border-gold/40 text-cream font-jost text-sm tracking-widest uppercase px-10 py-4 hover:border-[#D4A843] hover:text-[#D4A843] transition-all duration-300"
             >
               Zadzwoń do nas
