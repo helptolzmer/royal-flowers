@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import Script from "next/script";
 import FallingPetals from "@/components/FallingPetals";
 import { useReveal } from "@/lib/animations";
 
@@ -148,17 +149,11 @@ export default function SocialMediaSection() {
         </div>
       </section>
 
-      {/* Miejsce na feed z Instagrama */}
+      {/* Feed z Instagrama (Elfsight) */}
       <section className="relative z-10 px-6 md:px-16 pb-24">
         <div className="max-w-6xl mx-auto">
-          <div className="shimmer relative h-[300px] rounded-2xl overflow-hidden bg-dark-800 border border-gold/10 flex flex-col items-center justify-center gap-4">
-            <span className="text-gold/40">
-              <IconInstagram />
-            </span>
-            <p className="font-jost text-sm tracking-wider text-cream/40">
-              Tu pojawi się feed z Instagrama
-            </p>
-          </div>
+          <Script src="https://elfsightcdn.com/platform.js" strategy="lazyOnload" />
+          <div className="elfsight-app-44e417c1-cde3-4911-8f7d-d977b4f17362" data-elfsight-app-lazy />
         </div>
       </section>
     </div>
