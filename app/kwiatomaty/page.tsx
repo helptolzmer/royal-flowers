@@ -136,7 +136,7 @@ function KwiatomatKarta({ k, index, visible }: { k: Kwiatomat; index: number; vi
       style={{ transitionDelay: visible ? `${index * 100}ms` : "0ms" }}
     >
       <article
-        className={`group relative aspect-[16/10] rounded-xl overflow-hidden border border-gold/15 transition-all duration-500 ease-out hover:border-gold/40 hover:shadow-[0_0_40px_-6px_rgba(201,168,76,0.4)] ${
+        className={`group relative aspect-[4/5] sm:aspect-[16/10] md:aspect-square lg:aspect-[16/10] rounded-xl overflow-hidden border border-gold/15 transition-all duration-500 ease-out hover:border-gold/40 hover:shadow-[0_0_40px_-6px_rgba(201,168,76,0.4)] ${
           k.online ? "" : "grayscale opacity-75"
         }`}
       >
