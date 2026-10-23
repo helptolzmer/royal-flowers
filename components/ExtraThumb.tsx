@@ -1,22 +1,20 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { Balloon, Candy, Cookie, Flame, Gift, Mail, PawPrint, Ribbon, Wine, type LucideIcon } from "lucide-react";
+import { Balloon, Candy, Cookie, Gift, Mail, PawPrint, type LucideIcon } from "lucide-react";
 import { EXTRAS } from "@/lib/extras";
 
 const IKONY: Record<string, LucideIcon> = {
   raffaello: Candy,
   merci: Cookie,
+  ferrero: Candy,
+  lindt: Candy,
   "mis-maly": PawPrint,
   "mis-duzy": PawPrint,
   kartka: Mail,
-  wstazka: Ribbon,
-  swieczka: Flame,
   balon: Balloon,
-  wine: Wine,
 };
 
-// Miniatura dodatku: zdjęcie z /images/extras/…, a dopóki go nie ma — placeholder z ikoną (i nazwą w większych rozmiarach)
+// Miniatura dodatku: zdjęcie z /images/extras/… (jpg/png), a gdy dodatek nie ma zdjęcia (image = null) — placeholder z ikoną (i nazwą w większych rozmiarach)
 export default function ExtraThumb({
   extraId,
   className = "w-12 h-12",
@@ -29,27 +27,17 @@ export default function ExtraThumb({
   showName?: boolean;
 }) {
   const extra = EXTRAS.find((e) => e.id === extraId);
-  const [brak, setBrak] = useState(!extra?.image);
-  const imgRef = useRef<HTMLImageElement>(null);
   const Ikona = IKONY[extraId] ?? Gift;
-
-  // Zdjęcie mogło nie wczytać się jeszcze przed hydracją — sprawdź po montażu
-  useEffect(() => {
-    const img = imgRef.current;
-    if (img && img.complete && img.naturalWidth === 0) setBrak(true);
-  }, []);
 
   return (
     <div className={`relative shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-stone-100 to-stone-200 ${className}`}>
-      {!brak && extra?.image ? (
+      {extra?.image ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          ref={imgRef}
           src={extra.image}
           alt={extra.name}
           loading="lazy"
-          onError={() => setBrak(true)}
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover bg-white"
         />
       ) : (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 px-1 text-center" aria-label={extra?.name}>
