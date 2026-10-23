@@ -1,5 +1,12 @@
 [
   {
+    "id": "5",
+    "tytul": "Mistrz Florystyki — Małgorzata",
+    "opis": "Z ogromną dumą informujemy, że nasza szefowa Małgorzata uzyskała prestiżowy tytuł Mistrza Florystyki! To potwierdzenie wieloletniego doświadczenia, pasji i perfekcji w tworzeniu kompozycji kwiatowych. Gratulujemy!",
+    "data": "2026",
+    "zdjecie": "/images/mistrz-florystyki.jpg"
+  },
+  {
     "id": "1",
     "tytul": "Przenosimy się!",
     "opis": "Nasza kwiaciarnia przeprowadza się na Jana Długosza 27 — zaledwie 300 metrów od obecnej lokalizacji. Czeka na Was prywatny parking pod kwiaciarnią, całkowicie odświeżony styl i nowości. Do zobaczenia po wakacjach!",
