@@ -6,6 +6,7 @@ import Link from "next/link";
 import emailjs from "@emailjs/browser";
 import { Check, Flower2 } from "lucide-react";
 import { useCart } from "@/lib/CartContext";
+import Footer from "@/components/Footer";
 
 const EJS_SERVICE  = "service_pw7x0df";
 const EJS_KEY      = "-Yp8zoOj7V9bdLb_O";
@@ -209,6 +210,8 @@ function PotwierdzeniePage() {
           )}
         </div>
       </section>
+
+      <Footer className="mt-16" />
     </main>
   );
 }

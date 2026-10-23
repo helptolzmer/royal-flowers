@@ -6,6 +6,7 @@ import { Check, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import { useCart } from "@/lib/CartContext";
 import { EXTRAS } from "@/lib/extras";
 import ExtraThumb from "@/components/ExtraThumb";
+import Footer from "@/components/Footer";
 
 export default function KoszykPage() {
   const {
@@ -55,16 +56,7 @@ export default function KoszykPage() {
           </Link>
         </section>
 
-        <footer className="border-t border-gold/10 py-8 px-6 bg-dark mt-16">
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="font-cormorant text-xl tracking-widest text-cream/50">
-              ROYAL <span className="text-gold">FLOWERS</span>
-            </p>
-            <p className="font-jost text-xs text-cream/30">
-              © 2025 Royal Flowers. Wszystkie prawa zastrzeżone.
-            </p>
-          </div>
-        </footer>
+        <Footer className="mt-16" />
       </main>
     );
   }
@@ -254,16 +246,7 @@ export default function KoszykPage() {
         </div>
       </section>
 
-      <footer className="border-t border-gold/10 py-8 px-6 bg-dark mt-16">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-cormorant text-xl tracking-widest text-cream/50">
-            ROYAL <span className="text-gold">FLOWERS</span>
-          </p>
-          <p className="font-jost text-xs text-cream/30">
-            © 2025 Royal Flowers. Wszystkie prawa zastrzeżone.
-          </p>
-        </div>
-      </footer>
+      <Footer className="mt-16" />
     </main>
   );
 }

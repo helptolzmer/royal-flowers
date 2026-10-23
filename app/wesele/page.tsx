@@ -5,6 +5,7 @@ import Link from "next/link";
 import emailjs from "@emailjs/browser";
 import { ArrowLeft, ArrowRight, Check, ImagePlus, X } from "lucide-react";
 import { prefersReducedMotion, useCountUp, useParallax, useReveal } from "@/lib/animations";
+import Footer from "@/components/Footer";
 
 const style_opcje = [
   { nazwa: "Romantyczny", ikona: "🌹" },
@@ -866,14 +867,7 @@ export default function WeselePage() {
         </div>
       </section>
 
-      <footer className="border-t border-gold/10 py-8 px-6">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-cormorant text-xl tracking-widest text-cream/50">
-            ROYAL <span className="text-gold">FLOWERS</span>
-          </p>
-          <p className="font-jost text-xs text-cream/30">© 2025 Royal Flowers. Wszystkie prawa zastrzeżone.</p>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }

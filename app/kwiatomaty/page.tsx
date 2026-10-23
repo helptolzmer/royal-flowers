@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { MapPin, Clock, ArrowRight } from "lucide-react";
 import { useCountUp, useParallax, useReveal } from "@/lib/animations";
+import Footer from "@/components/Footer";
 
 /**
  * ZDJĘCIE TŁA HERO:
@@ -440,16 +441,7 @@ export default function KwiatomatyPage() {
         </div>
       </section>
 
-      <footer className="border-t border-gold/10 py-8 px-6">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-cormorant text-xl tracking-widest text-cream/50">
-            ROYAL <span className="text-gold">FLOWERS</span>
-          </p>
-          <p className="font-jost text-xs text-cream/30">
-            © 2025 Royal Flowers. Wszystkie prawa zastrzeżone.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }

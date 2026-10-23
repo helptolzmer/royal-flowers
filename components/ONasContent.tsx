@@ -8,6 +8,7 @@ import FallingPetals from "@/components/FallingPetals";
 import Lightbox from "@/components/Lightbox";
 import TypedHeading from "@/components/TypedHeading";
 import { prefersReducedMotion, useCountUp, useParallax, useReveal } from "@/lib/animations";
+import Footer from "@/components/Footer";
 
 const wartosci = [
   { icon: Heart, tytul: "Pasja", opis: "Każda kompozycja powstaje z miłości do kwiatów i dbałości o najdrobniejszy detal.", licznik: 1000, sufiks: "+", podpis: "stworzonych kompozycji" },
@@ -330,14 +331,7 @@ export default function ONasContent() {
         </div>
       </section>
 
-      <footer className="relative border-t border-gold/10 py-8 px-6 bg-dark">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-cormorant text-xl tracking-widest text-cream/50">
-            ROYAL <span className="text-gold">FLOWERS</span>
-          </p>
-          <p className="font-jost text-xs text-cream/30">© 2025 Royal Flowers. Wszystkie prawa zastrzeżone.</p>
-        </div>
-      </footer>
+      <Footer />
 
       {lightbox !== null && (
         <Lightbox

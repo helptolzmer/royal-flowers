@@ -18,6 +18,7 @@ import CrossSellModal from "@/components/CrossSellModal";
 import RecentlyViewed from "@/components/RecentlyViewed";
 import ExtraThumb from "@/components/ExtraThumb";
 import { useReveal } from "@/lib/animations";
+import Footer from "@/components/Footer";
 
 type Tab = "opis" | "szczegoly" | "dostawa";
 
@@ -417,6 +418,8 @@ export default function ProductDetail({
         addedProduct={lastAdded}
         addedExtraNames={lastAddedExtraNames}
       />
+
+      <Footer className="mt-16" />
     </main>
   );
 }
